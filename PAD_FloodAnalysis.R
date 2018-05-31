@@ -127,6 +127,9 @@ legend('topleft', legend = c('p-values', 'Floods', 'No Data', 'Dam filling', 'Ba
 
 dev.off()
 
+#Geometric probability of seeing no ice jam floods in 20 or more years
+Geom20 = 1 - pgeom(q = 19, prob = pbase)
+
 #Replication of Beltaos' regression analysis tests----
 
 # Years 1900 - 1967
