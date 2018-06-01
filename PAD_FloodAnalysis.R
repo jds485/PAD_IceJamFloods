@@ -7,20 +7,47 @@
 #Set working directory----
 setwd("C:\\Users\\jsmif\\Documents\\Cornell\\Research\\Publications\\CountRegressionIceJams\\DataAnalysis\\PAD_IceJamFloods")
 
-#Load libraries----
-
 #Load data----
+#All flood data
 Floods = read.csv(file = 'FloodData.csv', stringsAsFactors = FALSE)
-
 #Select only moderate (M) and extreme (X) floods (scale values of 2 and 3)
 MX = Floods[,c('YEAR', 'Floods23only')]
 
 #FIXME: remove years without flood data? currently using na.rm and is.na to check for NA data (no flood record) years
 
+#Compute cumulative number of floods for replication of Beltaos
+MX$FldSum = 0
+for (i in 1:nrow(MX)){
+  MX$FldSum[i] = sum(MX$Floods23only[seq(1,i,1)], na.rm = TRUE)
+}
+#Because Beltaos started in 1900, need to adjust the cumulative number by the number observed in 1900
+MX$FldSum = MX$FldSum - MX$FldSum[MX$YEAR == 1900]
+
+#FIXME: It seems like Beltos' dataset is different than the one we are working with. Not continuing with this analysis for now.
+
+#Plot of flood data----
+png('CumulativeFloods.png', res = 300, units = 'in', width = 6, height = 6)
+par(mar = c(5,5,3,1), xaxs = 'i', yaxs = 'i')
+plot(MX$YEAR, MX$FldSum, 
+     ylim = c(-8,23), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+     xlab = 'Year', ylab = 'Cumulative Number of Floods Since 1900',
+     cex.axis = 1.5, cex.lab = 1.5)
+#Polygon for dam filling years
+polygon(x = c(1968, 1968, 1971, 1971), y = c(-8, 23, 23, -8), col = 'blue', density = 0, lwd = 2)
+dev.off()
+
+#Pacific Decadal Osciallation indices
+#Monthly index for the PDO
+PDOi = read.csv('PDO.csv', stringsAsFactors = FALSE)
+#Annual sea surface temperature and sea level pressure
+PDO_SST_SLP = read.csv('PDO_SLP_SST.csv', stringsAsFactors = FALSE)
+
+#FIXME: Process monthly data to a usable format
+
 #Binomial exact tests----
 # Compare to Beltaos' analysis blocks for 1900 - 2017 data----
 #Estimate binomial p for the base case of pre-dam in 1968
-# Years 1826 - 1967
+# Years 1826 - 1967 - All historical pre-dam construction
 p1826 = sum(MX[MX$YEAR <= 1967, 'Floods23only'], na.rm = TRUE)/length(which(is.na(MX[MX$YEAR <= 1967, 'Floods23only']) == FALSE))
 # Years 1900 - 1967
 p1900 = sum(MX[MX$YEAR >= 1900 & MX$YEAR <= 1967, 'Floods23only'], na.rm = TRUE)/length(which(is.na(MX[MX$YEAR >= 1900 & MX$YEAR <= 1967, 'Floods23only']) == FALSE))
@@ -36,7 +63,7 @@ p1940 = sum(MX[MX$YEAR >= 1940 & MX$YEAR <= 1967, 'Floods23only'], na.rm = TRUE)
 p1950 = sum(MX[MX$YEAR >= 1950 & MX$YEAR <= 1967, 'Floods23only'], na.rm = TRUE)/length(which(is.na(MX[MX$YEAR >= 1950 & MX$YEAR <= 1967, 'Floods23only']) == FALSE))
 
 #Binomial exact tests using those estimates of p as the null hypothesis value.
-#Compute number of floods post-dam starting in 1971, and the length of record from 1971 - 2017
+#Compute number of floods post-dam (FldPD) starting in 1971, and the length of record from 1971 - 2017
 FldPD = sum(MX[MX$YEAR >= 1971 & MX$YEAR <= 2017, 'Floods23only'], na.rm = TRUE)
 n = length(which(is.na(MX[MX$YEAR >= 1971 & MX$YEAR <= 2017, 'Floods23only']) == FALSE))
 
@@ -61,12 +88,11 @@ bt1950 = binom.test(x = FldPD, n = n, p = p1950, alternative = 'less')
 size = 50
 #Window jump size in years
 jump = 1
-#FIXME: Evaluate the sensitivity of this analysis wrt size and jump. Should pick the size and jump that stabilizes the values.
+#FIXME: Evaluate the sensitivity of this analysis wrt size. Should pick the size that stabilizes the values.
 
 #FIXME: Currently does not drop reservior filling years.
 
 #Compute p-values of binomial exact tests. Treat the first 'size' years of data as the base case.
-
 #Preallocate p value vector and midpoint vector. First window is base case and does not get tested.
 pvec = mids = vector('numeric', length = (nrow(MX) - size))
 for (i in 1:(length(pvec) + 1)){
@@ -131,15 +157,55 @@ dev.off()
 Geom20 = 1 - pgeom(q = 19, prob = pbase)
 
 #Replication of Beltaos' regression analysis tests----
-
 # Years 1900 - 1967
-
+lm1900 = lm(MX[MX$YEAR >= 1900 & MX$YEAR <= 1967, 'FldSum'] ~ MX[MX$YEAR >= 1900 & MX$YEAR <= 1967, 'YEAR'])
 # Years 1910 - 1967
-
+lm1910 = lm(MX[MX$YEAR >= 1910 & MX$YEAR <= 1967, 'FldSum'] ~ MX[MX$YEAR >= 1910 & MX$YEAR <= 1967, 'YEAR'])
 # Years 1922 - 1967
-
+lm1922 = lm(MX[MX$YEAR >= 1922 & MX$YEAR <= 1967, 'FldSum'] ~ MX[MX$YEAR >= 1922 & MX$YEAR <= 1967, 'YEAR'])
 # Years 1930 - 1967
-
+lm1930 = lm(MX[MX$YEAR >= 1930 & MX$YEAR <= 1967, 'FldSum'] ~ MX[MX$YEAR >= 1930 & MX$YEAR <= 1967, 'YEAR'])
 # Years 1940 - 1967
-
+lm1940 = lm(MX[MX$YEAR >= 1940 & MX$YEAR <= 1967, 'FldSum'] ~ MX[MX$YEAR >= 1940 & MX$YEAR <= 1967, 'YEAR'])
 # Years 1950 - 1967
+lm1950 = lm(MX[MX$YEAR >= 1950 & MX$YEAR <= 1967, 'FldSum'] ~ MX[MX$YEAR >= 1950 & MX$YEAR <= 1967, 'YEAR'])
+# Post-dam years: 1971 - 2017
+lmPD = lm(MX[MX$YEAR >= 1971, 'FldSum'] ~ MX[MX$YEAR >= 1971, 'YEAR'])
+
+#Regression diagnostic plots - concerns about heteroskedasticity and normality. Showing one example.
+plot(lm1900)
+
+png('BeltosRegressionCheck.png', res = 300, units = 'in', width = 7, height = 7)
+par(mar = c(4,4,3,1), xaxs = 'i', yaxs = 'i')
+plot(MX$YEAR, MX$FldSum, 
+     ylim = c(-1,23), xlim = c(1900, max(MX$YEAR)),
+     xlab = 'Year', ylab = 'Cumulative Number of Floods',
+     cex.axis = 1.5, cex.lab = 1.5)
+#Polygon for dam filling years
+polygon(x = c(1968, 1968, 1971, 1971), y = c(-1, 31, 31, -1), col = 'blue', density = 0, lwd = 2)
+
+#Add regression lines
+abline(lm1900, col = 'red')
+abline(lm1910, col = 'orange')
+abline(lm1922, col = 'green')
+abline(lm1930, col = 'blue')
+abline(lm1940, col = 'purple')
+abline(lm1950, col = 'pink')
+abline(lmPD, col = 'black')
+
+dev.off()
+
+#Evaluation of PDO and Floods----
+plot(seq(1856, 1990,1), PDO_SST_SLP$PDO_SST, type = 'o', pch = 16, col = 'red',
+     xlim = c(1856,1990), ylim = c(-0.5, 0.5),
+     xlab = 'Year', ylab = 'Seal Level Pressure or Temperature Anomaly', main = 'PDO and Moderate or Extreme Floods in PAD',
+     cex.lab = 1.5, cex.main = 2, cex.axis = 1.5)
+par(new = TRUE)
+plot(seq(1856, 1990,1), PDO_SST_SLP$PDO_SLP, type = 'o', pch = 16, col = 'blue',
+     xlim = c(1856,1990), ylim = c(-0.5, 0.5),
+     xlab = '', ylab = '', main = '', axes = FALSE)
+par(new = TRUE)
+plot(x = MX$YEAR[MX$Floods23only == 1], y = rep(0.5,length(MX$YEAR[MX$Floods23only == 1])), 
+     pch = 1,
+     xlim = c(1856,1990), ylim = c(-0.5, 0.5),
+     xlab = '', ylab = '', main = '', axes = FALSE)
