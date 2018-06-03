@@ -153,8 +153,61 @@ legend('topleft', legend = c('p-values', 'Floods', 'No Data', 'Dam filling', 'Ba
 
 dev.off()
 
-#Geometric probability of seeing no ice jam floods in 20 or more years
-Geom20 = 1 - pgeom(q = 19, prob = pbase)
+#Geometric probability of seeing no ice jam floods in 20 or more years----
+#Rs geometric distribution starts at x = 0, rather than the traditional x = 1. So, 20 - 2 is needed here.
+Geom20 = 1 - pgeom(q = 20 - 2, prob = pbase)
+
+#Moving window for geometric
+#Using the same base period for p as for binomial p, what is the probability of waiting as many years as elapsed before the next flood?
+# Select only those years with floods after the base period.
+MX_Geom = MX[which(MX$Floods23only == 1 & MX$YEAR > (MX$YEAR[1] + size)),]
+GeomProb = vector('numeric', length = nrow(MX_Geom)-1)
+for (i in 1:length(GeomProb)){
+  #Number of years before next flood
+  x = MX_Geom$YEAR[i + 1] - MX_Geom$YEAR[i]
+  
+  #Compute the upper tail from geometric distribution for waiting at least x years for next flood given pbase probability in any year
+  GeomProb[i] = 1 - pgeom(q = (x-2), prob = pbase)
+}
+rm(x)
+
+png('MovingWindowGeometricWaitingTime.png', res = 300, width = 8, height = 8, units = 'in')
+par(mar = c(4,6,4,1), xaxs = 'i', yaxs = 'i')
+#Plot of the probabilities. X location is the flood year counted as 0 in geometric distribution waiting time
+plot(x = MX_Geom$YEAR[-nrow(MX_Geom)], y = GeomProb, pch = 16,
+     xlim = c(MX$YEAR[1], MX$YEAR[nrow(MX)]), ylim = c(0, 1),
+     xlab = 'Year', ylab = 'Probability of Waiting \n at Least as Long as Observed', main = 'Geometric Waiting Time for Next Observed Flood \n Base Years: 1826 - 1875',
+     cex.axis = 1.5, cex.main = 1.5, cex.lab = 1.5)
+
+axis(side = 1, at = seq(1830,2010,10), labels = FALSE)
+axis(side = 2, at = seq(0.1,0.9,0.2), labels = FALSE)
+
+#Line for 0.05 significance
+lines(x = c(MX$YEAR[1], MX$YEAR[nrow(MX)]), y = c(0.05, 0.05), lty = 2, lwd = 2)
+
+#Polygon for dam filling years
+polygon(x = c(1968, 1968, 1971, 1971), y = c(0, 1, 1, 0), col = 'blue', density = 0, lwd = 2)
+
+par(new = TRUE)
+#Plot of the floods to show where they exist
+plot(x = MX$YEAR[MX$Floods23only == 1], y = rep(0.01,length(MX$YEAR[MX$Floods23only == 1])), 
+     pch = 1, col = 'red',
+     xlim = c(MX$YEAR[1], MX$YEAR[nrow(MX)]), ylim = c(0, 1),
+     xlab = '', ylab = '', main = '', axes = FALSE)
+
+par(new = TRUE)
+#plot of the no data years to show where no data exist
+plot(x = MX$YEAR[is.na(MX$Floods23only)], y = rep(0.01,length(MX$YEAR[is.na(MX$Floods23only)])), 
+     pch = 'x', col = 'grey',
+     xlim = c(MX$YEAR[1], MX$YEAR[nrow(MX)]), ylim = c(0, 1),
+     xlab = '', ylab = '', main = '', axes = FALSE)
+
+#Polygon for base years
+polygon(x = c(MX$YEAR[1], MX$YEAR[1], MX$YEAR[size], MX$YEAR[size]), y = c(0, 0.1, 0.1, 0), col = 'red', density = 0, lwd = 2)
+
+legend('topleft', legend = c('Probabilities', 'Floods', 'No Data', 'Dam filling', 'Base Years', '0.05 sig. level'), pch = c(16,1,4,22,22,NA), lty = c(NA,NA,NA,NA,NA,2), lwd = 2, col = c('black', 'red', 'grey', 'blue','red', 'black'), cex = 1.2)
+
+dev.off()
 
 #Replication of Beltaos' regression analysis tests----
 # Years 1900 - 1967
