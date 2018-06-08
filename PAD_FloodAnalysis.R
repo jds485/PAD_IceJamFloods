@@ -394,6 +394,27 @@ rm(i,j)
 #Compute cumulative sums
 FldSumMat = apply(X = FloodMat, MARGIN = 2, FUN = cumsum)
 
+#Compute the p-value based on the observed cumulative number of floods 1971 - 2018 vs. cumulative number in synthetic years
+pBoot = length(which(FldSumMat[48,] <= (MX$FldSum[length(MX$FldSum)] - MX$FldSum[MX$YEAR == 1971])))/ncol(blkStart)
+
+#Compute p-value based on maximum length of no-flood periods in 1971 - 2018 record vs. synthetic record maximum dry spell lengths.
+getmode <- function(v) {
+  uniqv <- unique(v)
+  uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+MaxNoFld = length(which(MX$FldSum[MX$YEAR >= 1971] == getmode(MX$FldSum[MX$YEAR >= 1971]))) - 1
+MaxNoFldInds = apply(X = FldSumMat[1:48,], MARGIN = 2, FUN = getmode)
+MaxNoFldDists = vector('numeric', length(MaxNoFldInds))
+for (i in 1:length(MaxNoFldDists)){
+  MaxNoFldDists[i] = length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])) - 1
+}
+pMaxNoFlood = length(which(MaxNoFldDists >= MaxNoFld))/length(MaxNoFldDists)
+
+#Gumbel Approximation of p-value:
+rate = sqrt(1.645/var(MaxNoFldDists))
+loc = mean(MaxNoFldDists) - 0.5772/rate
+pMaxNoFlood_Gumbel = 1 - pgumbel(q = (MaxNoFld - 1), loc = loc, scale = 1/rate)
+
 #Plot the bootstrapped samples of the flood record on the cumulative chart as lines
 #Figure out the y limit upper bound based on the maximum number of floods observed in 50 years:
 upY = max(apply(X = FloodMat, MARGIN = 2, FUN = sum)) + MX$FldSum[MX$YEAR == 1971]
