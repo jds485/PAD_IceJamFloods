@@ -9,6 +9,8 @@ setwd("C:\\Users\\jsmif\\Documents\\Cornell\\Research\\Publications\\CountRegres
 
 #Load libraries----
 library(Hmisc)
+library(evd)
+library(doParallel)
 
 #Load data----
 #All flood data
@@ -478,3 +480,46 @@ minor.tick(nx = 5, ny = 5, tick.ratio = 0.5)
 legend('topleft', legend = c('Observed Record Pre-Dam', 'Observed Record Post-Dam', 'Bootstrapped Records', 'Reservoir Filling'), pch = c(NA, NA, NA, 22), lty = c(1,1,1,NA), lwd = 2, col = c('black', 'red', adjustcolor('black', alpha=0.01), 'grey'), cex = 1.2)
 
 dev.off()
+
+
+#Confidence intervals for bootstrapped p-value----
+#Note: This takes a while to run, even in parallel. Using 100 samples for now.
+cl <- makeCluster(detectCores() - 1)
+registerDoParallel(cl)
+CI = foreach (k = 1:100) %dopar%{
+  blkStart = replicate(expr = round(runif(n = numBlk, min = sampYrs[1], max = sampYrs[length(sampYrs)])), n = 10000)
+  #Extract the flood records using the years in the block samples. Order matters.
+  FloodMat = matrix(NA, nrow = nrow(blkStart)*block, ncol = ncol(blkStart))
+  for (i in 1:ncol(blkStart)){
+    for (j in 1:nrow(blkStart)){
+      FloodMat[seq(((j-1)*block + 1),((j-1)*block+5),1),i] = MX$Floods23only[MX$YEAR %in% c(blkStart[j,i] + seq(0,4,1))]
+    }
+  }
+  rm(i,j)
+  #Compute cumulative sums
+  FldSumMat = apply(X = FloodMat, MARGIN = 2, FUN = cumsum)
+  
+  #Compute the p-value based on the observed cumulative number of floods 1971 - 2018 vs. cumulative number in synthetic years
+  pBootCI = length(which(FldSumMat[48,] <= (MX$FldSum[length(MX$FldSum)] - MX$FldSum[MX$YEAR == 1971])))/ncol(blkStart)
+  
+  #Compute p-value based on maximum length of no-flood periods in 1971 - 2018 record vs. synthetic record maximum dry spell lengths.
+  MaxNoFld = length(which(MX$FldSum[MX$YEAR >= 1971] == getmode(MX$FldSum[MX$YEAR >= 1971]))) - 1
+  MaxNoFldInds = apply(X = FldSumMat[1:48,], MARGIN = 2, FUN = getmode)
+  MaxNoFldDists = vector('numeric', length(MaxNoFldInds))
+  for (i in 1:length(MaxNoFldDists)){
+    MaxNoFldDists[i] = length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])) - 1
+  }
+  rm(i)
+  pMaxNoFloodCI = length(which(MaxNoFldDists >= MaxNoFld))/length(MaxNoFldDists)
+  
+  return(list('Boot' = pBootCI, 'Max' = pMaxNoFloodCI))
+}
+stopCluster(cl)
+
+pBootCI = unlist(CI)[seq(1,100,2)]
+pMaxNoFloodCI = unlist(CI)[seq(2,100,2)]
+
+hist(pBootCI)
+hist(pMaxNoFloodCI)
+
+#Seems like both are not close to being significant. 
