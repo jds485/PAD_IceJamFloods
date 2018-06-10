@@ -408,7 +408,8 @@ MaxNoFld = length(which(MX$FldSum[MX$YEAR >= 1971] == getmode(MX$FldSum[MX$YEAR 
 MaxNoFldInds = apply(X = FldSumMat[1:48,], MARGIN = 2, FUN = getmode)
 MaxNoFldDists = vector('numeric', length(MaxNoFldInds))
 for (i in 1:length(MaxNoFldDists)){
-  MaxNoFldDists[i] = length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])) - 1
+  #If the maximum is not 0, need to subtract 1 from the length because the first year had a flood.
+  MaxNoFldDists[i] = ifelse(MaxNoFldInds[i] != 0, length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])) - 1, length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])))
 }
 pMaxNoFlood = length(which(MaxNoFldDists >= MaxNoFld))/length(MaxNoFldDists)
 
@@ -483,10 +484,10 @@ dev.off()
 
 
 #Confidence intervals for bootstrapped p-value----
-#Note: This takes a while to run, even in parallel. Using 100 samples for now.
+#Note: This takes a while to run, even in parallel. Using 1000 samples for now.
 cl <- makeCluster(detectCores() - 1)
 registerDoParallel(cl)
-CI = foreach (k = 1:100) %dopar%{
+CI = foreach (k = 1:1000) %dopar%{
   blkStart = replicate(expr = round(runif(n = numBlk, min = sampYrs[1], max = sampYrs[length(sampYrs)])), n = 10000)
   #Extract the flood records using the years in the block samples. Order matters.
   FloodMat = matrix(NA, nrow = nrow(blkStart)*block, ncol = ncol(blkStart))
@@ -507,7 +508,7 @@ CI = foreach (k = 1:100) %dopar%{
   MaxNoFldInds = apply(X = FldSumMat[1:48,], MARGIN = 2, FUN = getmode)
   MaxNoFldDists = vector('numeric', length(MaxNoFldInds))
   for (i in 1:length(MaxNoFldDists)){
-    MaxNoFldDists[i] = length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])) - 1
+    MaxNoFldDists[i] = ifelse(MaxNoFldInds[i] != 0, length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])) - 1, length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])))
   }
   rm(i)
   pMaxNoFloodCI = length(which(MaxNoFldDists >= MaxNoFld))/length(MaxNoFldDists)
@@ -521,5 +522,8 @@ pMaxNoFloodCI = unlist(CI)[seq(2,100,2)]
 
 hist(pBootCI)
 hist(pMaxNoFloodCI)
+
+quantile(pBootCI, probs = c(0.025, 0.975))
+quantile(pMaxNoFloodCI, probs = c(0.025, 0.975))
 
 #Seems like both are not close to being significant. 
