@@ -418,6 +418,13 @@ rate = sqrt(1.645/var(MaxNoFldDists))
 loc = mean(MaxNoFldDists) - 0.5772/rate
 pMaxNoFlood_Gumbel = 1 - pgumbel(q = (MaxNoFld - 1), loc = loc, scale = 1/rate)
 
+#Gumbel check
+png('GumbelCheck.png', res = 300, width = 5, height = 5, units = 'in')
+hist(MaxNoFldDists, breaks = seq(0,48,1), xlim = c(0,50), ylim = c(0,0.1), freq = FALSE, ylab = 'Density', xlab = 'Maximum Time Until Next Flood')
+par(new = TRUE)
+plot(seq(0,48,0.001), dgumbel(seq(0,48,0.001), loc = loc, scale = 1/rate), type = 'l', xlim = c(0,50), ylim = c(0,0.1), axes = FALSE, xlab = '', ylab = '')
+dev.off()
+
 #Plot the bootstrapped samples of the flood record on the cumulative chart as lines
 #Figure out the y limit upper bound based on the maximum number of floods observed in 50 years:
 upY = max(apply(X = FloodMat, MARGIN = 2, FUN = sum)) + MX$FldSum[MX$YEAR == 1971]
