@@ -524,13 +524,13 @@ CI = foreach (k = 1:1000) %dopar%{
 }
 stopCluster(cl)
 
-pBootCI = unlist(CI)[seq(1,100,2)]
-pMaxNoFloodCI = unlist(CI)[seq(2,100,2)]
+pBootCI = unlist(CI)[seq(1,length(CI),2)]
+pMaxNoFloodCI = unlist(CI)[seq(2,length(CI),2)]
 
 hist(pBootCI)
 hist(pMaxNoFloodCI)
 
-quantile(pBootCI, probs = c(0.025, 0.975))
-quantile(pMaxNoFloodCI, probs = c(0.025, 0.975))
+quantile(pBootCI, probs = c(0.025, 0.5, 0.975))
+quantile(pMaxNoFloodCI, probs = c(0.025, 0.5, 0.975))
 
-#Seems like both are not close to being significant. 
+#Seems like both are not close to being significant. Fairly Symmetric.
