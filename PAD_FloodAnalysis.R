@@ -373,7 +373,7 @@ mat = replicate(n = 10000, expr = arima.sim(model = temp, n = 51))
 #Use these synthetic predictions to compute how unusual the observed recrod is.
 #NOTE: All models are non-stationary, so this is not a good method to use. proceed down to bootstrapping.
 
-#Block Bootstrapping----
+#Block Bootstrapping using Full Dataset----
 #Bootstrap empirical records using only the years pre-dam construction to see how unusual the post-dam years are
 #Size of the bootstrap blocks. 5 is used because AR(5) model had lowest AIC
 block = 5
@@ -384,7 +384,7 @@ sampYrs = MX$YEAR[MX$YEAR <= (1967 - block + 1)]
 #Set random seed for reproducibility - using today's date
 set.seed(6818)
 #Draw bootstrapped block samples starting at these years.
-blkStart = replicate(expr = round(runif(n = numBlk, min = sampYrs[1], max = sampYrs[length(sampYrs)])), n = 10000)
+blkStart = replicate(expr = ceiling(runif(n = numBlk, min = sampYrs[1]-1, max = sampYrs[length(sampYrs)])), n = 10000)
 #Extract the flood records using the years in the block samples. Order matters.
 FloodMat = matrix(NA, nrow = nrow(blkStart)*block, ncol = ncol(blkStart))
 for (i in 1:ncol(blkStart)){
@@ -490,12 +490,12 @@ legend('topleft', legend = c('Observed Record Pre-Dam', 'Observed Record Post-Da
 dev.off()
 
 
-#Confidence intervals for bootstrapped p-value----
+# Confidence intervals for bootstrapped p-value----
 #Note: This takes a while to run, even in parallel. Using 1000 samples for now.
 cl <- makeCluster(detectCores() - 1)
 registerDoParallel(cl)
 CI = foreach (k = 1:1000) %dopar%{
-  blkStart = replicate(expr = round(runif(n = numBlk, min = sampYrs[1], max = sampYrs[length(sampYrs)])), n = 10000)
+  blkStart = replicate(expr = ceiling(runif(n = numBlk, min = sampYrs[1]-1, max = sampYrs[length(sampYrs)])), n = 10000)
   #Extract the flood records using the years in the block samples. Order matters.
   FloodMat = matrix(NA, nrow = nrow(blkStart)*block, ncol = ncol(blkStart))
   for (i in 1:ncol(blkStart)){
@@ -534,3 +534,265 @@ quantile(pBootCI, probs = c(0.025, 0.5, 0.975))
 quantile(pMaxNoFloodCI, probs = c(0.025, 0.5, 0.975))
 
 #Seems like both are not close to being significant. Fairly Symmetric.
+
+
+#Block Bootstrapping for Beltaos Dataset----
+#Bootstrap empirical records using only the years 1900 - pre-dam construction to see how unusual the post-dam years are
+#Size of the bootstrap blocks. 5 is used because AR(5) model had lowest AIC
+block = 5
+#Number of blocks to sample per replicate. Want all the years of record from post-dam to present to be bootstrapped, rounded up.
+numBlk = round((MX$YEAR[nrow(MX)] - 1970)/block,0)
+#Valid years to draw blocks from pre-dam record.
+sampYrs = MX$YEAR[which((MX$YEAR <= (1967 - block + 1)) & (MX$YEAR >= 1900))]
+#Set random seed for reproducibility - using today's date
+set.seed(6818)
+#Draw bootstrapped block samples starting at these years.
+blkStart = replicate(expr = ceiling(runif(n = numBlk, min = sampYrs[1]-1, max = sampYrs[length(sampYrs)])), n = 10000)
+#Extract the flood records using the years in the block samples. Order matters.
+FloodMat = matrix(NA, nrow = nrow(blkStart)*block, ncol = ncol(blkStart))
+for (i in 1:ncol(blkStart)){
+  for (j in 1:nrow(blkStart)){
+    FloodMat[seq(((j-1)*block + 1),((j-1)*block+5),1),i] = MX$Beltaos[MX$YEAR %in% c(blkStart[j,i] + seq(0,4,1))]
+  }
+}
+rm(i,j)
+#Compute cumulative sums
+FldSumMat = apply(X = FloodMat, MARGIN = 2, FUN = cumsum)
+
+#Compute the p-value based on the observed cumulative number of floods 1971 - 2018 vs. cumulative number in synthetic years
+pBootBelt = length(which(FldSumMat[48,] <= (MX$BeltSum[length(MX$BeltSum)] - MX$BeltSum[MX$YEAR == 1971])))/ncol(blkStart)
+
+#Compute p-value based on maximum length of no-flood periods in 1971 - 2018 record vs. synthetic record maximum dry spell lengths.
+getmode <- function(v) {
+  uniqv <- unique(v)
+  uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+MaxNoFld = length(which(MX$BeltSum[MX$YEAR >= 1971] == getmode(MX$BeltSum[MX$YEAR >= 1971]))) - 1
+MaxNoFldInds = apply(X = FldSumMat[1:48,], MARGIN = 2, FUN = getmode)
+MaxNoFldDists = vector('numeric', length(MaxNoFldInds))
+for (i in 1:length(MaxNoFldDists)){
+  #If the maximum is not 0, need to subtract 1 from the length because the first year had a flood.
+  MaxNoFldDists[i] = ifelse(MaxNoFldInds[i] != 0, length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])) - 1, length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])))
+}
+pMaxNoFloodBelt = length(which(MaxNoFldDists >= MaxNoFld))/length(MaxNoFldDists)
+
+#Gumbel Approximation of p-value:
+rate = sqrt(1.645/var(MaxNoFldDists))
+loc = mean(MaxNoFldDists) - 0.5772/rate
+pMaxNoFloodBelt_Gumbel = 1 - pgumbel(q = (MaxNoFld - 1), loc = loc, scale = 1/rate)
+
+#Gumbel check
+png('GumbelCheck_Belt.png', res = 300, width = 5, height = 5, units = 'in')
+hist(MaxNoFldDists, breaks = seq(0,48,1), xlim = c(0,50), ylim = c(0,0.1), freq = FALSE, ylab = 'Density', xlab = 'Maximum Time Until Next Flood')
+par(new = TRUE)
+plot(seq(0,48,0.001), dgumbel(seq(0,48,0.001), loc = loc, scale = 1/rate), type = 'l', xlim = c(0,50), ylim = c(0,0.1), axes = FALSE, xlab = '', ylab = '')
+dev.off()
+
+#Plot the bootstrapped samples of the flood record on the cumulative chart as lines
+#Figure out the y limit upper bound based on the maximum number of floods observed in 50 years:
+upY = max(apply(X = FloodMat, MARGIN = 2, FUN = sum)) + MX$BeltSum[MX$YEAR == 1971]
+
+#PDF figure
+pdf('Block5BootstrappedCumulativeFloods_BeltaosDataset.pdf', width = 6, height = 6)
+par(mar = c(5,5,3,1), xaxs = 'i', yaxs = 'i')
+#Plot observed data pre-dam only as a line(? should this show data points?)
+plot(MX$YEAR[(MX$YEAR <= 1971) & (MX$YEAR >= 1900)], MX$BeltSum[(MX$YEAR <= 1971) & (MX$YEAR >= 1900)], type = 'l', lwd = 2,
+     ylim = c(0,upY), xlim = c(1900, max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+#Plot synthetic records
+par(new = TRUE)
+matplot(x = c(MX$YEAR[MX$YEAR >= 1971], 2019,2020), y = FldSumMat+MX$BeltSum[MX$YEAR == 1970], col = adjustcolor('black', alpha=0.01), type = 'l', lwd = 1, lty = 1,
+        ylim = c(0,upY), xlim = c(1900, max(MX$YEAR)),
+        xlab = 'Year', ylab = 'Cumulative Number of Floods Since 1888', main = 'Bootstrapped Synthetic Records for 1971 - 2018 \n 5-Year Block Sampled from 1900 - 1967 Beltaos Floods',
+        cex.axis = 1.5, cex.lab = 1.5)
+
+#Plot observed flood record in red
+par(new = TRUE)
+plot(MX$YEAR[MX$YEAR >= 1971], MX$BeltSum[MX$YEAR >= 1971], type = 'l', lwd = 2, col = 'red',
+     ylim = c(0,upY), xlim = c(1900, max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+
+#Polygon for dam filling years
+polygon(x = c(1968, 1968, 1971, 1971), y = c(-10, upY, upY, -10), col = 'grey', density = 0, lwd = 2)
+
+minor.tick(nx = 4, ny = 5, tick.ratio = 0.5)
+legend('topleft', legend = c('Beltaos Record Pre-Dam', 'Beltaos Record Post-Dam', 'Bootstrapped Records', 'Reservoir Filling'), pch = c(NA, NA, NA, 22), lty = c(1,1,1,NA), lwd = 2, col = c('black', 'red', adjustcolor('black', alpha=0.01), 'grey'), cex = 1)
+
+dev.off()
+
+
+#Confidence intervals for bootstrapped p-value----
+#Note: This takes a while to run, even in parallel. Using 1000 samples for now.
+cl <- makeCluster(detectCores() - 1)
+registerDoParallel(cl)
+CIBelt = foreach (k = 1:1000) %dopar%{
+  blkStart = replicate(expr = ceiling(runif(n = numBlk, min = sampYrs[1]-1, max = sampYrs[length(sampYrs)])), n = 10000)
+  #Extract the flood records using the years in the block samples. Order matters.
+  FloodMat = matrix(NA, nrow = nrow(blkStart)*block, ncol = ncol(blkStart))
+  for (i in 1:ncol(blkStart)){
+    for (j in 1:nrow(blkStart)){
+      FloodMat[seq(((j-1)*block + 1),((j-1)*block+5),1),i] = MX$Beltaos[MX$YEAR %in% c(blkStart[j,i] + seq(0,4,1))]
+    }
+  }
+  rm(i,j)
+  #Compute cumulative sums
+  FldSumMat = apply(X = FloodMat, MARGIN = 2, FUN = cumsum)
+  
+  #Compute the p-value based on the observed cumulative number of floods 1971 - 2018 vs. cumulative number in synthetic years
+  pBootCI = length(which(FldSumMat[48,] <= (MX$BeltSum[length(MX$FldSum)] - MX$BeltSum[MX$YEAR == 1971])))/ncol(blkStart)
+  
+  #Compute p-value based on maximum length of no-flood periods in 1971 - 2018 record vs. synthetic record maximum dry spell lengths.
+  MaxNoFld = length(which(MX$BeltSum[MX$YEAR >= 1971] == getmode(MX$BeltSum[MX$YEAR >= 1971]))) - 1
+  MaxNoFldInds = apply(X = FldSumMat[1:48,], MARGIN = 2, FUN = getmode)
+  MaxNoFldDists = vector('numeric', length(MaxNoFldInds))
+  for (i in 1:length(MaxNoFldDists)){
+    MaxNoFldDists[i] = ifelse(MaxNoFldInds[i] != 0, length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])) - 1, length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])))
+  }
+  rm(i)
+  pMaxNoFloodCI = length(which(MaxNoFldDists >= MaxNoFld))/length(MaxNoFldDists)
+  
+  return(list('Boot' = pBootCI, 'Max' = pMaxNoFloodCI))
+}
+stopCluster(cl)
+
+pBootCIBelt = unlist(CIBelt)[seq(1,length(CIBelt),2)]
+pMaxNoFloodCIBelt = unlist(CIBelt)[seq(2,length(CIBelt),2)]
+
+hist(pBootCIBelt)
+hist(pMaxNoFloodCIBelt)
+
+quantile(pBootCIBelt, probs = c(0.025, 0.5, 0.975))
+quantile(pMaxNoFloodCIBelt, probs = c(0.025, 0.5, 0.975))
+
+
+#Block Bootstrapping for 1900-1967 using Full Dataset----
+#Bootstrap empirical records using only the years 1900 - pre-dam construction to see how unusual the post-dam years are
+#Size of the bootstrap blocks. 5 is used because AR(5) model had lowest AIC
+block = 5
+#Number of blocks to sample per replicate. Want all the years of record from post-dam to present to be bootstrapped, rounded up.
+numBlk = round((MX$YEAR[nrow(MX)] - 1970)/block,0)
+#Valid years to draw blocks from pre-dam record.
+sampYrs = MX$YEAR[which((MX$YEAR <= (1967 - block + 1)) & (MX$YEAR >= 1900))]
+#Set random seed for reproducibility - using today's date
+set.seed(6818)
+#Draw bootstrapped block samples starting at these years.
+blkStart = replicate(expr = ceiling(runif(n = numBlk, min = sampYrs[1]-1, max = sampYrs[length(sampYrs)])), n = 10000)
+#Extract the flood records using the years in the block samples. Order matters.
+FloodMat = matrix(NA, nrow = nrow(blkStart)*block, ncol = ncol(blkStart))
+for (i in 1:ncol(blkStart)){
+  for (j in 1:nrow(blkStart)){
+    FloodMat[seq(((j-1)*block + 1),((j-1)*block+5),1),i] = MX$Floods23only[MX$YEAR %in% c(blkStart[j,i] + seq(0,4,1))]
+  }
+}
+rm(i,j)
+#Compute cumulative sums
+FldSumMat = apply(X = FloodMat, MARGIN = 2, FUN = cumsum)
+
+#Compute the p-value based on the observed cumulative number of floods 1971 - 2018 vs. cumulative number in synthetic years
+pBootFull1900St = length(which(FldSumMat[48,] <= (MX$FldSum[length(MX$FldSum)] - MX$FldSum[MX$YEAR == 1971])))/ncol(blkStart)
+
+#Compute p-value based on maximum length of no-flood periods in 1971 - 2018 record vs. synthetic record maximum dry spell lengths.
+getmode <- function(v) {
+  uniqv <- unique(v)
+  uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+MaxNoFld = length(which(MX$FldSum[MX$YEAR >= 1971] == getmode(MX$FldSum[MX$YEAR >= 1971]))) - 1
+MaxNoFldInds = apply(X = FldSumMat[1:48,], MARGIN = 2, FUN = getmode)
+MaxNoFldDists = vector('numeric', length(MaxNoFldInds))
+for (i in 1:length(MaxNoFldDists)){
+  #If the maximum is not 0, need to subtract 1 from the length because the first year had a flood.
+  MaxNoFldDists[i] = ifelse(MaxNoFldInds[i] != 0, length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])) - 1, length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])))
+}
+pMaxNoFloodFull1900St = length(which(MaxNoFldDists >= MaxNoFld))/length(MaxNoFldDists)
+
+#Gumbel Approximation of p-value:
+rate = sqrt(1.645/var(MaxNoFldDists))
+loc = mean(MaxNoFldDists) - 0.5772/rate
+pMaxNoFloodFull1900St_Gumbel = 1 - pgumbel(q = (MaxNoFld - 1), loc = loc, scale = 1/rate)
+
+#Gumbel check
+png('GumbelCheck_Full1900Start.png', res = 300, width = 5, height = 5, units = 'in')
+hist(MaxNoFldDists, breaks = seq(0,48,1), xlim = c(0,50), ylim = c(0,0.2), freq = FALSE, ylab = 'Density', xlab = 'Maximum Time Until Next Flood')
+par(new = TRUE)
+plot(seq(0,48,0.001), dgumbel(seq(0,48,0.001), loc = loc, scale = 1/rate), type = 'l', xlim = c(0,50), ylim = c(0,0.2), axes = FALSE, xlab = '', ylab = '')
+dev.off()
+
+#Plot the bootstrapped samples of the flood record on the cumulative chart as lines
+#Figure out the y limit upper bound based on the maximum number of floods observed in 50 years:
+upY = max(apply(X = FloodMat, MARGIN = 2, FUN = sum)) + MX$FldSum[MX$YEAR == 1971]
+
+#PDF figure
+pdf('Block5BootstrappedCumulativeFloods_FullDataset_1900Start.pdf', width = 6, height = 6)
+par(mar = c(5,5,3,1), xaxs = 'i', yaxs = 'i')
+#Plot observed data pre-dam only as a line(? should this show data points?)
+plot(MX$YEAR[MX$YEAR <= 1971], MX$FldSum[MX$YEAR <= 1971], type = 'l', lwd = 2,
+     ylim = c(-6,upY), xlim = c(1900, max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+#Plot synthetic records
+par(new = TRUE)
+matplot(x = c(MX$YEAR[MX$YEAR >= 1971], 2019,2020), y = FldSumMat+MX$FldSum[MX$YEAR == 1970], col = adjustcolor('black', alpha=0.01), type = 'l', lwd = 1, lty = 1,
+        ylim = c(-6,upY), xlim = c(1900, max(MX$YEAR)),
+        xlab = 'Year', ylab = 'Cumulative Number of Floods Since 1888', main = 'Bootstrapped Synthetic Records for 1971 - 2018 \n 5-Year Block Sampled from 1900 - 1967 Updated Data',
+        cex.axis = 1.5, cex.lab = 1.5)
+
+#Plot observed flood record in red
+par(new = TRUE)
+plot(MX$YEAR[MX$YEAR >= 1971], MX$FldSum[MX$YEAR >= 1971], type = 'l', lwd = 2, col = 'red',
+     ylim = c(-6,upY), xlim = c(1900, max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+
+#Polygon for dam filling years
+polygon(x = c(1968, 1968, 1971, 1971), y = c(-10, upY, upY, -10), col = 'grey', density = 0, lwd = 2)
+
+minor.tick(nx = 5, ny = 5, tick.ratio = 0.5)
+legend('topleft', legend = c('Observed Record Pre-Dam', 'Observed Record Post-Dam', 'Bootstrapped Records', 'Reservoir Filling'), pch = c(NA, NA, NA, 22), lty = c(1,1,1,NA), lwd = 2, col = c('black', 'red', adjustcolor('black', alpha=0.01), 'grey'), cex = 1.2)
+
+dev.off()
+
+
+# Confidence intervals for bootstrapped p-value----
+#Note: This takes a while to run, even in parallel. Using 1000 samples for now.
+cl <- makeCluster(detectCores() - 1)
+registerDoParallel(cl)
+CIFull_1900St = foreach (k = 1:1000) %dopar%{
+  blkStart = replicate(expr = ceiling(runif(n = numBlk, min = sampYrs[1]-1, max = sampYrs[length(sampYrs)])), n = 10000)
+  #Extract the flood records using the years in the block samples. Order matters.
+  FloodMat = matrix(NA, nrow = nrow(blkStart)*block, ncol = ncol(blkStart))
+  for (i in 1:ncol(blkStart)){
+    for (j in 1:nrow(blkStart)){
+      FloodMat[seq(((j-1)*block + 1),((j-1)*block+5),1),i] = MX$Floods23only[MX$YEAR %in% c(blkStart[j,i] + seq(0,4,1))]
+    }
+  }
+  rm(i,j)
+  #Compute cumulative sums
+  FldSumMat = apply(X = FloodMat, MARGIN = 2, FUN = cumsum)
+  
+  #Compute the p-value based on the observed cumulative number of floods 1971 - 2018 vs. cumulative number in synthetic years
+  pBootCI = length(which(FldSumMat[48,] <= (MX$FldSum[length(MX$FldSum)] - MX$FldSum[MX$YEAR == 1971])))/ncol(blkStart)
+  
+  #Compute p-value based on maximum length of no-flood periods in 1971 - 2018 record vs. synthetic record maximum dry spell lengths.
+  MaxNoFld = length(which(MX$FldSum[MX$YEAR >= 1971] == getmode(MX$FldSum[MX$YEAR >= 1971]))) - 1
+  MaxNoFldInds = apply(X = FldSumMat[1:48,], MARGIN = 2, FUN = getmode)
+  MaxNoFldDists = vector('numeric', length(MaxNoFldInds))
+  for (i in 1:length(MaxNoFldDists)){
+    MaxNoFldDists[i] = ifelse(MaxNoFldInds[i] != 0, length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])) - 1, length(which(FldSumMat[1:48,i] == MaxNoFldInds[i])))
+  }
+  rm(i)
+  pMaxNoFloodCI = length(which(MaxNoFldDists >= MaxNoFld))/length(MaxNoFldDists)
+  
+  return(list('Boot' = pBootCI, 'Max' = pMaxNoFloodCI))
+}
+stopCluster(cl)
+
+pBootCIFull_1900St = unlist(CIFull_1900St)[seq(1,length(CIFull_1900St),2)]
+pMaxNoFloodCIFull_1900St = unlist(CIFull_1900St)[seq(2,length(CIFull_1900St),2)]
+
+hist(pBootCIFull_1900St)
+hist(pMaxNoFloodCIFull_1900St)
+
+quantile(pBootCIFull_1900St, probs = c(0.025, 0.5, 0.975))
+quantile(pMaxNoFloodCIFull_1900St, probs = c(0.025, 0.5, 0.975))
