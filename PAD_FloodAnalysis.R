@@ -259,11 +259,13 @@ par(mar = c(4,5,3,1), xaxs = 'i', yaxs = 'i')
 #Normal QQ plot for residuals
 qqnorm(lmPD$residuals, ylim = c(-1.5,1.5), xlim = c(-2.5,2.5), main = 'Regression for 1971 - 2018 \n Normal Q-Q Plot', cex.lab = 1.5, cex.axis = 1.5)
 qqline(lmPD$residuals)
+mtext(text = expression(bold('A')), side = 3, at = -4, line = 0.75, cex = 2)
 
 #Residuals vs. Fitted Y Values
 plot(lmPD$fitted.values, lmPD$residuals, type = 'p', xlim = c(13,17), ylim = c(-1.5,1.5), cex.lab = 1.5, cex.axis = 1.5,
      xlab = 'Fitted Y Values', ylab = 'Regression Residuals', main = 'Regression for 1971 - 2018 \n Residuals vs. Fitted Y Values')
 lines(c(10,20), c(0,0), lty = 2)
+mtext(text = expression(bold('B')), side = 3, at = 12, line = 0.75, cex = 2)
 dev.off()
 
 #Plot regression lines in Beltaos' study
@@ -427,62 +429,64 @@ dev.off()
 
 #Plot the bootstrapped samples of the flood record on the cumulative chart as lines
 #Figure out the y limit upper bound based on the maximum number of floods observed in 50 years:
-upY = max(apply(X = FloodMat, MARGIN = 2, FUN = sum)) + MX$FldSum[MX$YEAR == 1971]
+upYFull = max(apply(X = FloodMat, MARGIN = 2, FUN = sum)) + MX$FldSum[MX$YEAR == 1971]
 
 #As a png file the graphic takes a long time to render. Use PDF instead.
 # png('Block5BootstrappedCumulativeFloods.png', res = 300, units = 'in', width = 6, height = 6)
 # par(mar = c(5,5,3,1), xaxs = 'i', yaxs = 'i')
 # #Plot observed data pre-dam only as a line(? should this show data points?)
 # plot(MX$YEAR[MX$YEAR <= 1971], MX$FldSum[MX$YEAR <= 1971], type = 'l', lwd = 2,
-#      ylim = c(-6,upY), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+#      ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
 #      xlab = '', ylab = '', axes = FALSE)
 # 
 # #Plot synthetic records
 # par(new = TRUE)
 # matplot(x = c(MX$YEAR[MX$YEAR >= 1971], 2019,2020), y = FldSumMat+MX$FldSum[MX$YEAR == 1970], col = adjustcolor('black', alpha=0.01), type = 'l', lwd = 1, lty = 1,
-#      ylim = c(-6,upY), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+#      ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
 #      xlab = 'Year', ylab = 'Cumulative Number of Floods Since 1888',
 #      cex.axis = 1.5, cex.lab = 1.5)
 # 
 # #Plot observed flood record in red
 # par(new = TRUE)
 # plot(MX$YEAR[MX$YEAR >= 1971], MX$FldSum[MX$YEAR >= 1971], type = 'l', lwd = 1, col = 'red',
-#      ylim = c(-6,upY), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+#      ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
 #      xlab = '', ylab = '', axes = FALSE)
 # 
 # 
 # #Polygon for dam filling years
-# polygon(x = c(1968, 1968, 1971, 1971), y = c(-10, upY, upY, -10), col = 'grey', density = 0, lwd = 2)
+# polygon(x = c(1968, 1968, 1971, 1971), y = c(-10, upYFull, upYFull, -10), col = 'grey', density = 0, lwd = 2)
 # 
 # minor.tick(nx = 5, ny = 5, tick.ratio = 0.5)
 # legend('topleft', legend = c('Observed Record Pre-Dam', 'Observed Record Post-Dam', 'Bootstrapped Records', 'Reservoir Filling'), pch = c(NA, NA, NA, 22), lty = c(1,1,1,NA), lwd = 1, col = c('black', 'red', adjustcolor('black', alpha=0.01), 'grey'), cex = 1.2)
 # 
 # dev.off()
 
+FldSumMatFull = FldSumMat
+
 #PDF figure
 pdf('Block5BootstrappedCumulativeFloods.pdf', width = 6, height = 6)
 par(mar = c(5,5,3,1), xaxs = 'i', yaxs = 'i')
 #Plot observed data pre-dam only as a line(? should this show data points?)
 plot(MX$YEAR[MX$YEAR <= 1971], MX$FldSum[MX$YEAR <= 1971], type = 'l', lwd = 2,
-     ylim = c(-6,upY), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+     ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
      xlab = '', ylab = '', axes = FALSE)
 
 #Plot synthetic records
 par(new = TRUE)
-matplot(x = c(MX$YEAR[MX$YEAR >= 1971], 2019,2020), y = FldSumMat+MX$FldSum[MX$YEAR == 1970], col = adjustcolor('black', alpha=0.01), type = 'l', lwd = 1, lty = 1,
-        ylim = c(-6,upY), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+matplot(x = c(MX$YEAR[MX$YEAR >= 1971], 2019,2020), y = FldSumMatFull+MX$FldSum[MX$YEAR == 1970], col = adjustcolor('black', alpha=0.01), type = 'l', lwd = 1, lty = 1,
+        ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
         xlab = 'Year', ylab = 'Cumulative Number of Floods Since 1888', main = 'Bootstrapped Synthetic Records for 1971 - 2018 \n 5-Year Block Sampled from 1826 - 1967',
         cex.axis = 1.5, cex.lab = 1.5)
 
 #Plot observed flood record in red
 par(new = TRUE)
 plot(MX$YEAR[MX$YEAR >= 1971], MX$FldSum[MX$YEAR >= 1971], type = 'l', lwd = 2, col = 'red',
-     ylim = c(-6,upY), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+     ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
      xlab = '', ylab = '', axes = FALSE)
 
 
 #Polygon for dam filling years
-polygon(x = c(1968, 1968, 1971, 1971), y = c(-10, upY, upY, -10), col = 'grey', density = 0, lwd = 2)
+polygon(x = c(1968, 1968, 1971, 1971), y = c(-10, upYFull, upYFull, -10), col = 'grey', density = 0, lwd = 2)
 
 minor.tick(nx = 5, ny = 5, tick.ratio = 0.5)
 legend('topleft', legend = c('Observed Record Pre-Dam', 'Observed Record Post-Dam', 'Bootstrapped Records', 'Reservoir Filling'), pch = c(NA, NA, NA, 22), lty = c(1,1,1,NA), lwd = 2, col = c('black', 'red', adjustcolor('black', alpha=0.01), 'grey'), cex = 1.2)
@@ -666,6 +670,126 @@ hist(pMaxNoFloodCIBelt)
 quantile(pBootCIBelt, probs = c(0.025, 0.5, 0.975))
 quantile(pMaxNoFloodCIBelt, probs = c(0.025, 0.5, 0.975))
 
+#Side by side figures for paper----
+#PDF figure
+pdf('Block5BootstrappedCumulativeFloods_SideBySide.pdf', width = 12, height = 6)
+layout(cbind(1,2))
+par(mar = c(5,5,3,1), xaxs = 'i', yaxs = 'i')
+#Plot observed data pre-dam only as a line(? should this show data points?)
+plot(MX$YEAR[(MX$YEAR <= 1971) & (MX$YEAR >= 1900)], MX$BeltSum[(MX$YEAR <= 1971) & (MX$YEAR >= 1900)], type = 'l', lwd = 2,
+     ylim = c(0,upY), xlim = c(1900, max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+#Plot synthetic records
+par(new = TRUE)
+matplot(x = c(MX$YEAR[MX$YEAR >= 1971], 2019,2020), y = FldSumMat+MX$BeltSum[MX$YEAR == 1970], col = adjustcolor('black', alpha=0.01), type = 'l', lwd = 1, lty = 1,
+        ylim = c(0,upY), xlim = c(1900, max(MX$YEAR)),
+        xlab = 'Year', ylab = 'Cumulative Number of Floods Since 1888', main = 'Bootstrapped Synthetic Records for 1971 - 2018 \n 5-Year Block Sampled from 1900 - 1967 Beltaos Floods',
+        cex.axis = 1.5, cex.lab = 1.5)
+
+#Plot observed flood record in red
+par(new = TRUE)
+plot(MX$YEAR[MX$YEAR >= 1971], MX$BeltSum[MX$YEAR >= 1971], type = 'l', lwd = 2, col = 'red',
+     ylim = c(0,upY), xlim = c(1900, max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+
+#Polygon for dam filling years
+polygon(x = c(1968, 1968, 1971, 1971), y = c(-10, upY, upY, -10), col = 'grey', density = 0, lwd = 2)
+
+minor.tick(nx = 4, ny = 5, tick.ratio = 0.5)
+legend('topleft', legend = c('Beltaos Record Pre-Dam', 'Beltaos Record Post-Dam', 'Bootstrapped Records', 'Reservoir Filling'), pch = c(NA, NA, NA, 22), lty = c(1,1,1,NA), lwd = 2, col = c('black', 'red', adjustcolor('black', alpha=0.01), 'grey'), cex = 1)
+mtext(text = expression(bold('A')), side = 3, at = 1890, cex = 2, line = 0.75)
+
+#Figure 2
+par(mar = c(5,5,3,1), xaxs = 'i', yaxs = 'i')
+#Plot observed data pre-dam only as a line(? should this show data points?)
+plot(MX$YEAR[MX$YEAR <= 1971], MX$FldSum[MX$YEAR <= 1971], type = 'l', lwd = 2,
+     ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+#Plot synthetic records
+par(new = TRUE)
+matplot(x = c(MX$YEAR[MX$YEAR >= 1971], 2019,2020), y = FldSumMatFull+MX$FldSum[MX$YEAR == 1970], col = adjustcolor('black', alpha=0.01), type = 'l', lwd = 1, lty = 1,
+        ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+        xlab = 'Year', ylab = 'Cumulative Number of Floods Since 1888', main = 'Bootstrapped Synthetic Records for 1971 - 2018 \n 5-Year Block Sampled from 1826 - 1967',
+        cex.axis = 1.5, cex.lab = 1.5)
+
+#Plot observed flood record in red
+par(new = TRUE)
+plot(MX$YEAR[MX$YEAR >= 1971], MX$FldSum[MX$YEAR >= 1971], type = 'l', lwd = 2, col = 'red',
+     ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+
+#Polygon for dam filling years
+polygon(x = c(1968, 1968, 1971, 1971), y = c(-10, upYFull, upYFull, -10), col = 'grey', density = 0, lwd = 2)
+
+minor.tick(nx = 5, ny = 5, tick.ratio = 0.5)
+legend('topleft', legend = c('Observed Record Pre-Dam', 'Observed Record Post-Dam', 'Bootstrapped Records', 'Reservoir Filling'), pch = c(NA, NA, NA, 22), lty = c(1,1,1,NA), lwd = 2, col = c('black', 'red', adjustcolor('black', alpha=0.01), 'grey'), cex = 1)
+mtext(text = expression(bold('B')), side = 3, at = 1810, cex = 2, line = 0.75)
+
+dev.off()
+
+#PNG figure
+png('Block5BootstrappedCumulativeFloods_SideBySide.png', width = 12, height = 6, res = 300, units = 'in')
+layout(cbind(1,2))
+par(mar = c(5,5,3,1), xaxs = 'i', yaxs = 'i')
+#Plot observed data pre-dam only as a line(? should this show data points?)
+plot(MX$YEAR[(MX$YEAR <= 1971) & (MX$YEAR >= 1900)], MX$BeltSum[(MX$YEAR <= 1971) & (MX$YEAR >= 1900)], type = 'l', lwd = 2,
+     ylim = c(0,upY), xlim = c(1900, max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+#Plot synthetic records
+par(new = TRUE)
+matplot(x = c(MX$YEAR[MX$YEAR >= 1971], 2019,2020), y = FldSumMat+MX$BeltSum[MX$YEAR == 1970], col = adjustcolor('black', alpha=0.01), type = 'l', lwd = 1, lty = 1,
+        ylim = c(0,upY), xlim = c(1900, max(MX$YEAR)),
+        xlab = 'Year', ylab = 'Cumulative Number of Floods Since 1888', main = 'Bootstrapped Synthetic Records for 1971 - 2018 \n 5-Year Block Sampled from 1900 - 1967 Beltaos Floods',
+        cex.axis = 1.5, cex.lab = 1.5)
+
+#Plot observed flood record in red
+par(new = TRUE)
+plot(MX$YEAR[MX$YEAR >= 1971], MX$BeltSum[MX$YEAR >= 1971], type = 'l', lwd = 2, col = 'red',
+     ylim = c(0,upY), xlim = c(1900, max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+
+#Polygon for dam filling years
+polygon(x = c(1968, 1968, 1971, 1971), y = c(-10, upY, upY, -10), col = 'grey', density = 0, lwd = 2)
+
+minor.tick(nx = 4, ny = 5, tick.ratio = 0.5)
+legend('topleft', legend = c('Beltaos Record Pre-Dam', 'Beltaos Record Post-Dam', 'Bootstrapped Records', 'Reservoir Filling'), pch = c(NA, NA, NA, 22), lty = c(1,1,1,NA), lwd = 2, col = c('black', 'red', adjustcolor('black', alpha=0.01), 'grey'), cex = 1)
+mtext(text = expression(bold('A')), side = 3, at = 1890, cex = 2, line = 0.75)
+
+#Figure 2
+par(mar = c(5,5,3,1), xaxs = 'i', yaxs = 'i')
+#Plot observed data pre-dam only as a line(? should this show data points?)
+plot(MX$YEAR[MX$YEAR <= 1971], MX$FldSum[MX$YEAR <= 1971], type = 'l', lwd = 2,
+     ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+#Plot synthetic records
+par(new = TRUE)
+matplot(x = c(MX$YEAR[MX$YEAR >= 1971], 2019,2020), y = FldSumMatFull+MX$FldSum[MX$YEAR == 1970], col = adjustcolor('black', alpha=0.01), type = 'l', lwd = 1, lty = 1,
+        ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+        xlab = 'Year', ylab = 'Cumulative Number of Floods Since 1888', main = 'Bootstrapped Synthetic Records for 1971 - 2018 \n 5-Year Block Sampled from 1826 - 1967',
+        cex.axis = 1.5, cex.lab = 1.5)
+
+#Plot observed flood record in red
+par(new = TRUE)
+plot(MX$YEAR[MX$YEAR >= 1971], MX$FldSum[MX$YEAR >= 1971], type = 'l', lwd = 2, col = 'red',
+     ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+
+#Polygon for dam filling years
+polygon(x = c(1968, 1968, 1971, 1971), y = c(-10, upYFull, upYFull, -10), col = 'grey', density = 0, lwd = 2)
+
+minor.tick(nx = 5, ny = 5, tick.ratio = 0.5)
+legend('topleft', legend = c('Observed Record Pre-Dam', 'Observed Record Post-Dam', 'Bootstrapped Records', 'Reservoir Filling'), pch = c(NA, NA, NA, 22), lty = c(1,1,1,NA), lwd = 2, col = c('black', 'red', adjustcolor('black', alpha=0.01), 'grey'), cex = 1)
+mtext(text = expression(bold('B')), side = 3, at = 1810, cex = 2, line = 0.75)
+
+dev.off()
 
 #Block Bootstrapping for 1900-1967 using Full Dataset----
 #Bootstrap empirical records using only the years 1900 - pre-dam construction to see how unusual the post-dam years are
