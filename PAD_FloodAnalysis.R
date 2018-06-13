@@ -257,7 +257,7 @@ png('BeltaosRegressionDiagnostics.png', res = 300, units = 'in', width = 8, heig
 layout(cbind(1,2))
 par(mar = c(4,5,3,1), xaxs = 'i', yaxs = 'i')
 #Normal QQ plot for residuals
-qqnorm(lmPD$residuals, ylim = c(-1.5,1.5), xlim = c(-2.5,2.5), main = 'Regression for 1971 - 2018 \n Normal Q-Q Plot', cex.lab = 1.5, cex.axis = 1.5)
+qqnorm(lmPD$residuals, ylim = c(-1.5,1.5), xlim = c(-2.5,2.5), main = 'Regression for 1971 - 2018 \n Normal Q-Q Plot of Residuals', cex.lab = 1.5, cex.axis = 1.5)
 qqline(lmPD$residuals)
 mtext(text = expression(bold('A')), side = 3, at = -4, line = 0.75, cex = 2)
 
