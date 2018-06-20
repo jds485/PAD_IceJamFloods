@@ -11,6 +11,7 @@ setwd("C:\\Users\\jsmif\\Documents\\Cornell\\Research\\Publications\\CountRegres
 library(Hmisc)
 library(evd)
 library(doParallel)
+library(trend)
 
 #Load data----
 #All flood data
@@ -60,6 +61,36 @@ minor.tick(nx = 5, ny = 5, tick.ratio = 0.5)
 legend('topleft', legend = c('Flood Not in Beltaos (2018)', 'Flood in Beltaos (2018)', 'No Flood, Small Flood, \n or Unknown Magnitude', 'Reservoir Filling'), pch = c(16,16,1,NA), lty = c(NA,NA,NA,1), lwd = 1, col = c('red', 'blue', 'black', 'grey'), cex = 1)
 
 dev.off()
+
+
+png('CumulativeFloods_BW.png', res = 300, units = 'in', width = 6, height = 6)
+par(mar = c(5,5,3,1), yaxs = 'i')
+#Plot filler data: Both no floods
+plot(MX$YEAR[MX$Beltaos == 0 & MX$Floods23only == 0], MX$FldSum[MX$Beltaos == 0 & MX$Floods23only == 0], pch = 1, col = 'grey60',
+     ylim = c(min(MX$FldSum)-1,max(MX$FldSum)+1), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+#Plot Floods not considered by Beltaos
+par(new = TRUE)
+plot(MX$YEAR[MX$Beltaos == 0 & MX$Floods23only == 1], MX$FldSum[MX$Beltaos == 0 & MX$Floods23only == 1], pch = 17,
+     ylim = c(min(MX$FldSum)-1,max(MX$FldSum)+1), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+     xlab = 'Year', ylab = 'Cumulative Number of Floods Since 1888',
+     cex.axis = 1.5, cex.lab = 1.5)
+#Plot all other floods considered in both studies
+par(new = TRUE)
+plot(MX$YEAR[MX$Beltaos == 1 & MX$Floods23only == 1], MX$FldSum[MX$Beltaos == 1 & MX$Floods23only == 1], pch = 16,
+     ylim = c(min(MX$FldSum)-1,max(MX$FldSum)+1), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+
+#Polygon for dam filling years
+polygon(x = c(1968, 1968, 1971, 1971), y = c(min(MX$FldSum)-1, max(MX$FldSum)+1, max(MX$FldSum)+1, min(MX$FldSum)-1), col = 'grey', density = 0, lwd = 2)
+
+minor.tick(nx = 5, ny = 5, tick.ratio = 0.5)
+legend('topleft', legend = c('Flood Not in Beltaos (2018)', 'Flood in Beltaos (2018)', 'No Flood, Small Flood, \n or Unknown Magnitude', 'Reservoir Filling'), pch = c(17,16,1,NA), lty = c(NA,NA,NA,1), lwd = 1, col = c('black', 'black', 'grey60', 'grey'), cex = 1)
+
+dev.off()
+
 
 #Pacific Decadal Osciallation indices
 #Monthly index for the PDO
@@ -289,6 +320,11 @@ abline(lm1950, col = 'pink')
 abline(lmPD, col = 'black')
 
 #dev.off()
+
+#Mann-Kendall Test to verify Beltos did the computation correctly
+mk.test(x = cumsum(MX$Beltaos[MX$YEAR >= 1972]) - cumsum(MX$Beltaos[which((MX$YEAR >= (1967 - 45)) & (MX$YEAR <= 1967))]), alternative = 'two.sided', continuity = TRUE)
+#just looking at the plot, it seems reasonable to expect that a trend would be detected with any test because many more negatives than positives.
+
 
 #Evaluation of PDO and Floods----
 plot(seq(1856, 1990,1), PDO_SST_SLP$PDO_SST, type = 'o', pch = 16, col = 'red',
@@ -765,6 +801,65 @@ mtext(text = expression(bold('B')), side = 3, at = 1810, cex = 2, line = 0.75)
 
 dev.off()
 
+#Black and white
+png('Block5BootstrappedCumulativeFloods_SideBySide_BW.png', width = 12, height = 6, res = 300, units = 'in')
+layout(cbind(1,2))
+par(mar = c(5,5,3,1.2), xaxs = 'i', yaxs = 'i')
+#Plot observed data pre-dam only as a line(? should this show data points?)
+plot(MX$YEAR[(MX$YEAR <= 1971) & (MX$YEAR >= 1900)], MX$BeltSum[(MX$YEAR <= 1971) & (MX$YEAR >= 1900)], type = 'l', lwd = 2,
+     ylim = c(0,upY), xlim = c(1900, max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+#Plot synthetic records
+par(new = TRUE)
+matplot(x = c(MX$YEAR[MX$YEAR >= 1971], 2018,2019,2020,2021), y = FldSumMatBelt+MX$BeltSum[MX$YEAR == 1971], col = adjustcolor('black', alpha=0.01), type = 'l', lwd = 1, lty = 1,
+        ylim = c(0,upY), xlim = c(1900, max(MX$YEAR)),
+        xlab = 'Year', ylab = 'Cumulative Number of Floods Since 1888', main = 'Bootstrapped Synthetic Records for 1972 - 2017 \n 5-Year Block Sampled from 1900 - 1967 Beltaos Floods',
+        cex.axis = 1.5, cex.lab = 1.5)
+
+#Plot observed flood record in black
+par(new = TRUE)
+plot(MX$YEAR[MX$YEAR >= 1971], MX$BeltSum[MX$YEAR >= 1971], type = 'l', lwd = 2,
+     ylim = c(0,upY), xlim = c(1900, max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+
+#Polygon for dam filling years
+polygon(x = c(1968, 1968, 1971, 1971), y = c(-10, upY, upY, -10), col = 'grey', density = 0, lwd = 2)
+
+minor.tick(nx = 4, ny = 5, tick.ratio = 0.5)
+legend('topleft', legend = c('Beltaos (2018) Record', 'Bootstrapped Records', 'Reservoir Filling'), pch = c(NA, NA, 22), lty = c(1,1,NA), lwd = 2, col = c('black', adjustcolor('black', alpha=0.01), 'grey'), cex = 1)
+mtext(text = expression(bold('A')), side = 3, at = 1890, cex = 2, line = 0.75)
+
+#Figure 2
+par(mar = c(5,5,3,1.2), xaxs = 'i', yaxs = 'i')
+#Plot observed data pre-dam only as a line(? should this show data points?)
+plot(MX$YEAR[MX$YEAR <= 1971], MX$FldSum[MX$YEAR <= 1971], type = 'l', lwd = 2,
+     ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+#Plot synthetic records
+par(new = TRUE)
+matplot(x = c(MX$YEAR[MX$YEAR >= 1971], 2018,2019,2020,2021), y = FldSumMatFull+MX$FldSum[MX$YEAR == 1971], col = adjustcolor('black', alpha=0.01), type = 'l', lwd = 1, lty = 1,
+        ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+        xlab = 'Year', ylab = 'Cumulative Number of Floods Since 1888', main = 'Bootstrapped Synthetic Records for 1972 - 2017 \n 5-Year Block Sampled from 1826 - 1967',
+        cex.axis = 1.5, cex.lab = 1.5)
+
+#Plot observed flood record in black
+par(new = TRUE)
+plot(MX$YEAR[MX$YEAR >= 1971], MX$FldSum[MX$YEAR >= 1971], type = 'l', lwd = 2,
+     ylim = c(-6,upYFull), xlim = c(MX$YEAR[1], max(MX$YEAR)),
+     xlab = '', ylab = '', axes = FALSE)
+
+#Polygon for dam filling years
+polygon(x = c(1968, 1968, 1971, 1971), y = c(-10, upYFull, upYFull, -10), col = 'grey', density = 0, lwd = 2)
+
+minor.tick(nx = 5, ny = 5, tick.ratio = 0.5)
+legend('topleft', legend = c('Observed Record', 'Bootstrapped Records', 'Reservoir Filling'), pch = c(NA, NA, 22), lty = c(1,1,NA), lwd = 2, col = c('black', adjustcolor('black', alpha=0.01), 'grey'), cex = 1)
+mtext(text = expression(bold('B')), side = 3, at = 1810, cex = 2, line = 0.75)
+
+dev.off()
+
 #Block Bootstrapping for 1900-1967 using Full Dataset----
 #Bootstrap empirical records using only the years 1900 - pre-dam construction to see how unusual the post-dam years are
 #Size of the bootstrap blocks. 5 is used because AR(5) model had lowest AIC
@@ -897,3 +992,12 @@ hist(pMaxNoFloodCIFull_1900St)
 
 quantile(pBootCIFull_1900St, probs = c(0.025, 0.5, 0.975))
 quantile(pMaxNoFloodCIFull_1900St, probs = c(0.025, 0.5, 0.975))
+
+#Mann-Kendall Test on Difference in cumulative records: pre-dam observed vs. post-dam synthetic----
+MannKendallPvals = vector('numeric', ncol(FldSumMatBelt))
+for (i in 1:length(MannKendallPvals)){
+  MannKendallPvals[i] = mk.test(x = (FldSumMatBelt[1:46,i] - cumsum(MX$Beltaos[which((MX$YEAR >= (1967 - 45)) & (MX$YEAR <= 1967))])), alternative = 'two.sided', continuity = TRUE)$pval
+}
+#Plot of p-values from synthetic data
+hist(MannKendallPvals, freq = TRUE, breaks = seq(0,1,0.05), xlab = 'p-value', ylim = c(0,8000), cex.axis = 1.5, cex.lab = 1.5, main = 'Mann-Kendall p-values for Beltaos (2018) Observed Pre-dam Record \n Compared to Bootstrapped p-value Synthetic Records')
+
