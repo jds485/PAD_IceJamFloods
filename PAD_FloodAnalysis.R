@@ -20,6 +20,7 @@ library(Hmisc)
 library(evd)
 library(doParallel)
 library(trend)
+library(ppcc)
 
 #Function to get the mode. Only returns one mode, which works for this problem.
 getmode <- function(v) {
@@ -392,6 +393,9 @@ plot(lmPD$fitted.values, lmPD$residuals, type = 'p', xlim = c(13,17), ylim = c(-
 lines(c(10,20), c(0,0), lty = 2)
 mtext(text = expression(bold('B')), side = 3, at = 12, line = 0.75, cex = 2)
 dev.off()
+
+#Probability plot correlation coefficient test
+PPCCtestBeltPD = ppccTest(x = lmPD$residuals, qfn = 'qnorm', ppos = 'Blom')
 
 #Plot regression lines in Beltaos' study
 #png('BeltosRegressionCheck.png', res = 300, units = 'in', width = 7, height = 7)
