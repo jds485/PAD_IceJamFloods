@@ -346,6 +346,8 @@ dev.off()
 
 #Replication of Beltaos' regression analysis tests----
 # Years 1900 - 1967
+X2 = MX[MX$YEAR >= 1900 & MX$YEAR <= 1967, 'YEAR']^2
+lm1900_x2 = lm(MX[MX$YEAR >= 1900 & MX$YEAR <= 1967, 'BeltSum'] ~ MX[MX$YEAR >= 1900 & MX$YEAR <= 1967, 'YEAR'] + X2)
 lm1900 = lm(MX[MX$YEAR >= 1900 & MX$YEAR <= 1967, 'BeltSum'] ~ MX[MX$YEAR >= 1900 & MX$YEAR <= 1967, 'YEAR'])
 # Years 1910 - 1967
 lm1910 = lm(MX[MX$YEAR >= 1910 & MX$YEAR <= 1967, 'BeltSum'] ~ MX[MX$YEAR >= 1910 & MX$YEAR <= 1967, 'YEAR'])
