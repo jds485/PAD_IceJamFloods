@@ -8,6 +8,7 @@ import sys
 import warnings
 import math
 from scipy import stats
+from scipy.stats import chi2
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 import numpy as np
@@ -66,7 +67,6 @@ def fit_logistic(X_hold,Y_hold,Firth=False):
         # Correct BIC
         res.bic = statsmodels.tools.eval_measures.bic(res.llf, nobs=res.nobs, df_modelwc=res.df_model+1)
     else:
-        #Fixme: make edits to consider more than one X predictor
         #Do Firth's logistic regression
         (rint, rbeta, rbse, rfitll) = fit_firth(Y_hold, X_hold, start_vec = None)
         # Wald test
@@ -87,9 +87,14 @@ def fit_logistic(X_hold,Y_hold,Firth=False):
         
         # AICc adjustment for Firth model
         aicc = statsmodels.tools.eval_measures.aicc(rfitll, nobs=res.nobs, df_modelwc=res.df_model+1)
+        # AIC
         aic = statsmodels.tools.eval_measures.aic(rfitll, nobs=res.nobs, df_modelwc=res.df_model+1)
+        # BIC
         bic = statsmodels.tools.eval_measures.bic(rfitll, nobs=res.nobs, df_modelwc=res.df_model+1)
-        res.params = np.array([rint,rbeta[0],rbeta[1]])
+        #Store parameters, standard errors, likelihoods, and statistics
+        rint = np.array([rint])
+        rbeta = np.array(rbeta)
+        res.params = np.concatenate([rint,rbeta])
         res.bse = rbse
         res.llf = rfitll
         res.llnull = null_fitll
@@ -100,26 +105,46 @@ def fit_logistic(X_hold,Y_hold,Firth=False):
         res.lrstat = lrstat
         res.lrt_pval = lrt_pvalue
         
-        #Fixme: get p vals for parameters
-        res.pvalues = 1.
+        #Get Wald p vals for parameters
+        res.pvalues = 1. - chi2.cdf(x=(res.params/res.bse)**2, df=1)
         
     return res
 
 # Iterate over columns
-def iterate_logistic(X_hold,Y_hold, fixed_columns = [0]):
+def iterate_logistic(X_hold,Y_hold, fixed_columns = [0], Firth=False):
     l = np.size(fixed_columns)+1
     k = np.shape(X_hold)[1]
 
     betas = np.zeros([k,l])
     pvalues = np.zeros([k,l])
     aic = np.zeros([k,1])
+    aicc = np.zeros([k,1])
     bic = np.zeros([k,1])
     
     # Fit constant
-    res = fit_logistic(X_hold[:,0],Y_hold)
+    if Firth:
+        null_X = np.delete(arr=X_hold,obj=range(int(np.size(X_hold)/len(X_hold)))[1:int(np.size(X_hold)/len(X_hold))],axis=1)
+        (null_intercept, null_beta, null_bse, null_fitll) = fit_firth(Y_hold, null_X, start_vec = None)
+        
+        #Using this as a way to return a model in the same class as GLM.
+        res = GLM(Y_hold, null_X, family=families.Binomial()).fit()
+        # AICc adjustment for Firth model
+        res.aicc = statsmodels.tools.eval_measures.aicc(null_fitll, nobs=res.nobs, df_modelwc=res.df_model+1)
+        # AIC
+        res.aic = statsmodels.tools.eval_measures.aic(null_fitll, nobs=res.nobs, df_modelwc=res.df_model+1)
+        # BIC
+        res.bic = statsmodels.tools.eval_measures.bic(null_fitll, nobs=res.nobs, df_modelwc=res.df_model+1)
+        #Store parameters, standard errors, likelihoods, and statistics
+        res.params = np.array([null_intercept])
+        #Get Wald p vals for parameters
+        res.pvalues = 1. - chi2.cdf(x=(res.params/null_bse)**2, df=1)
+    else:
+        res = fit_logistic(X_hold[:,0],Y_hold)
+    
     betas[0,:] = res.params
     pvalues[0,:] = res.pvalues
     aic[0] = res.aic
+    aicc[0] = res.aicc
     bic[0] = res.bic
     
     NAN = ~np.isnan(X_hold).any(axis=0)
@@ -128,12 +153,13 @@ def iterate_logistic(X_hold,Y_hold, fixed_columns = [0]):
             if i not in fixed_columns:
                 columns = fixed_columns.copy()
                 columns.append(i)
-                res = fit_logistic(X_hold[:,columns],Y_hold)
+                res = fit_logistic(X_hold[:,columns],Y_hold, Firth=Firth)
                 betas[i,:] = res.params
                 pvalues[i,:] = res.pvalues
                 aic[i] = res.aic
+                aicc[i] = res.aicc
                 bic[i] = res.bic
-    return betas, pvalues,aic,bic
+    return betas, pvalues,aic,aicc,bic
 
 #Now do bootstrapping for chosen model#########################################
 #First get index
@@ -171,7 +197,7 @@ def boot_sample(X,Y,indicies,block_length = 5):
     return bootstrap_X,bootstrap_Y
 
 #Bootstrap fitting
-def boot_fit(bootstrap_X,bootstrap_Y,columns):
+def boot_fit(bootstrap_X,bootstrap_Y,columns, Firth=False):
     M = np.shape(bootstrap_X)[2]#Number of bootstrap samples
     k = np.size(columns)#Number of parameters
     beta_boot = np.zeros([M,k])
@@ -182,7 +208,7 @@ def boot_fit(bootstrap_X,bootstrap_Y,columns):
 #        print(bootstrap_Y[:,i])
 #        np.save('boot_X',bootstrap_X[:,columns,i])
 #        np.save('boot_Y',bootstrap_Y[:,i])
-        res = fit_logistic(bootstrap_X[:,columns,i],bootstrap_Y[:,i])
+        res = fit_logistic(bootstrap_X[:,columns,i],bootstrap_Y[:,i], Firth=Firth)
         beta_boot[i,:] = res.params
     return beta_boot
 
