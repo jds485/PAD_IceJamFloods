@@ -4,15 +4,27 @@ Created on Tue Dec 22 06:31:40 2020
 
 @author: jlamon02
 """
+import sys
+import warnings
+import math
+from scipy import stats
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
-import statsmodels.api as sm
 import numpy as np
 from itertools import groupby
+import statsmodels
+import statsmodels.api as sm
 from statsmodels.genmod.generalized_linear_model import GLM
 from statsmodels.genmod import families
 
 import statsmodels.stats.tests.test_influence
+
+import os
+owd = os.getcwd()
+os.chdir('C:\\Users\\js4yd\\Documents\\LogisticPADIJF\\FirthRegression')
+from firth_regression import *
+os.chdir(owd)
+del owd
 
 # Load data
 def load_data():
@@ -46,8 +58,51 @@ def add_constant(X,Y):
     return X
 
 # Fit logisitic regression
-def fit_logistic(X_hold,Y_hold):
-    res = GLM(Y_hold, X_hold, family=families.Binomial()).fit()#XXX Confirm this with logistic using older XXXX
+def fit_logistic(X_hold,Y_hold,Firth=False):
+    if not Firth:
+        res = GLM(Y_hold, X_hold, family=families.Binomial()).fit()#XXX Confirm this with logistic using older XXXX
+        # AICc adjustment
+        res.aicc = statsmodels.tools.eval_measures.aicc(res.llf, nobs=res.nobs, df_modelwc=res.df_model+1)
+        # Correct BIC
+        res.bic = statsmodels.tools.eval_measures.bic(res.llf, nobs=res.nobs, df_modelwc=res.df_model+1)
+    else:
+        #Fixme: make edits to consider more than one X predictor
+        #Do Firth's logistic regression
+        (rint, rbeta, rbse, rfitll) = fit_firth(Y_hold, X_hold, start_vec = None)
+        # Wald test
+        waldp = 2. * (1. - stats.norm.cdf(abs(rbeta[0]/rbse[0])))
+        
+        # LRT
+        null_X = np.delete(arr=X_hold,obj=range(int(np.size(X_hold)/len(X_hold)))[1:int(np.size(X_hold)/len(X_hold))],axis=1)
+        (null_intercept, null_beta, null_bse, null_fitll) = fit_firth(Y_hold, null_X, start_vec = None)
+        lrstat = -2.*(null_fitll - rfitll)
+        lrt_pvalue = 1.
+        if lrstat > 0.: # non-convergence
+            lrt_pvalue = stats.chi2.sf(lrstat, 1)
+        
+        #Using this as a way to return a model in the same class as GLM.
+        res = GLM(Y_hold, X_hold, family=families.Binomial()).fit()
+        # AICc adjustment
+        res.aicc_GLM = statsmodels.tools.eval_measures.aicc(res.llf, nobs=res.nobs, df_modelwc=res.df_model+1)
+        
+        # AICc adjustment for Firth model
+        aicc = statsmodels.tools.eval_measures.aicc(rfitll, nobs=res.nobs, df_modelwc=res.df_model+1)
+        aic = statsmodels.tools.eval_measures.aic(rfitll, nobs=res.nobs, df_modelwc=res.df_model+1)
+        bic = statsmodels.tools.eval_measures.bic(rfitll, nobs=res.nobs, df_modelwc=res.df_model+1)
+        res.params = np.array([rint,rbeta[0],rbeta[1]])
+        res.bse = rbse
+        res.llf = rfitll
+        res.llnull = null_fitll
+        res.aicc = aicc
+        res.aic = aic
+        res.bic = bic
+        res.waldp = waldp
+        res.lrstat = lrstat
+        res.lrt_pval = lrt_pvalue
+        
+        #Fixme: get p vals for parameters
+        res.pvalues = 1.
+        
     return res
 
 # Iterate over columns
