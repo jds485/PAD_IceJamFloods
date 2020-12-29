@@ -18,7 +18,10 @@ X = add_constant(X,Y)
 #Test constant model with GLM vs. logistic regression
 res_GLM = fit_logistic(X[:,[0,1,4]],Y)
 
+#Test Firth regression method
 import statsmodels.api as sm
+res_Firth = fit_logistic(X[:,[0,1,4]],Y,Firth=True)
+
 logit=sm.Logit(Y,X[:,[0,1,4]])
 res_SM = logit.fit()
 
