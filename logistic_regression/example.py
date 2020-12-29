@@ -60,7 +60,10 @@ cross=np.reshape(X[:,2]*X[:,4],(-1,1))
 X_hold = np.concatenate((X[:,[0,2,4]],cross),axis=1)
 res_cross = fit_logistic(X_hold,Y)
 res_cross_Firth = fit_logistic(X_hold,Y,Firth=True)
+#Note: interaction term is not significant with profile likelihood p-value = .134
 #Best model is BL-GP & Fort Vermillion DDF.
+#p-values for best model from profile likelihood in R:
+#Int: 1.252043e-11     B1: 1.532832e-02     B2: 1.969853e-03
 
 #Now bootstrap
 #[beta_boot,bootstrap_X,bootstrap_Y] = boot_master(X,Y,columns=[0,1,4],M=5000,block_length = 5)
