@@ -68,7 +68,7 @@ def add_constant(X,Y):
     return X
 
 # Fit logisitic regression
-def fit_logistic(X_hold,Y_hold,Firth=False,resBase=None):
+def fit_logistic(X_hold,Y_hold,Firth=False,resBase=None,LRtest=True):
     if not Firth:
         res = GLM(Y_hold, X_hold, family=families.Binomial()).fit()#XXX Confirm this with logistic using older XXXX
         # AICc adjustment
@@ -85,17 +85,21 @@ def fit_logistic(X_hold,Y_hold,Firth=False,resBase=None):
         else:
             res = resBase
         #Do Firth's logistic regression
-        (rint, rbeta, rbse, rfitll) = fit_firth(Y_hold, X_hold, start_vec = None)
+        (rint, rbeta, rbse, rfitll, pi) = fit_firth(Y_hold, X_hold, start_vec = None)
         # Wald test
         waldp = 2. * (1. - stats.norm.cdf(abs(rbeta[0]/rbse[0])))
         
-        # LRT
-        null_X = np.delete(arr=X_hold,obj=range(int(np.size(X_hold)/len(X_hold)))[1:int(np.size(X_hold)/len(X_hold))],axis=1)
-        (null_intercept, null_beta, null_bse, null_fitll) = fit_firth(Y_hold, null_X, start_vec = None)
-        lrstat = -2.*(null_fitll - rfitll)
-        lrt_pvalue = 1.
-        if lrstat > 0.: # non-convergence
-            lrt_pvalue = stats.chi2.sf(lrstat, 1)
+        if LRtest:    
+            # LRT
+            null_X = np.delete(arr=X_hold,obj=range(int(np.size(X_hold)/len(X_hold)))[1:int(np.size(X_hold)/len(X_hold))],axis=1)
+            (null_intercept, null_beta, null_bse, null_fitll, null_pi) = fit_firth(Y_hold, null_X, start_vec = None)
+            lrstat = -2.*(null_fitll - rfitll)
+            lrt_pvalue = 1.
+            if lrstat > 0.: # non-convergence
+                lrt_pvalue = stats.chi2.sf(lrstat, 1)
+            res.llnull = null_fitll
+            res.lrstat = lrstat
+            res.lrt_pval = lrt_pvalue
         
         # AICc adjustment for Firth model
         aicc = statsmodels.tools.eval_measures.aicc(rfitll, nobs=len(Y_hold), df_modelwc=np.shape(X_hold)[1])
@@ -109,16 +113,16 @@ def fit_logistic(X_hold,Y_hold,Firth=False,resBase=None):
         res.params = np.concatenate([rint,rbeta])
         res.bse = rbse
         res.llf = rfitll
-        res.llnull = null_fitll
         res.aicc = aicc
         res.aic = aic
         res.bic = bic
         res.waldp = waldp
-        res.lrstat = lrstat
-        res.lrt_pval = lrt_pvalue
         
         #Get Wald p vals for parameters
         res.pvalues = 1. - chi2.cdf(x=(res.params/res.bse)**2, df=1)
+        
+        #Add predicted y
+        res.predict = pi
         
     return res
 
@@ -136,7 +140,7 @@ def iterate_logistic(X_hold,Y_hold, fixed_columns = [0], Firth=False):
     # Fit constant
     if Firth:
         null_X = np.delete(arr=X_hold,obj=range(int(np.size(X_hold)/len(X_hold)))[1:int(np.size(X_hold)/len(X_hold))],axis=1)
-        (null_intercept, null_beta, null_bse, null_fitll) = fit_firth(Y_hold, null_X, start_vec = None)
+        (null_intercept, null_beta, null_bse, null_fitll, null_pi) = fit_firth(Y_hold, null_X, start_vec = None)
         
         #Using this as a way to return a model in the same class as GLM.
         res = GLM(Y_hold, null_X, family=families.Binomial()).fit()
@@ -168,7 +172,7 @@ def iterate_logistic(X_hold,Y_hold, fixed_columns = [0], Firth=False):
             if i not in fixed_columns:
                 columns = fixed_columns.copy()
                 columns.append(i)
-                res = fit_logistic(X_hold[:,columns],Y_hold, Firth=Firth, resBase=resBase)
+                res = fit_logistic(X_hold[:,columns],Y_hold, Firth=Firth, resBase=resBase,LRtest=False)
                 betas[i,:] = res.params
                 pvalues[i,:] = res.pvalues
                 aic[i] = res.aic
@@ -211,14 +215,17 @@ def boot_sample(X,Y,indicies,block_length = 5):
             bootstrap_Y[j,i] = Y[indicies[i,j]]
     return bootstrap_X,bootstrap_Y
 
-def boot_sample_param(X,Y,indicies,res):
+def boot_sample_param(X,Y,indicies,res,Firth=False):
     [M,N] = np.shape(indicies)
     K = np.shape(X)[1]
     
     bootstrap_X = np.zeros([N,K,M])
     bootstrap_Y = np.zeros([N,M])
     
-    Y = res.predict()
+    if Firth:
+        Y = res.predict
+    else:
+        Y = res.predict()
     for i in range(M):
         bootstrap_X[:,:,i]=X
         bootstrap_Y[:,i] = np.random.binomial(1,Y)
@@ -229,7 +236,7 @@ def boot_sample_param(X,Y,indicies,res):
 #Bootstrap fitting
 def boot_fit(bootstrap_X,bootstrap_Y,columns, Firth=False, resBase=None):
     M = np.shape(bootstrap_X)[2]#Number of bootstrap samples
-    k = np.size(columns)#Number of parameters
+    k = np.size(columns)+1#Number of parameters
     beta_boot = np.zeros([M,k])
     
     for i in range(M):
@@ -241,14 +248,14 @@ def boot_fit(bootstrap_X,bootstrap_Y,columns, Firth=False, resBase=None):
         
         X_hold = normalize(bootstrap_X[:,columns,i])
         X_hold = add_constant(X_hold,bootstrap_Y[:,i])
-        res = fit_logistic(X_hold,bootstrap_Y[:,i], Firth=Firth, resBase=resBase)
+        res = fit_logistic(X_hold,bootstrap_Y[:,i], Firth=Firth, resBase=resBase, LRtest=False)
         beta_boot[i,:] = res.params
     return beta_boot
 
 def boot_master(X,Y,columns,M=5000,block_length = 5,param=True, Firth=False, resBase=None, res=[]):
     indicies = boot_index(X,Y,M,block_length)
     if param:
-        bootstrap_X,bootstrap_Y = boot_sample_param(X,Y,indicies,res)
+        bootstrap_X,bootstrap_Y = boot_sample_param(X,Y,indicies,res,Firth=Firth)
     else:
         bootstrap_X,bootstrap_Y = boot_sample(X,Y,indicies,block_length)
     beta_boot = boot_fit(bootstrap_X,bootstrap_Y,columns, Firth=Firth, resBase=resBase)
