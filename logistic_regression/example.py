@@ -8,6 +8,7 @@ Created on Wed Dec 23 06:58:00 2020
 from utils import *
 import numpy as np
 import matplotlib.pyplot as plt
+import copy
 [years,Y,X] = load_data()
 [years,Y,X] = clean_dats(years,Y,X,column=[0,1,3,5,6])
 
@@ -18,9 +19,11 @@ X = add_constant(X,Y)
 #Test constant model with GLM vs. logistic regression
 res_GLM = fit_logistic(X[:,[0,2,4]],Y)
 
+resBase = copy.deepcopy(res_GLM)
 #Firth regression method
 import statsmodels.api as sm
-res_Firth = fit_logistic(X[:,[0,2,4]],Y,Firth=True)
+res_Firth = fit_logistic(X[:,[0,2,4]],Y,Firth=True, resBase = resBase)
+del resBase
 
 logit=sm.Logit(Y,X[:,[0,2,4]])
 res_SM = logit.fit()
@@ -59,7 +62,9 @@ plt.ylabel('Fort Verm DDF')
 cross=np.reshape(X[:,2]*X[:,4],(-1,1))
 X_hold = np.concatenate((X[:,[0,2,4]],cross),axis=1)
 res_cross = fit_logistic(X_hold,Y)
-res_cross_Firth = fit_logistic(X_hold,Y,Firth=True)
+resBase = copy.deepcopy(res_cross)
+res_cross_Firth = fit_logistic(X_hold,Y,Firth=True,resBase=resBase)
+del resBase
 #Note: interaction term is not significant with profile likelihood p-value = .134
 #Best model is BL-GP & Fort Vermillion DDF.
 #p-values for best model from profile likelihood in R:
