@@ -7,6 +7,7 @@ Created on Wed Dec 30 07:35:26 2020
 import numpy as np
 import matplotlib.pyplot as plt
 from lifelines import KaplanMeierFitter
+from lifelines import WeibullFitter
 
 #moving average
 def moving_average(a, n=3) :
@@ -71,3 +72,22 @@ def percentile_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissah',sc
     if xlim != None:
         plt.xlim(xlim)
     fig.tight_layout()
+
+def survival(waits):
+    N_years,N_scen,N_prob,M_boot = np.shape(waits)
+    median = np.zeros([N_years,N_scen])
+    for year in range(N_years):
+        for GCM in range(N_scen):
+            #First re-structure as a long-vector
+            wait_hold = np.copy(np.reshape(waits[year,GCM,:,:],[N_prob*M_boot]))
+            if np.median(wait_hold)<300:
+                median[year,GCM] = np.median(wait_hold)
+            else:
+                E = wait_hold < 300.
+                wait_hold[wait_hold>300.] = 139-year
+                
+                wf = WeibullFitter().fit(wait_hold,E)
+                median[year,GCM] = wf.median_
+                print('survival',GCM)
+        print(139-year+1)
+        return median

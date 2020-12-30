@@ -151,3 +151,17 @@ plt.xlabel('Year')
 plt.ylabel('Beaverlodge Precip')
 
 #Survival Analysis#############################################################
+median = survival(waits)
+for i in range(12):
+    median[:,i] = moving_average(median[:,i],n=10)
+
+plt.figure()
+for i in range(6):
+    plt.plot(Years_GCM[38:89],median[38:89,i],'g',linewidth = 5)
+    plt.plot(Years_GCM[38:89],median[38:89,i+6],'b',linewidth = 5)
+
+plt.xlabel('Year')
+plt.xlabel('Median Time Between Floods')
+plt.legend(['RCP85','RCP45'])
+
+GCMs=['HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR']
