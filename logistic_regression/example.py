@@ -9,6 +9,12 @@ from utils import *
 import numpy as np
 import matplotlib.pyplot as plt
 import copy
+import random
+# set seed
+random.seed(123020)
+np.random.seed(123020)
+
+# Load data
 [years,Y,X] = load_data()
 [years,Y,X] = clean_dats(years,Y,X,column=[0,1,3,5,6],fill_years = False)
 
@@ -70,15 +76,24 @@ del resBase
 #p-values for best model from profile likelihood in R:
 #Int: 1.252043e-11     B1: 1.532832e-02     B2: 1.969853e-03
 
-[years,Y,X] = load_data()
-[years,Y,X] = clean_dats(years,Y,X,column=[0,1,3,5,6],fill_years = True)
 #Now bootstrap#################################################################
-#[beta_boot,bootstrap_X,bootstrap_Y] = boot_master(X,Y,columns=[0,1,4],M=5000,block_length = 5,param=True,res=res_GLM)
+resBase = copy.deepcopy(res_GLM)
+#reload data for use in boot_master function
+[years,Y,X] = load_data()
+[years,Y,X] = clean_dats(years,Y,X,column=[0,1,3,5,6],fill_years = False)
+[beta_boot,bootstrap_X,bootstrap_Y] = boot_master(X,Y,columns=[1,3],M=5000,param=True,res=res_Firth, Firth=True, resBase=resBase)
+#Parametric bootstrap using MVN dist.
+#boot_betas,bootstrap_X,bootstrap_Y=mimic_bootstrap(res_GLM,X,Y,M_boot=50)
 
 #Now GCM#######################################################################
-boot_betas,bootstrap_X,bootstrap_Y=mimic_bootstrap(res_GLM,X,Y,M_boot=50)
+#Load the fill years
+[years,Y,X] = load_data()
+[years,Y,X] = clean_dats(years,Y,X,column=[0,1,3,5,6],fill_years = True)
+
 Temp_GCM,Precip_GCM,Years_GCM = load_GCMS(X[:,1],X[:,3])
-prob,flood,cum_flood,waits = simulate_GCM_futures(Y,bootstrap_X,bootstrap_Y,boot_betas,Temp_GCM,Precip_GCM,M_boot=50,N_prob=1000)
+prob,flood,cum_flood,waits = simulate_GCM_futures(Y,bootstrap_X,bootstrap_Y,beta_boot,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000)
+#For use with MVN dist. parametric bootstrap
+#prob,flood,cum_flood,waits = simulate_GCM_futures(Y,bootstrap_X,bootstrap_Y,boot_betas,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000)
 
 #Now plots#####################################################################
 from utils_figures import *
