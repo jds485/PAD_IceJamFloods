@@ -12,6 +12,7 @@ from scipy.stats import chi2
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 import numpy as np
+import copy
 from itertools import groupby
 import statsmodels
 import statsmodels.api as sm
@@ -59,7 +60,7 @@ def add_constant(X,Y):
     return X
 
 # Fit logisitic regression
-def fit_logistic(X_hold,Y_hold,Firth=False):
+def fit_logistic(X_hold,Y_hold,Firth=False,resBase=None):
     if not Firth:
         res = GLM(Y_hold, X_hold, family=families.Binomial()).fit()#XXX Confirm this with logistic using older XXXX
         # AICc adjustment
@@ -67,6 +68,14 @@ def fit_logistic(X_hold,Y_hold,Firth=False):
         # Correct BIC
         res.bic = statsmodels.tools.eval_measures.bic(res.llf, nobs=res.nobs, df_modelwc=res.df_model+1)
     else:
+        if resBase is None:
+            sys.stderr.write('resBase must be provided to do Firth regression\n')
+            sys.exit(1)
+        elif type(resBase) is not statsmodels.genmod.generalized_linear_model.GLMResultsWrapper:
+            sys.stderr.write('resBase must be type statsmodels.genmod.generalized_linear_model.GLMResultsWrapper\n')
+            sys.exit(2)
+        else:
+            res = resBase
         #Do Firth's logistic regression
         (rint, rbeta, rbse, rfitll) = fit_firth(Y_hold, X_hold, start_vec = None)
         # Wald test
@@ -80,17 +89,12 @@ def fit_logistic(X_hold,Y_hold,Firth=False):
         if lrstat > 0.: # non-convergence
             lrt_pvalue = stats.chi2.sf(lrstat, 1)
         
-        #Using this as a way to return a model in the same class as GLM.
-        res = GLM(Y_hold, X_hold, family=families.Binomial()).fit()
-        # AICc adjustment
-        res.aicc_GLM = statsmodels.tools.eval_measures.aicc(res.llf, nobs=res.nobs, df_modelwc=res.df_model+1)
-        
         # AICc adjustment for Firth model
-        aicc = statsmodels.tools.eval_measures.aicc(rfitll, nobs=res.nobs, df_modelwc=res.df_model+1)
+        aicc = statsmodels.tools.eval_measures.aicc(rfitll, nobs=len(Y_hold), df_modelwc=np.shape(X_hold)[1])
         # AIC
-        aic = statsmodels.tools.eval_measures.aic(rfitll, nobs=res.nobs, df_modelwc=res.df_model+1)
+        aic = statsmodels.tools.eval_measures.aic(rfitll, nobs=len(Y_hold), df_modelwc=np.shape(X_hold)[1])
         # BIC
-        bic = statsmodels.tools.eval_measures.bic(rfitll, nobs=res.nobs, df_modelwc=res.df_model+1)
+        bic = statsmodels.tools.eval_measures.bic(rfitll, nobs=len(Y_hold), df_modelwc=np.shape(X_hold)[1])
         #Store parameters, standard errors, likelihoods, and statistics
         rint = np.array([rint])
         rbeta = np.array(rbeta)
@@ -147,13 +151,16 @@ def iterate_logistic(X_hold,Y_hold, fixed_columns = [0], Firth=False):
     aicc[0] = res.aicc
     bic[0] = res.bic
     
+    #Set variable for use later
+    resBase = copy.deepcopy(res)
+    
     NAN = ~np.isnan(X_hold).any(axis=0)
     for i in range(1,k):
         if NAN[i]:
             if i not in fixed_columns:
                 columns = fixed_columns.copy()
                 columns.append(i)
-                res = fit_logistic(X_hold[:,columns],Y_hold, Firth=Firth)
+                res = fit_logistic(X_hold[:,columns],Y_hold, Firth=Firth, resBase=resBase)
                 betas[i,:] = res.params
                 pvalues[i,:] = res.pvalues
                 aic[i] = res.aic
@@ -197,7 +204,7 @@ def boot_sample(X,Y,indicies,block_length = 5):
     return bootstrap_X,bootstrap_Y
 
 #Bootstrap fitting
-def boot_fit(bootstrap_X,bootstrap_Y,columns, Firth=False):
+def boot_fit(bootstrap_X,bootstrap_Y,columns, Firth=False, resBase=None):
     M = np.shape(bootstrap_X)[2]#Number of bootstrap samples
     k = np.size(columns)#Number of parameters
     beta_boot = np.zeros([M,k])
@@ -208,14 +215,14 @@ def boot_fit(bootstrap_X,bootstrap_Y,columns, Firth=False):
 #        print(bootstrap_Y[:,i])
 #        np.save('boot_X',bootstrap_X[:,columns,i])
 #        np.save('boot_Y',bootstrap_Y[:,i])
-        res = fit_logistic(bootstrap_X[:,columns,i],bootstrap_Y[:,i], Firth=Firth)
+        res = fit_logistic(bootstrap_X[:,columns,i],bootstrap_Y[:,i], Firth=Firth, resBase=resBase)
         beta_boot[i,:] = res.params
     return beta_boot
 
-def boot_master(X,Y,columns,M=5000,block_length = 5):
+def boot_master(X,Y,columns,M=5000,block_length = 5, Firth=False, resBase=None):
     indicies = boot_index(X,Y,M,block_length)
     bootstrap_X,bootstrap_Y = boot_sample(X,Y,indicies,block_length)
-    beta_boot = boot_fit(bootstrap_X,bootstrap_Y,columns)
+    beta_boot = boot_fit(bootstrap_X,bootstrap_Y,columns, Firth=Firth, resBase=resBase)
     return beta_boot,bootstrap_X,bootstrap_Y
 
 #Now do simulation of GCMS#####################################################
