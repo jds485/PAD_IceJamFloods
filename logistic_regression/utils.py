@@ -294,10 +294,10 @@ def splice_flood(flood,scenario,boot,hist_flood,N_prob):
 def simulate_GCM_futures(hist_flood,bootstrap_X,bootstrap_Y,beta_boot,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000):
     #Initialize
     N_scen = np.shape(Temp_GCM)[1]#Number of GCM/RCP scenarios
-    prob = np.zeros([139,N_scen,M_boot])#135 years (1962-2100) by 12 GCM/RCP by N_prob
-    flood = np.zeros([139,N_scen,N_prob,M_boot])#135 years (1962-2100) by 12 GCM/RCP by N_prob by M_boot
-    cum_flood = np.zeros([139,N_scen,N_prob,M_boot])#135 years (1962-2100) by 12 GCM/RCP by N_prob by M_boot
-    waits = np.zeros([139,N_scen,N_prob,M_boot])#135 years (1962-2100) by 12 GCM/RCP by N_prob by M_boot
+    prob = np.zeros([np.shape(Temp_GCM)[0],N_scen,M_boot])#135 years (1962-2100) by 12 GCM/RCP by N_prob
+    flood = np.zeros([np.shape(Temp_GCM)[0],N_scen,N_prob,M_boot])#135 years (1962-2100) by 12 GCM/RCP by N_prob by M_boot
+    cum_flood = np.zeros([np.shape(Temp_GCM)[0],N_scen,N_prob,M_boot])#135 years (1962-2100) by 12 GCM/RCP by N_prob by M_boot
+    waits = np.zeros([np.shape(Temp_GCM)[0],N_scen,N_prob,M_boot])#135 years (1962-2100) by 12 GCM/RCP by N_prob by M_boot
     #Loop over boot
     for boot in range(M_boot):
         X_fu = bootstrap_X[:,:,boot]
@@ -308,10 +308,10 @@ def simulate_GCM_futures(hist_flood,bootstrap_X,bootstrap_Y,beta_boot,Temp_GCM,P
         #Loop over scenario
         for scenario in range(N_scen):
             #Compute Probabilities
-            forc = np.zeros([139,3])
-            forc[:,0] = 1
-            forc[:,1] = (Temp_GCM[:,0]-X_mean[0])/X_std[0]
-            forc[:,2] = (Precip_GCM[:,1]-X_mean[1])/X_std[1]
+            forc = np.zeros([np.shape(Temp_GCM)[0],3])
+            forc[:,0] = 1.
+            forc[:,1] = (Temp_GCM[:,scenario]-X_mean[0])/X_std[0]
+            forc[:,2] = (Precip_GCM[:,scenario]-X_mean[1])/X_std[1]
             
             prob[:,scenario,boot] = compute_prob(beta_fu,forc)
             #Simulate Floods
