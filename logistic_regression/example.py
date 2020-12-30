@@ -86,12 +86,12 @@ resBase = copy.deepcopy(res_GLM)
 #boot_betas,bootstrap_X,bootstrap_Y=mimic_bootstrap(res_GLM,X,Y,M_boot=50)
 
 #Now GCM#######################################################################
-#Load the fill years
+#Load the dam filling years
 [years,Y,X] = load_data()
 [years,Y,X] = clean_dats(years,Y,X,column=[0,1,3,5,6],fill_years = True)
 
 Temp_GCM,Precip_GCM,Years_GCM = load_GCMS(X[:,1],X[:,3])
-prob,flood,cum_flood,waits = simulate_GCM_futures(Y,bootstrap_X,bootstrap_Y,beta_boot,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000)
+prob,flood,cum_flood,waits = simulate_GCM_futures(Y,bootstrap_X[:,[1,3],:],bootstrap_Y,beta_boot,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000)
 #For use with MVN dist. parametric bootstrap
 #prob,flood,cum_flood,waits = simulate_GCM_futures(Y,bootstrap_X,bootstrap_Y,boot_betas,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000)
 
