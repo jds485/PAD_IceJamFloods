@@ -81,7 +81,7 @@ resBase = copy.deepcopy(res_GLM)
 #reload data for use in boot_master function
 [years,Y,X] = load_data()
 [years,Y,X] = clean_dats(years,Y,X,column=[0,1,3,5,6],fill_years = False)
-[beta_boot,bootstrap_X,bootstrap_Y] = boot_master(X,Y,columns=[1,3],M=5000,param=True,res=res_Firth, Firth=True, resBase=resBase)
+[beta_boot,bootstrap_X,bootstrap_Y] = boot_master(X,Y,columns=[1,3],M=1000,param=True,res=res_Firth, Firth=True, resBase=resBase)
 #Parametric bootstrap using MVN dist.
 #boot_betas,bootstrap_X,bootstrap_Y=mimic_bootstrap(res_GLM,X,Y,M_boot=50)
 
@@ -91,14 +91,15 @@ resBase = copy.deepcopy(res_GLM)
 [years,Y,X] = clean_dats(years,Y,X,column=[0,1,3,5,6],fill_years = True)
 
 Temp_GCM,Precip_GCM,Years_GCM = load_GCMS(X[:,1],X[:,3])
-prob,flood,cum_flood,waits = simulate_GCM_futures(Y,bootstrap_X[:,[1,3],:],bootstrap_Y,beta_boot,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000)
+prob,flood,cum_flood,waits = simulate_GCM_futures(Y,bootstrap_X[:,[1,3],:],bootstrap_Y,beta_boot,Temp_GCM,Precip_GCM,M_boot=1000,N_prob=1000)
 #For use with MVN dist. parametric bootstrap
 #prob,flood,cum_flood,waits = simulate_GCM_futures(Y,bootstrap_X,bootstrap_Y,boot_betas,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000)
 
 #Now plots#####################################################################
 from utils_figures import *
 import matplotlib.pyplot as plt
-GCMs = ['RCP85 - HadGEM2-ES','RCP85 - ACCESS1-0','RCP85 - CanESM2','RCP85 - CCSM4','RCP85 - CNRM-CM5','RCP85 - MPI-ESM-LR','RCP45 - HadGEM2-ES','RCP45 - ACCESS1-0','RCP45 - CanESM2','RCP45 - CCSM4','RCP45 - CNRM-CM5','RCP45 - MPI-ESM-LR']
+GCMs=['HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR']
+RCPs=['RCP85','RCP45']
 #Make double plots
 for scenario in range(6):
     percentiles = [10,25,50,75,90]
@@ -107,59 +108,53 @@ for scenario in range(6):
     plt_perc2 = np.percentile(prob[:,scenario+6,:],percentiles,axis=1)
 
     for i in range(5):
-        plt_perc[i,0:120]=moving_average(plt_perc[i,:],20)
-        plt_perc2[i,0:120]=moving_average(plt_perc2[i,:],20)
-        for j in range(120,139):
-            plt_perc[i,j] = np.mean(plt_perc[i,j:139])
-            plt_perc2[i,j] = np.mean(plt_perc2[i,j:139])
-    percentile_fill_plot_double(plt_perc,plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.001,0.5],Names=['RCP85','RCP45'])
+        plt_perc[i,0:(np.shape(Temp_GCM)[0]-19)]=moving_average(plt_perc[i,:],20)
+        plt_perc2[i,0:(np.shape(Temp_GCM)[0]-19)]=moving_average(plt_perc2[i,:],20)
+        for j in range((np.shape(Temp_GCM)[0]-19),np.shape(Temp_GCM)[0]):
+            plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
+            plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
+    percentile_fill_plot_double(plt_perc,plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00001,0.5],Names=RCPs)
 #All prob
-plt_perc = np.zeros([12,139])
-for scenario in range(12):
+plt_perc = np.zeros([np.shape(Temp_GCM)[1],np.shape(Temp_GCM)[0]])
+for scenario in range(np.shape(Temp_GCM)[1]):
     
     #Probability
     plt_perc[scenario,:] = np.percentile(prob[:,scenario,:],50,axis=1)
 
-    plt_perc[scenario,0:120]=moving_average(plt_perc[scenario,:],20)
-    for j in range(120,139):
-        plt_perc[scenario,j] = np.mean(plt_perc[scenario,j:139])
+    plt_perc[scenario,0:(np.shape(Temp_GCM)[0]-19)]=moving_average(plt_perc[scenario,:],20)
+    for j in range((np.shape(Temp_GCM)[0]-19),np.shape(Temp_GCM)[0]):
+        plt_perc[scenario,j] = np.mean(plt_perc[scenario,j:np.shape(Temp_GCM)[0]])
 
-percentile_plot_single(plt_perc,title='Ice Jam Flood Projection',ylabel='IJF Probability',scale='log',ylim=[0.001,0.5],split='gcm',Names=['HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR'])
+percentile_plot_single(plt_perc,title='Ice Jam Flood Projection',ylabel='IJF Probability',scale='log',ylim=[0.00001,0.5],split='gcm',Names=['HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR'])
 
 #Plot GCM Data
 #Temp RCPs
-GCMs=['HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR']
-RCPs=['RCP85','RCP45']
 plt.figure()
 for i in range(6):
-    plt.plot(range(1950,2096),moving_average(Temp_GCM[:,i],10),'b',linewidth=3,label=RCPs[0])
-    plt.plot(range(1950,2096),moving_average(Temp_GCM[:,6+i],10),'r',linewidth=3,label=RCPs[1])
+    plt.plot(range(1962,2091),moving_average(Temp_GCM[:,i],10),'b',linewidth=3,label=RCPs[0])
+    plt.plot(range(1962,2091),moving_average(Temp_GCM[:,6+i],10),'r',linewidth=3,label=RCPs[1])
 plt.legend(RCPs)
 plt.xlabel('Year')
-plt.ylabel('Fort Chip DDF')
+plt.ylabel('Fort Verm DDF')
 
 #Prec RCPs
-GCMs=['HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR']
-RCPs=['RCP85','RCP45']
 plt.figure()
 for i in range(6):
-    plt.plot(range(1950,2096),moving_average(Precip_GCM[:,i],10),'b',linewidth=3,label=RCPs[0])
-    plt.plot(range(1950,2096),moving_average(Precip_GCM[:,6+i],10),'r',linewidth=3,label=RCPs[1])
+    plt.plot(range(1962,2091),moving_average(Precip_GCM[:,i],10),'b',linewidth=3,label=RCPs[0])
+    plt.plot(range(1962,2091),moving_average(Precip_GCM[:,6+i],10),'r',linewidth=3,label=RCPs[1])
 plt.legend(RCPs)
 plt.xlabel('Year')
 plt.ylabel('Beaverlodge Precip')
 
 #Prec GCMs
-GCMs=['HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR']
-RCPs=['RCP85','RCP45']
 plt.figure()
 for i in range(2):
-    plt.plot(range(1950,2096),moving_average(Precip_GCM[:,6*i],10),'b',linewidth=3,label=GCMs[0])
-    plt.plot(range(1950,2096),moving_average(Precip_GCM[:,6*i+1],10),'g',linewidth=3,label=GCMs[1])
-    plt.plot(range(1950,2096),moving_average(Precip_GCM[:,6*i+2],10),'r',linewidth=3,label=GCMs[2])
-    plt.plot(range(1950,2096),moving_average(Precip_GCM[:,6*i+3],10),'c',linewidth=3,label=GCMs[3])
-    plt.plot(range(1950,2096),moving_average(Precip_GCM[:,6*i+4],10),'m',linewidth=3,label=GCMs[4])
-    plt.plot(range(1950,2096),moving_average(Precip_GCM[:,6*i+5],10),'y',linewidth=3,label=GCMs[5])
+    plt.plot(range(1962,2091),moving_average(Precip_GCM[:,6*i],10),'b',linewidth=3,label=GCMs[0])
+    plt.plot(range(1962,2091),moving_average(Precip_GCM[:,6*i+1],10),'g',linewidth=3,label=GCMs[1])
+    plt.plot(range(1962,2091),moving_average(Precip_GCM[:,6*i+2],10),'r',linewidth=3,label=GCMs[2])
+    plt.plot(range(1962,2091),moving_average(Precip_GCM[:,6*i+3],10),'c',linewidth=3,label=GCMs[3])
+    plt.plot(range(1962,2091),moving_average(Precip_GCM[:,6*i+4],10),'m',linewidth=3,label=GCMs[4])
+    plt.plot(range(1962,2091),moving_average(Precip_GCM[:,6*i+5],10),'y',linewidth=3,label=GCMs[5])
     #plt.plot(range(1950,2096),moving_average(Precip[:,6+i],10),'r',linewidth=3,label=RCPs[1])
 plt.legend(GCMs)
 plt.xlabel('Year')
@@ -167,8 +162,9 @@ plt.ylabel('Beaverlodge Precip')
 
 #Survival Analysis#############################################################
 median = survival(waits)
-for i in range(12):
-    median[:,i] = moving_average(median[:,i],n=10)
+A = np.zeros([np.shape(Temp_GCM)[0]-10+1,np.shape(Temp_GCM)[1]])
+for i in range(np.shape(Temp_GCM)[1]):
+    A[:,i] = moving_average(median[:,i],n=10)
 
 plt.figure()
 for i in range(6):
@@ -176,7 +172,5 @@ for i in range(6):
     plt.plot(Years_GCM[38:89],median[38:89,i+6],'b',linewidth = 5)
 
 plt.xlabel('Year')
-plt.xlabel('Median Time Between Floods')
-plt.legend(['RCP85','RCP45'])
-
-GCMs=['HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR']
+plt.ylabel('Median Time Between Floods')
+plt.legend(RCPs)
