@@ -86,8 +86,6 @@ def fit_logistic(X_hold,Y_hold,Firth=False,resBase=None,LRtest=True):
             res = resBase
         #Do Firth's logistic regression
         (rint, rbeta, rbse, rfitll, pi) = fit_firth(Y_hold, X_hold, start_vec = None)
-        # Wald test
-        waldp = 2. * (1. - stats.norm.cdf(abs(rbeta[0]/rbse[0])))
         
         if LRtest:    
             # LRT
@@ -294,10 +292,10 @@ def splice_flood(flood,scenario,boot,hist_flood,N_prob):
 def simulate_GCM_futures(hist_flood,bootstrap_X,bootstrap_Y,beta_boot,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000):
     #Initialize
     N_scen = np.shape(Temp_GCM)[1]#Number of GCM/RCP scenarios
-    prob = np.zeros([np.shape(Temp_GCM)[0],N_scen,M_boot])#135 years (1962-2100) by 12 GCM/RCP by N_prob
-    flood = np.zeros([np.shape(Temp_GCM)[0],N_scen,N_prob,M_boot])#135 years (1962-2100) by 12 GCM/RCP by N_prob by M_boot
-    cum_flood = np.zeros([np.shape(Temp_GCM)[0],N_scen,N_prob,M_boot])#135 years (1962-2100) by 12 GCM/RCP by N_prob by M_boot
-    waits = np.zeros([np.shape(Temp_GCM)[0],N_scen,N_prob,M_boot])#135 years (1962-2100) by 12 GCM/RCP by N_prob by M_boot
+    prob = np.zeros([np.shape(Temp_GCM)[0],N_scen,M_boot])#138 years (1962-2099) by 12 GCM/RCP by N_prob
+    flood = np.zeros([np.shape(Temp_GCM)[0],N_scen,N_prob,M_boot])#138 years (1962-2099) by 12 GCM/RCP by N_prob by M_boot
+    cum_flood = np.zeros([np.shape(Temp_GCM)[0],N_scen,N_prob,M_boot])#138 years (1962-2099) by 12 GCM/RCP by N_prob by M_boot
+    waits = np.zeros([np.shape(Temp_GCM)[0],N_scen,N_prob,M_boot])#138 years (1962-2099) by 12 GCM/RCP by N_prob by M_boot
     #Loop over boot
     for boot in range(M_boot):
         X_fu = bootstrap_X[:,:,boot]
