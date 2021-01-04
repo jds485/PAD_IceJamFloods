@@ -114,7 +114,6 @@ def fit_logistic(X_hold,Y_hold,Firth=False,resBase=None,LRtest=True):
         res.aicc = aicc
         res.aic = aic
         res.bic = bic
-        res.waldp = waldp
         
         #Get Wald p vals for parameters
         res.pvalues = 1. - chi2.cdf(x=(res.params/res.bse)**2, df=1)
