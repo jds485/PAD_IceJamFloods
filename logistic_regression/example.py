@@ -10,6 +10,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import copy
 import random
+import seaborn as sb
+import pandas as pd
 # set seed
 random.seed(123020)
 np.random.seed(123020)
@@ -45,13 +47,31 @@ plt.xlabel('Fort Verm DDF')
 plt.figure()
 plt.scatter(X[Y==0,4],Y[Y==0])
 plt.scatter(X[Y==1,4],Y[Y==1])
-plt.xlabel('BL Precip')
+plt.xlabel('BL/GP Nov.-Apr. Precip.')
 
 plt.figure()
-plt.scatter(X[Y==0,4],X[Y==0,2])
-plt.scatter(X[Y==1,4],X[Y==1,2])
-plt.xlabel('BL Precip')
-plt.ylabel('Fort Verm DDF')
+plt.scatter(X[Y==0,2],X[Y==0,4])
+plt.scatter(X[Y==1,2],X[Y==1,4])
+plt.ylabel('BL/GP Nov.-Apr. Precip.')
+plt.xlabel('Fort Verm. DDF')
+
+plt.figure()
+plt.scatter(X[Y==0,1],X[Y==0,4])
+plt.scatter(X[Y==1,1],X[Y==1,4])
+plt.ylabel('BL/GP Nov.-Apr. Precip.')
+plt.xlabel('Fort Chip. DDF')
+
+plt.figure()
+plt.scatter(X[Y==0,1],X[Y==0,6])
+plt.scatter(X[Y==1,1],X[Y==1,6])
+plt.ylabel('BL/GP Nov.-Apr. Precip.')
+plt.xlabel('Freeze-up Stage (Beltaos, 2014)')
+
+plt.figure()
+plt.scatter(X[Y==0,1],X[Y==0,7])
+plt.scatter(X[Y==1,1],X[Y==1,7])
+plt.ylabel('BL/GP Nov.-Apr. Precip.')
+plt.xlabel('Melt Test')
 
 # Example of iterative model building
 [betas, pvalues,aic,aicc,bic]=iterate_logistic(X,Y, fixed_columns = [0])
@@ -59,6 +79,8 @@ plt.ylabel('Fort Verm DDF')
 # Three parameter models
 [betas3, pvalues3,aic3,aicc3,bic3]=iterate_logistic(X,Y, fixed_columns = [0,4])
 [betas3f, pvalues3f,aic3f,aicc3f,bic3f]=iterate_logistic(X,Y, fixed_columns = [0,4],Firth=True)
+#Freeze
+[betas3frf, pvalues3frf,aic3frf,aicc3frf,bic3frf]=iterate_logistic(X,Y, fixed_columns = [0,6],Firth=True)
 # Cross parameter models
 #cross=np.reshape(X[:,1]*X[:,4],(-1,1))
 #X_hold = np.concatenate((X[:,[0,1,4]],cross),axis=1)
@@ -76,6 +98,21 @@ del resBase
 #p-values for best model from profile likelihood in R:
 #Int: 1.252043e-11     B1: 1.532832e-02     B2: 1.969853e-03
 
+#Constant and Interaction Only
+X_hold = np.concatenate((X[:,[0]],cross),axis=1)
+resBase = copy.deepcopy(res_cross)
+res_crossOnly_Firth = fit_logistic(X_hold,Y,Firth=True,resBase=resBase)
+del resBase
+
+# Four parameter models
+[betas4f, pvalues4f,aic4f,aicc4f,bic4f]=iterate_logistic(X,Y, fixed_columns = [0,2,4],Firth=True)
+#Freeze
+[betas4frf, pvalues4frf,aic4frf,aicc4frf,bic4frf]=iterate_logistic(X,Y, fixed_columns = [0,4,6],Firth=True)
+# Five parameter models
+[betas5f, pvalues5f,aic5f,aicc5f,bic5f]=iterate_logistic(X,Y, fixed_columns = [0,2,4,8],Firth=True)
+#Freeze
+[betas5frf, pvalues5frf,aic5frf,aicc5frf,bic5frf]=iterate_logistic(X,Y, fixed_columns = [0,2,4,6],Firth=True)
+
 #Now bootstrap#################################################################
 resBase = copy.deepcopy(res_GLM)
 #reload data for use in boot_master function
@@ -84,6 +121,11 @@ resBase = copy.deepcopy(res_GLM)
 [beta_boot,bootstrap_X,bootstrap_Y] = boot_master(X,Y,columns=[1,3],M=1000,param=True,res=res_Firth, Firth=True, resBase=resBase)
 #Parametric bootstrap using MVN dist.
 #boot_betas,bootstrap_X,bootstrap_Y=mimic_bootstrap(res_GLM,X,Y,M_boot=50)
+
+#pair plot of the beta empirical distribution
+betas_boot_df = pd.DataFrame(data=beta_boot, columns = ['Constant', 'DDF Fort Verm.', 'BL/GP Precip.'])
+sb.set_style('darkgrid')
+test = sb.pairplot(betas_boot_df, diag_kind = 'kde', plot_kws={"s":13})
 
 #Now GCM#######################################################################
 #Load the dam filling years
@@ -171,7 +213,7 @@ for scenario in range(6):
         #for j in range((np.shape(Temp_GCM)[0]-(window-1)),np.shape(Temp_GCM)[0]):
         #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
         #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
-    percentile_fill_plot_double(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='linear',ylim=[-10,0],Names=RCPs,window=window)
+    percentile_fill_plot_double(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='linear',ylim=[-6,0],Names=RCPs,window=window)
 #Median in log space
 for scenario in range(6):
     percentiles = [10,25,50,75,90]
@@ -185,7 +227,7 @@ for scenario in range(6):
         #for j in range((np.shape(Temp_GCM)[0]-(window-1)),np.shape(Temp_GCM)[0]):
         #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
         #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
-    percentile_fill_plot_double(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='linear',ylim=[-10,0],Names=RCPs,window=window)
+    percentile_fill_plot_double(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='linear',ylim=[-6,0],Names=RCPs,window=window)
 
 #Return period
 for scenario in range(6):
@@ -289,6 +331,7 @@ plt.legend(RCPs)
 
 #Standard error in betas
 np.std(beta_boot, axis = 0)/np.sqrt(1000)
+#array([0.07311289, 0.03190114, 0.03872068])
 
 #Standard error in probability for each year
 plt.hist(np.std(prob[:,1,:], axis=1)/np.sqrt(1000),bins=50)
