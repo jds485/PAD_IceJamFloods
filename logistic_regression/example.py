@@ -62,14 +62,14 @@ plt.ylabel('BL/GP Nov.-Apr. Precip.')
 plt.xlabel('Fort Chip. DDF')
 
 plt.figure()
-plt.scatter(X[Y==0,1],X[Y==0,6])
-plt.scatter(X[Y==1,1],X[Y==1,6])
+plt.scatter(X[Y==0,6],X[Y==0,4])
+plt.scatter(X[Y==1,6],X[Y==1,4])
 plt.ylabel('BL/GP Nov.-Apr. Precip.')
 plt.xlabel('Freeze-up Stage (Beltaos, 2014)')
 
 plt.figure()
-plt.scatter(X[Y==0,1],X[Y==0,7])
-plt.scatter(X[Y==1,1],X[Y==1,7])
+plt.scatter(X[Y==0,7],X[Y==0,4])
+plt.scatter(X[Y==1,7],X[Y==1,4])
 plt.ylabel('BL/GP Nov.-Apr. Precip.')
 plt.xlabel('Melt Test')
 
@@ -125,7 +125,14 @@ resBase = copy.deepcopy(res_GLM)
 #pair plot of the beta empirical distribution
 betas_boot_df = pd.DataFrame(data=beta_boot, columns = ['Constant', 'DDF Fort Verm.', 'BL/GP Precip.'])
 sb.set_style('darkgrid')
-test = sb.pairplot(betas_boot_df, diag_kind = 'kde', plot_kws={"s":13})
+sb.pairplot(betas_boot_df, diag_kind = 'kde', plot_kws={"s":13})
+
+#How many points are excluded when axes are trimmed
+(len(np.where((beta_boot[:,0] < -15))[0]) + len(np.where((beta_boot[:,1] < -6))[0]) + len(np.where((beta_boot[:,2] > 6))[0]) 
+- len(np.where((beta_boot[:,0] < -15) & (beta_boot[:,1] < -6))[0])
+- len(np.where((beta_boot[:,0] < -15) & (beta_boot[:,2] > 6))[0])
+- len(np.where((beta_boot[:,1] < -6) & (beta_boot[:,2] > 6))[0])
++ len(np.where((beta_boot[:,0] < -15) & (beta_boot[:,1] < -6) & (beta_boot[:,2] > 6))[0]))
 
 #Now GCM#######################################################################
 #Load the dam filling years
@@ -214,6 +221,21 @@ for scenario in range(6):
         #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
         #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
     percentile_fill_plot_double(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='linear',ylim=[-6,0],Names=RCPs,window=window)
+#With power of 10 axes
+for scenario in range(6):
+    percentiles = [10,25,50,75,90]
+    #Probability
+    plt_perc = np.percentile(prob[:,scenario,:],percentiles,axis=1)
+    plt_perc2 = np.percentile(prob[:,scenario+6,:],percentiles,axis=1)
+
+    for i in range(5):
+        plt_perc[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(np.log10(plt_perc[i,:]),window)
+        plt_perc2[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(np.log10(plt_perc2[i,:]),window)
+        #for j in range((np.shape(Temp_GCM)[0]-(window-1)),np.shape(Temp_GCM)[0]):
+        #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
+        #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
+    percentile_fill_plot_double(10**(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))]),10**(plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))]),title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.000000001,0.5],Names=RCPs,window=window)
+
 #Median in log space
 for scenario in range(6):
     percentiles = [10,25,50,75,90]
@@ -314,6 +336,16 @@ plt.figure()
 for i in range(6):
     plt.plot(Years_GCM[38:89],median[38:89,i],'g',linewidth = 5)
     plt.plot(Years_GCM[38:89],median[38:89,i+6],'b',linewidth = 5)
+
+plt.xlabel('Year')
+plt.ylabel('Median Time Between Floods')
+plt.legend(RCPs)
+
+#to 2070 - not much data supporting later years
+plt.figure()
+for i in range(6):
+    plt.plot(Years_GCM[38:109],median[38:109,i],'g',linewidth = 5)
+    plt.plot(Years_GCM[38:109],median[38:109,i+6],'b',linewidth = 5)
 
 plt.xlabel('Year')
 plt.ylabel('Median Time Between Floods')
