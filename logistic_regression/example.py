@@ -12,6 +12,7 @@ import copy
 import random
 import seaborn as sb
 import pandas as pd
+from sklearn.decomposition import PCA
 # set seed
 random.seed(123020)
 np.random.seed(123020)
@@ -20,9 +21,14 @@ np.random.seed(123020)
 [years,Y,X] = load_data()
 [years,Y,X] = clean_dats(years,Y,X,column=[0,1,3,5,6],fill_years = False)
 
+#Evaluate square root of temperature as predictor
+X_sqrt = np.concatenate((X[:,[0,1,3]],np.sqrt(-X[:,[0,1]])),axis=1)
+
 X = normalize(X)
+X_sqrt = normalize(X_sqrt)
 
 X = add_constant(X,Y)
+X_sqrt = add_constant(X_sqrt,Y)
 
 #Test constant model with GLM vs. logistic regression
 res_GLM = fit_logistic(X[:,[0,2,4]],Y)
@@ -104,6 +110,17 @@ resBase = copy.deepcopy(res_cross)
 res_crossOnly_Firth = fit_logistic(X_hold,Y,Firth=True,resBase=resBase)
 del resBase
 
+#Constant and Principal Components
+pca = PCA(n_components=2)
+principalComponents = pca.fit_transform(X[:,[2,4]])
+principalComponents = np.concatenate((X[:,[0]],principalComponents),axis=1)
+resBase = copy.deepcopy(res_GLM)
+res_PC1_Firth = fit_logistic(principalComponents[:,[0,1]],Y,Firth=True,resBase=resBase)
+del resBase
+resBase = copy.deepcopy(res_GLM)
+res_PC_Firth = fit_logistic(principalComponents,Y,Firth=True,resBase=resBase)
+del resBase
+
 # Four parameter models
 [betas4f, pvalues4f,aic4f,aicc4f,bic4f]=iterate_logistic(X,Y, fixed_columns = [0,2,4],Firth=True)
 #Freeze
@@ -112,6 +129,22 @@ del resBase
 [betas5f, pvalues5f,aic5f,aicc5f,bic5f]=iterate_logistic(X,Y, fixed_columns = [0,2,4,8],Firth=True)
 #Freeze
 [betas5frf, pvalues5frf,aic5frf,aicc5frf,bic5frf]=iterate_logistic(X,Y, fixed_columns = [0,2,4,6],Firth=True)
+
+#Evaluate square root models
+resBase = copy.deepcopy(res_GLM)
+res_sqrt_Firth = fit_logistic(X_sqrt[:,[0,4]],Y,Firth=True,resBase=resBase)
+res_sqrt_Firth = fit_logistic(X_sqrt[:,[0,5]],Y,Firth=True,resBase=resBase)
+[betas3f_sqrt, pvalues3f_sqrt,aic3f_sqrt,aicc3f_sqrt,bic3f_sqrt]=iterate_logistic(X_sqrt,Y, fixed_columns = [0,3],Firth=True)
+del resBase
+
+#Plot of the PC model and the preferred 2 parameter model
+plt.figure()
+plt.plot(years,res_PC1_Firth.predict,linewidth=2, label='PC1', ls = '--', marker = 'D')
+plt.plot(years,res_Firth.predict,linewidth=2, label='GP + FV', ls = '--', marker = '^')
+plt.scatter(years,Y, label = 'Floods', marker = 'o', c = 'r')
+plt.ylabel('Prob. of Flood')
+plt.xlabel('Year')
+plt.legend(loc = 'center')
 
 #Now bootstrap#################################################################
 resBase = copy.deepcopy(res_GLM)
