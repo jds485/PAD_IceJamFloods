@@ -177,6 +177,11 @@ prob,flood,cum_flood,waits = simulate_GCM_futures(Y,bootstrap_X[:,[1,3],:],boots
 #For use with MVN dist. parametric bootstrap
 #prob,flood,cum_flood,waits = simulate_GCM_futures(Y,bootstrap_X,bootstrap_Y,boot_betas,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000)
 
+#Run analysis for the GCM temperature and precip over the historical record.
+#Using Nprob = 1 because only historical info is needed
+Temp_GCM_NoHistSplice,Precip_GCM_NoHistSplice,Years_GCM_NoHistSplice = load_GCMS(X[:,1],X[:,3],histSplice=False)
+prob_nhs,flood_nhs,cum_flood_nhs,waits_nhs = simulate_GCM_futures(Y,bootstrap_X[:,[1,3],:],bootstrap_Y,beta_boot,Temp_GCM_NoHistSplice,Precip_GCM_NoHistSplice,M_boot=1000,N_prob=1)
+
 #Now plots#####################################################################
 from utils_figures import *
 import matplotlib.pyplot as plt
@@ -211,7 +216,7 @@ for scenario in range(6):
         #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
         #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
     percentile_fill_plot_double(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='linear',ylim=[0.00001,0.2],Names=RCPs,window=window)
-#Log scale
+#Log scale IQR
 for scenario in range(6):
     percentiles = [10,25,50,75,90]
     #Probability
@@ -224,7 +229,51 @@ for scenario in range(6):
         #for j in range((np.shape(Temp_GCM)[0]-(window-1)),np.shape(Temp_GCM)[0]):
         #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
         #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
-    percentile_fill_plot_double(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00001,0.5],Names=RCPs,window=window)
+    percentile_fill_plot_double(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.0001,1],Names=RCPs,window=window)
+#Log scale IQR and 95%
+for scenario in range(6):
+    percentiles = [2.5,25,50,75,97.5]
+    #Probability
+    plt_perc = np.percentile(prob[:,scenario,:],percentiles,axis=1)
+    plt_perc2 = np.percentile(prob[:,scenario+6,:],percentiles,axis=1)
+
+    for i in range(5):
+        plt_perc[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
+        plt_perc2[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
+        #for j in range((np.shape(Temp_GCM)[0]-(window-1)),np.shape(Temp_GCM)[0]):
+        #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
+        #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
+    percentile_fill_plot_single(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green')
+    percentile_fill_plot_single(plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue')
+#Log scale 90%CI
+for scenario in range(6):
+    percentiles = [10,5,50,95,90]
+    #Probability
+    plt_perc = np.percentile(prob[:,scenario,:],percentiles,axis=1)
+    plt_perc2 = np.percentile(prob[:,scenario+6,:],percentiles,axis=1)
+
+    for i in range(5):
+        plt_perc[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
+        plt_perc2[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
+        #for j in range((np.shape(Temp_GCM)[0]-(window-1)),np.shape(Temp_GCM)[0]):
+        #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
+        #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
+    percentile_fill_plot_double(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs,window=window)
+#Log scale 95%CI
+for scenario in range(6):
+    percentiles = [10,2.5,50,97.5,90]
+    #Probability
+    plt_perc = np.percentile(prob[:,scenario,:],percentiles,axis=1)
+    plt_perc2 = np.percentile(prob[:,scenario+6,:],percentiles,axis=1)
+
+    for i in range(5):
+        plt_perc[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
+        plt_perc2[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
+        #for j in range((np.shape(Temp_GCM)[0]-(window-1)),np.shape(Temp_GCM)[0]):
+        #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
+        #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
+    percentile_fill_plot_double(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs,window=window)
+
 #Median
 for scenario in range(6):
     percentiles = [10,25,50,75,90]
@@ -267,7 +316,49 @@ for scenario in range(6):
         #for j in range((np.shape(Temp_GCM)[0]-(window-1)),np.shape(Temp_GCM)[0]):
         #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
         #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
-    percentile_fill_plot_double(10**(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))]),10**(plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))]),title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.000000001,0.5],Names=RCPs,window=window)
+    percentile_fill_plot_double(10**(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))]),10**(plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))]),title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000000001,1],Names=RCPs,window=window)
+#With power of 10 axes and 80%CI
+for scenario in range(6):
+    percentiles = [10,10,50,90,90]
+    #Probability
+    plt_perc = np.percentile(prob[:,scenario,:],percentiles,axis=1)
+    plt_perc2 = np.percentile(prob[:,scenario+6,:],percentiles,axis=1)
+
+    for i in range(5):
+        plt_perc[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(np.log10(plt_perc[i,:]),window)
+        plt_perc2[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(np.log10(plt_perc2[i,:]),window)
+        #for j in range((np.shape(Temp_GCM)[0]-(window-1)),np.shape(Temp_GCM)[0]):
+        #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
+        #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
+    percentile_fill_plot_double(10**(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))]),10**(plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))]),title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000000001,1],Names=RCPs,window=window)
+#With power of 10 axes and 90%CI
+for scenario in range(6):
+    percentiles = [10,5,50,95,90]
+    #Probability
+    plt_perc = np.percentile(prob[:,scenario,:],percentiles,axis=1)
+    plt_perc2 = np.percentile(prob[:,scenario+6,:],percentiles,axis=1)
+
+    for i in range(5):
+        plt_perc[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(np.log10(plt_perc[i,:]),window)
+        plt_perc2[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(np.log10(plt_perc2[i,:]),window)
+        #for j in range((np.shape(Temp_GCM)[0]-(window-1)),np.shape(Temp_GCM)[0]):
+        #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
+        #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
+    percentile_fill_plot_double(10**(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))]),10**(plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))]),title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000000001,1],Names=RCPs,window=window)
+#With power of 10 axes and 95% CI
+for scenario in range(6):
+    percentiles = [2.5,2.5,50,97.5,97.5]
+    #Probability
+    plt_perc = np.percentile(prob[:,scenario,:],percentiles,axis=1)
+    plt_perc2 = np.percentile(prob[:,scenario+6,:],percentiles,axis=1)
+
+    for i in range(5):
+        plt_perc[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(np.log10(plt_perc[i,:]),window)
+        plt_perc2[i,0:(np.shape(Temp_GCM)[0]-(window-1))]=moving_average(np.log10(plt_perc2[i,:]),window)
+        #for j in range((np.shape(Temp_GCM)[0]-(window-1)),np.shape(Temp_GCM)[0]):
+        #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
+        #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
+    percentile_fill_plot_double(10**(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))]),10**(plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))]),title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000000001,1],Names=RCPs,window=window)
 
 #Median in log space
 for scenario in range(6):
@@ -358,6 +449,31 @@ for i in range(2):
 plt.legend(GCMs)
 plt.xlabel('Year')
 plt.ylabel('Beaverlodge Precip')
+
+#Plot of the historical probabilities for each model
+for i in range(6):
+    plt.figure()
+    plt.plot(Years_GCM[0:59],np.percentile(prob_nhs[0:59,i,:],95,axis=1),linewidth=2, label='95%', c = 'r', ls = '--', marker = 'D')
+    plt.plot(Years_GCM[0:59],np.average(prob_nhs[0:59,i,:],axis=1),linewidth=2, label='Mean', marker = 'o')
+    plt.plot(Years_GCM[0:59],np.percentile(prob_nhs[0:59,i,:],5,axis=1),linewidth=2, label='5%', c = 'g', ls = '--', marker = 'D')
+    plt.scatter(Years_GCM[0:59],np.concatenate((Y[0:6],[0,0,0,0],Y[6:55])), label = 'Floods', marker = 'o', c = 'c')
+    plt.ylabel('Prob. of Flood')
+    plt.xlabel('Year')
+    plt.legend(loc = 'center')
+    plt.title(GCMs[i] + ' - RCP85')
+    plt.savefig(GCMs[i] + '_RCP85.png')
+    
+for i in range(6,12):
+    plt.figure()
+    plt.plot(Years_GCM[0:59],np.percentile(prob_nhs[0:59,i,:],95,axis=1),linewidth=2, label='95%', c = 'r', ls = '--', marker = 'D')
+    plt.plot(Years_GCM[0:59],np.average(prob_nhs[0:59,i,:],axis=1),linewidth=2, label='Mean', marker = 'o')
+    plt.plot(Years_GCM[0:59],np.percentile(prob_nhs[0:59,i,:],5,axis=1),linewidth=2, label='5%', c = 'g', ls = '--', marker = 'D')
+    plt.scatter(Years_GCM[0:59],np.concatenate((Y[0:6],[0,0,0,0],Y[6:55])), label = 'Floods', marker = 'o', c = 'c')
+    plt.ylabel('Prob. of Flood')
+    plt.xlabel('Year')
+    plt.legend(loc = 'center')
+    plt.title(GCMs[i-6] + ' - RCP45')
+    plt.savefig(GCMs[i-6] + '_RCP45.png')
 
 #Survival Analysis#############################################################
 median = survival(waits)
