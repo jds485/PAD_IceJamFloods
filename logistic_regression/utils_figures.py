@@ -8,7 +8,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from lifelines import KaplanMeierFitter
 from lifelines import WeibullFitter
-
 from collections import deque,Counter
 from bisect import insort, bisect_left
 from itertools import islice

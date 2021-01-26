@@ -18,10 +18,9 @@ import statsmodels
 import statsmodels.api as sm
 from statsmodels.genmod.generalized_linear_model import GLM
 from statsmodels.genmod import families
-
 import statsmodels.stats.tests.test_influence
-
 import os
+
 owd = os.getcwd()
 os.chdir('C:\\Users\\js4yd\\Documents\\LogisticPADIJF\\FirthRegression')
 from firth_regression import *
