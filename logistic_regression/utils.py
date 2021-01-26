@@ -260,13 +260,14 @@ def boot_master(X,Y,columns,M=5000,block_length = 5,param=True, Firth=False, res
 
 #Now do simulation of GCMS#####################################################
 #Load GCMS--Need to finish for Jared --XX
-def load_GCMS(hist_temp,hist_precip):
+def load_GCMS(hist_temp,hist_precip,histSplice=True):
     Temp_GCM = np.loadtxt('GCM_Temp.csv',delimiter=',',skiprows=63)[:,1:13] #Drop year column load in 1962-2100
     Precip_GCM = np.loadtxt('GCM_Precip.csv',delimiter=',',skiprows=63)[:,1:13] #Drop year column load in 1962-2100
     Years_GCM = np.loadtxt('GCM_Precip.csv',delimiter=',',skiprows=63)[:,0] # load in 1962-2100
     hist_mean = 150.6115385#Historical mean @ GP
     Precip_GCM = convert_precip(Precip_GCM,hist_mean)#Convert to fraction of mean
-    Temp_GCM,Precip_GCM = splice_history(Temp_GCM,Precip_GCM,hist_temp,hist_precip)
+    if histSplice:
+        Temp_GCM,Precip_GCM = splice_history(Temp_GCM,Precip_GCM,hist_temp,hist_precip)
     return Temp_GCM,Precip_GCM,Years_GCM
     
 def convert_precip(precip,hist_mean):
