@@ -463,17 +463,19 @@ del i
 
 #Survival Analysis#############################################################
 median = survival(waits)
-A = np.zeros([np.shape(Temp_GCM)[0]-10+1,np.shape(Temp_GCM)[1]])
+AvgMedWait = np.zeros([np.shape(Temp_GCM)[0]-10+1,np.shape(Temp_GCM)[1]])
 for i in range(np.shape(Temp_GCM)[1]):
-    A[:,i] = moving_average(median[:,i],n=10)
+    AvgMedWait[:,i] = moving_average(median[:,i],n=10)
 del i
+
+GCM2030Waits = median[68,:]
+GCM2050Waits = median[88,:]
 
 plt.figure()
 for i in range(6):
     plt.plot(Years_GCM[38:89],median[38:89,i],'g',linewidth = 5)
     plt.plot(Years_GCM[38:89],median[38:89,i+6],'b',linewidth = 5)
 del i
-
 plt.xlabel('Year')
 plt.ylabel('Median Time Between Floods')
 plt.legend(RCPs)
@@ -484,7 +486,6 @@ for i in range(6):
     plt.plot(Years_GCM[38:109],median[38:109,i],'g',linewidth = 5)
     plt.plot(Years_GCM[38:109],median[38:109,i+6],'b',linewidth = 5)
 del i
-
 plt.xlabel('Year')
 plt.ylabel('Median Time Between Floods')
 plt.legend(RCPs)
@@ -495,7 +496,6 @@ for i in range(6):
     plt.plot(Years_GCM,median[:,i],'g',linewidth = 5)
     plt.plot(Years_GCM,median[:,i+6],'b',linewidth = 5)
 del i
-
 plt.xlabel('Year')
 plt.ylabel('Median Time Between Floods')
 plt.legend(RCPs)

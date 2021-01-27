@@ -29,6 +29,10 @@ del owd
 
 # Load data
 def load_data():
+    """
+    Loads the full dataset used for analysis.
+    Returns a vector of years, vector of binary flood/no flood years, and matrix of explanatory variables
+    """
     years = np.loadtxt('cleaned_data.csv',delimiter=',',skiprows=1,usecols=0)
     Y = np.loadtxt('cleaned_data.csv',delimiter=',',skiprows=1,usecols=12)
     X = np.genfromtxt('cleaned_data.csv',delimiter=',',skip_header=1,usecols=[1,2,3,4,5,6,7,8,9,10,11])
@@ -36,6 +40,11 @@ def load_data():
 
 # Clean data
 def clean_dats(years,Y,X,column='any',fill_years = False):
+    """
+    Removes NA data from the specified columns. Default is to remove all rows with NAs.
+    If only specific columns are to be checked, the index is specified by column = [].
+    When fill_years = True, dam filling years are kept in the data.
+    """
     if column == 'any':
         years_hold = years[~np.isnan(X).any(axis=1)]
         Y_hold = Y[~np.isnan(X).any(axis=1)]
@@ -56,6 +65,9 @@ def clean_dats(years,Y,X,column='any',fill_years = False):
 
 # Normalize independent variable
 def normalize(X):
+    """
+    Normalizes the variable by the Z-transform.
+    """
     k = np.shape(X)[1]
     for i in range(k):
         X[:,i] = (X[:,i]-np.mean(X[:,i]))/np.std(X[:,i])
@@ -63,11 +75,19 @@ def normalize(X):
 
 # Add constant
 def add_constant(X,Y):
+    """
+    Adds a column of ones to the provided X matrix.
+    """
     X = np.concatenate((np.ones([np.size(Y),1]),X),axis=1)
     return X
 
 # Fit logisitic regression
 def fit_logistic(X_hold,Y_hold,Firth=False,resBase=None,LRtest=True):
+    """
+    Fits a logistic regression model using standard (when Firth = False) or Firth's method (when Firth = True).
+    resBase is the result of a previous call to a regression that is used to store data for Firth's method.
+    LRtest indicates if the likelihood ratio test should be reported.
+    """
     if not Firth:
         res = GLM(Y_hold, X_hold, family=families.Binomial()).fit()#XXX Confirm this with logistic using older XXXX
         # AICc adjustment
@@ -124,6 +144,12 @@ def fit_logistic(X_hold,Y_hold,Firth=False,resBase=None,LRtest=True):
 
 # Iterate over columns
 def iterate_logistic(X_hold,Y_hold, fixed_columns = [0], Firth=False):
+    """
+    Fits logistic regression to the provided data while using the fixed_columns in the regression.
+    Firth specifies if Firth regression should be used.
+    
+    Returns matrices of fitted betas, pvalues, aic, aicc (second order aic), and bic
+    """
     l = np.size(fixed_columns)+1
     k = np.shape(X_hold)[1]
 
@@ -179,6 +205,12 @@ def iterate_logistic(X_hold,Y_hold, fixed_columns = [0], Firth=False):
 #Now do bootstrapping for chosen model#########################################
 #First get index
 def boot_index(X,Y,M=5000,block_length=5):
+    """
+    Obtains indicies for M block bootstrapped samples of length equal to the input data.
+    If block bootstrapping is required, specify a block_length.
+    
+    Returns the matrix of indices for the M samples.
+    """
     N = np.size(Y)
     nearest_fifth = block_length*round(N/block_length)
     #print(nearest_fifth)
@@ -197,6 +229,10 @@ def boot_index(X,Y,M=5000,block_length=5):
 
 #Next do bootstrap sampling
 def boot_sample(X,Y,indicies,block_length = 5):
+    """
+    Does bootstrap sampling using the provided datasets and indices.
+    Returns bootstrapped X and Y data.
+    """
     [M,N] = np.shape(indicies)
     K = np.shape(X)[1]
     
@@ -212,6 +248,10 @@ def boot_sample(X,Y,indicies,block_length = 5):
     return bootstrap_X,bootstrap_Y
 
 def boot_sample_param(X,Y,indicies,res,Firth=False):
+    """
+    Completes a parametric bootstrap using the provided data.
+    Returns bootstrapped X and Y data.
+    """
     [M,N] = np.shape(indicies)
     K = np.shape(X)[1]
     
@@ -231,6 +271,11 @@ def boot_sample_param(X,Y,indicies,res,Firth=False):
     return bootstrap_X,bootstrap_Y
 #Bootstrap fitting
 def boot_fit(bootstrap_X,bootstrap_Y,columns, Firth=False, resBase=None):
+    """
+    Fits logistic regression model to the provided data.
+    
+    Returns matrix of the bootstrapped betas.
+    """
     M = np.shape(bootstrap_X)[2]#Number of bootstrap samples
     k = np.size(columns)+1#Number of parameters
     beta_boot = np.zeros([M,k])
@@ -249,6 +294,15 @@ def boot_fit(bootstrap_X,bootstrap_Y,columns, Firth=False, resBase=None):
     return beta_boot
 
 def boot_master(X,Y,columns,M=5000,block_length = 5,param=True, Firth=False, resBase=None, res=[]):
+    """
+    Computes M block nonparametric (when param = False) or 
+    parametric (when param = True) bootstrapped samples of betas for logistic regression.
+    Uses Firth regression when Firth = True.
+    res is the result from the best Firth regression model.
+    resBase is the result of a previous call to a regression that is used to store data for Firth's method.
+    
+    Returns matrix of the bootstrapped betas, X, and Y variables
+    """
     indicies = boot_index(X,Y,M,block_length)
     if param:
         bootstrap_X,bootstrap_Y = boot_sample_param(X,Y,indicies,res,Firth=Firth)
@@ -258,8 +312,12 @@ def boot_master(X,Y,columns,M=5000,block_length = 5,param=True, Firth=False, res
     return beta_boot,bootstrap_X,bootstrap_Y
 
 #Now do simulation of GCMS#####################################################
-#Load GCMS--Need to finish for Jared --XX
+#Load GCMS
 def load_GCMS(hist_temp,hist_precip,histSplice=True):
+    """
+    Loads the GCM data and appends historical temperature and precipitation to it if histSplice=True.
+    Returns matrix of temperature and precip for 12 GCMs, and vector of years.
+    """
     Temp_GCM = np.loadtxt('GCM_Temp.csv',delimiter=',',skiprows=63)[:,1:13] #Drop year column load in 1962-2100
     Precip_GCM = np.loadtxt('GCM_Precip.csv',delimiter=',',skiprows=63)[:,1:13] #Drop year column load in 1962-2100
     Years_GCM = np.loadtxt('GCM_Precip.csv',delimiter=',',skiprows=63)[:,0] # load in 1962-2100
@@ -270,11 +328,17 @@ def load_GCMS(hist_temp,hist_precip,histSplice=True):
     return Temp_GCM,Precip_GCM,Years_GCM
     
 def convert_precip(precip,hist_mean):
+    """
+    Converts precipitation by dividing by the historical mean.
+    """
     #Convert precip values to percent of historical average values
     return precip/hist_mean
 
 #Splice in historical data
 def splice_history(Temp_GCM,Precip_GCM,hist_temp,hist_precip):
+    """
+    Adds historical temperature and precip to GCM timeseries.
+    """
     N = np.size(hist_precip)
     for i in range(12):
         Temp_GCM[0:N,i] = hist_temp
@@ -282,6 +346,9 @@ def splice_history(Temp_GCM,Precip_GCM,hist_temp,hist_precip):
     return Temp_GCM,Precip_GCM        
 
 def splice_flood(flood,scenario,boot,hist_flood,N_prob):
+    """
+    Adds historical floods to GCM timeseries
+    """
     N = np.size(hist_flood)
     for i in range(N_prob):
         flood[0:N,scenario,i,boot] = hist_flood
@@ -289,6 +356,11 @@ def splice_flood(flood,scenario,boot,hist_flood,N_prob):
         
 #Do random Simulation
 def simulate_GCM_futures(hist_flood,bootstrap_X,bootstrap_Y,beta_boot,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000):
+    """
+    Simulate future ice jam flood timeseries with the provided bootstrapped data and GCM temp and precip.
+    N_prob specifies the number of replicates from each of the bootstrapped betas.
+    M_boot is the number of bootstrapped betas
+    """
     #Initialize
     N_scen = np.shape(Temp_GCM)[1]#Number of GCM/RCP scenarios
     prob = np.zeros([np.shape(Temp_GCM)[0],N_scen,M_boot])#138 years (1962-2099) by 12 GCM/RCP by N_prob
@@ -323,10 +395,16 @@ def simulate_GCM_futures(hist_flood,bootstrap_X,bootstrap_Y,beta_boot,Temp_GCM,P
     return prob,flood,cum_flood,waits
 
 def compute_prob(boot_fu,forc):
+    """
+    Compute logistic probability.
+    """
     prod = np.matmul(forc,boot_fu)
     return np.exp(prod)/(1+np.exp(prod))
 
 def simulate_ice_jams(prob,N_prob):
+    """
+    Generates a timeseries of floods given the probability.
+    """
     #L is the length of the simulation (i.e. 2020-2100=>80)
     #N_prob is the number of replicates
     L = len(prob)
@@ -336,6 +414,9 @@ def simulate_ice_jams(prob,N_prob):
     return X
 
 def make_cum(X):
+    """
+    Cumulative sum of floods, and quantiles of the total floods.
+    """
     L=np.shape(X)[0]
     X=np.cumsum(X,axis=0)
     cum_quant = np.zeros([L,5])
@@ -344,6 +425,9 @@ def make_cum(X):
     return X,cum_quant
 
 def projected_waits(cum_flood):
+    """
+    Computes waiting times for floods using the provided cumulative flood data.
+    """
     L,N = np.shape(cum_flood)
     #waits = np.zeros([L,N])
     X = np.ones([L,N])

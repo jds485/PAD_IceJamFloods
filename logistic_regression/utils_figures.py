@@ -14,6 +14,9 @@ from itertools import islice
 
 #moving average
 def moving_average(a, n=3) :
+    """
+    Computes the moving average with window size n
+    """
     ret = np.cumsum(a, dtype=float)
     ret[n:] = ret[n:] - ret[:-n]
     return ret[(n - 1):] / n
@@ -62,7 +65,9 @@ def RunningMedian(seq, M):
     return medians
 
 def percentile_fill_plot_double(Y,Y2,title='Wicked Pissah',ylabel='Cumulative Pissah',scale='linear',Names=['Pissah1','Pissah2'],ylim=None,xlim=None,window=20,CIind=1):
-#    import matplotlib.pyplot as plt
+    """
+    Confidence corridor plot with RCP45 (Y) and RCP85 (Y2) on the same plot.
+    """
     N = np.shape(Y)[0]
     half = int((N-1)/2)
     fig, (ax1) = plt.subplots(nrows=1, ncols=1, sharex=True, figsize=(8,4))
@@ -88,7 +93,9 @@ def percentile_fill_plot_double(Y,Y2,title='Wicked Pissah',ylabel='Cumulative Pi
     fig.tight_layout()
 
 def percentile_fill_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissah',scale='linear',Names='Pissah1',ylim=None,xlim=None,window=20,CIind=0,colPlt='green'):
-#    import matplotlib.pyplot as plt
+    """
+    Confidence corridor plot for one GCM+RCP at a time. Useful for overlaying multiple confidence levels on one plot.
+    """
     N = np.shape(Y)[0]
     half = int((N-1)/2)
     fig, (ax1) = plt.subplots(nrows=1, ncols=1, sharex=True, figsize=(8,4))
@@ -115,8 +122,9 @@ def percentile_fill_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissa
     fig.tight_layout()
 
 def percentile_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissah',scale='linear',ylim=None,xlim=None,split='scenario',Names=['Pissah1','Pissah2'],window=20):
-    import matplotlib.pyplot as plt
-
+    """
+    Plots Y for all of the GCMs+RCPs on one plot.
+    """
     fig, (ax1) = plt.subplots(nrows=1, ncols=1, sharex=True, figsize=(8,4))
     if split == 'scenario':
         ax1.plot(np.arange(1962+(window-1),2100,1),Y[0,:],'g',linewidth=5,label=Names[0])
@@ -147,6 +155,9 @@ def percentile_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissah',sc
     fig.tight_layout()
 
 def survival(waits):
+    """
+    Completes survival analysis for wait times that are longer than simulation period.
+    """
     N_years,N_scen,N_prob,M_boot = np.shape(waits)
     median = np.zeros([N_years,N_scen])
     for year in range(N_years):
