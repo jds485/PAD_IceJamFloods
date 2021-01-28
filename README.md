@@ -10,7 +10,7 @@ If you have questions about the repository, please email Jared.
 # Description of Repository
 This repository houses all of the necessary code to reproduce the statistical analyses presented in the above papers.\
 
-**block_bootstrap directory**\
+## **block_bootstrap directory for Timoney et al. (2018)**
 This directory corresponds to the Timoney et al. (2018) paper. All output data and figures are provided, as well as intermediate figures and additional statistical tests not presented in the paper. Note that some of these statistical tests are not recommended by the authors.
 \
 The PAD_FloodAnalysis.R script assumes that all files are located and written to one directory.\
@@ -22,11 +22,12 @@ Autoregressive models are tested, but found to be nonstationary and are not reco
 Block bootstrapping (preferred method for this paper) is used, and hypothesis tests are performed using the bootstrapped data. Additional tests not presented in the paper are provided for the maximum length of time before seeing a flood in the regulated era.\
 The Mann-Kendall test as used in Beltaos is applied to the bootstrapped data to illustrate the affect of stochastic variability on the results of the test.\
 
-**logistic_regression directory**\
+## **logistic_regression directory for Lamontagne et al.**
 This directory corresponds to the Lamontagne et al. paper. All paper figures are provided, as well as intermediate figures not presented in the paper.\
 \
-The utils.py and utils_figures.py scripts load user-defined functions that are used for this analysis. These functions depend on the [firth_regression](https://gist.github.com/jds485/fd737a8314d45485f7e11f588baf88b9) function, which was forked and modified from John Lees' Gist. Click the provided link and place that function into a directory of your choice. Place that directory name into the utils.py script where os.chdir is located.\
-The example.py script assumes that all files written to the .\PAD_IceJamFloods\logistic_regression directory. This script takes up to 5 hours to run. The resulting data file is about 39 GB. We estimate that a machine with 16 GB RAM or more is required to run this script.
+Python 3.7.4 was used for this analysis. The requirements.txt file provides the packages and versions used for this analysis.\
+The utils.py and utils_figures.py scripts load user-defined functions that are used for this analysis. These functions depend on Jared's [firth_regression](https://gist.github.com/jds485/fd737a8314d45485f7e11f588baf88b9) function, which was forked and modified from John Lees' Gist. Click the provided link and place that function script into a directory of your choice. Place that directory name into the utils.py script where os.chdir is located.\
+The example.py script assumes that all files are written to the .\PAD_IceJamFloods\logistic_regression directory. This script takes up to 5 hours to run. The resulting data file is about 39 GB. We estimate that a machine with 16 GB RAM or more is required to run this script.
 
 # License
 See license file.
