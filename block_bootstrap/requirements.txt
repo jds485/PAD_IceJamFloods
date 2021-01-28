@@ -1,0 +1,15 @@
+R version 3.5.0 (2018-04-23)
+Running under: Windows >= 8 x64
+
+Packages:
+ppcc v1.1, 
+trend v1.1.1, 
+doParallel v1.0.14, 
+iterators v1.0.10, 
+foreach v1.4.4, 
+evd v2.3-3, 
+Hmisc v4.2-0, 
+ggplot2 v3.2.0, 
+Formula v1.2-3, 
+survival v2.44-1.1, 
+lattice v0.20-38
