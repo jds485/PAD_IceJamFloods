@@ -13,6 +13,7 @@ This repository houses all of the necessary code to reproduce the statistical an
 ## **block_bootstrap directory for Timoney et al. (2018)**
 This directory corresponds to the Timoney et al. (2018) paper. All output data and figures are provided, as well as intermediate figures and additional statistical tests not presented in the paper. Note that some of these statistical tests are not recommended by the authors.
 \
+R 3.5.0 was used for this analysis. The requirements.txt file provides the packages and versions used for this analysis.\
 The PAD_FloodAnalysis.R script assumes that all files are located and written to one directory.\
 Flood data are loaded from the provided data file, and several cumulative flood count plots are made using that dataset.\
 Binomial exact tests and geometric distribution-based tests are used to compare to Beltaos' t-tests (but they are not appropriate tests to use because of nonstationarity in the probability of a flood over the period of record).\
