@@ -28,14 +28,19 @@ os.chdir(owd)
 del owd
 
 # Load data
-def load_data():
+def load_data(PPPR=False):
     """
     Loads the full dataset used for analysis.
     Returns a vector of years, vector of binary flood/no flood years, and matrix of explanatory variables
     """
-    years = np.loadtxt('cleaned_data.csv',delimiter=',',skiprows=1,usecols=0)
-    Y = np.loadtxt('cleaned_data.csv',delimiter=',',skiprows=1,usecols=12)
-    X = np.genfromtxt('cleaned_data.csv',delimiter=',',skip_header=1,usecols=[1,2,3,4,5,6,7,8,9,10,11])
+    if not PPPR:
+        years = np.loadtxt('cleaned_data.csv',delimiter=',',skiprows=1,usecols=0)
+        Y = np.loadtxt('cleaned_data.csv',delimiter=',',skiprows=1,usecols=12)
+        X = np.genfromtxt('cleaned_data.csv',delimiter=',',skip_header=1,usecols=[1,2,3,4,5,6,7,8,9,10,11])
+    else:
+        years = np.loadtxt('cleaned_data_PPPR.csv',delimiter=',',skiprows=1,usecols=0)
+        Y = np.loadtxt('cleaned_data_PPPR.csv',delimiter=',',skiprows=1,usecols=12)
+        X = np.genfromtxt('cleaned_data_PPPR.csv',delimiter=',',skip_header=1,usecols=[1,2,3,4,5,6,7,8,9,10,11,13,14])
     return years,Y,X
 
 # Clean data
