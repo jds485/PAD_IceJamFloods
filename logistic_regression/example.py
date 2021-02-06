@@ -499,3 +499,43 @@ del i
 plt.xlabel('Year')
 plt.ylabel('Median Time Between Floods')
 plt.legend(RCPs)
+
+
+#### Regression Models with Peace Point and Peace River for SI
+# Load data
+[years_PR,Y_PR,X_PR] = load_data(PPPR=True)
+[years_PR,Y_PR,X_PR] = clean_dats(years_PR,Y_PR,X_PR,column=[0,1,3,5,6,9,10],fill_years = False)
+
+[years_PP,Y_PP,X_PP] = load_data(PPPR=True)
+[years_PP,Y_PP,X_PP] = clean_dats(years_PP,Y_PP,X_PP,column=[0,1,3,5,6,11,12],fill_years = False)
+
+X_PR = normalize(X_PR)
+X_PP = normalize(X_PP)
+
+X_PR = add_constant(X_PR,Y_PR)
+X_PP = add_constant(X_PP,Y_PP)
+
+# Iterative model building
+#  All two parameter models (constant + variable)
+#   Firth two parameter models
+[betasf_PR, pvaluesf_PR,aicf_PR,aiccf_PR,bicf_PR]=iterate_logistic(X_PR,Y_PR, fixed_columns = [0],Firth=True)
+[betasf_PP, pvaluesf_PP,aicf_PP,aiccf_PP,bicf_PP]=iterate_logistic(X_PP,Y_PP, fixed_columns = [0],Firth=True)
+# Three parameter models
+#  Firth three parameter models
+[betas3f_PR, pvalues3f_PR,aic3f_PR,aicc3f_PR,bic3f_PR]=iterate_logistic(X_PR,Y_PR, fixed_columns = [0,4],Firth=True)
+[betas3f_PP, pvalues3f_PP,aic3f_PP,aicc3f_PP,bic3f_PP]=iterate_logistic(X_PP,Y_PP, fixed_columns = [0,4],Firth=True)
+#  Best Freeze-up model with three parameters
+[betas3frf_PR, pvalues3frf_PR,aic3frf_PR,aicc3frf_PR,bic3frf_PR]=iterate_logistic(X_PR,Y_PR, fixed_columns = [0,6],Firth=True)
+[betas3frf_PP, pvalues3frf_PP,aic3frf_PP,aicc3frf_PP,bic3frf_PP]=iterate_logistic(X_PP,Y_PP, fixed_columns = [0,6],Firth=True)
+# Four parameter models with Firth regression
+[betas4f_PR, pvalues4f_PR,aic4f_PR,aicc4f_PR,bic4f_PR]=iterate_logistic(X_PR,Y_PR, fixed_columns = [0,2,4],Firth=True)
+[betas4f_PP, pvalues4f_PP,aic4f_PP,aicc4f_PP,bic4f_PP]=iterate_logistic(X_PP,Y_PP, fixed_columns = [0,2,4],Firth=True)
+#  Best with Freezeup
+[betas4frf_PR, pvalues4frf_PR,aic4frf_PR,aicc4frf_PR,bic4frf_PR]=iterate_logistic(X_PR,Y_PR, fixed_columns = [0,4,6],Firth=True)
+[betas4frf_PP, pvalues4frf_PP,aic4frf_PP,aicc4frf_PP,bic4frf_PP]=iterate_logistic(X_PP,Y_PP, fixed_columns = [0,4,6],Firth=True)
+# Five parameter models - Same models selected for both freeze-up and regular at this stage.
+[betas5f_PR, pvalues5f_PR,aic5f_PR,aicc5f_PR,bic5f_PR]=iterate_logistic(X_PR,Y_PR, fixed_columns = [0,2,4,10],Firth=True)
+[betas5f_PP, pvalues5f_PP,aic5f_PP,aicc5f_PP,bic5f_PP]=iterate_logistic(X_PP,Y_PP, fixed_columns = [0,2,4,13],Firth=True)
+#  Best with Freezeup
+[betas5frf_PR, pvalues5frf_PR,aic5frf_PR,aicc5frf_PR,bic5frf_PR]=iterate_logistic(X_PR,Y_PR, fixed_columns = [0,2,4,6],Firth=True)
+[betas5frf_PP, pvalues5frf_PP,aic5frf_PP,aicc5frf_PP,bic5frf_PP]=iterate_logistic(X_PP,Y_PP, fixed_columns = [0,2,4,6],Firth=True)
