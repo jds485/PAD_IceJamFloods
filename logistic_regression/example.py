@@ -54,30 +54,30 @@ plt.xlabel('Fort Verm DDF')
 plt.figure()
 plt.scatter(X[Y==0,4],Y[Y==0])
 plt.scatter(X[Y==1,4],Y[Y==1])
-plt.xlabel('BL/GP Nov.-Apr. Precip.')
+plt.xlabel('GP/BL Nov.-Apr. Precip.')
 
 plt.figure()
 plt.scatter(X[Y==0,2],X[Y==0,4])
 plt.scatter(X[Y==1,2],X[Y==1,4])
-plt.ylabel('BL/GP Nov.-Apr. Precip.')
+plt.ylabel('GP/BL Nov.-Apr. Precip.')
 plt.xlabel('Fort Verm. DDF')
 
 plt.figure()
 plt.scatter(X[Y==0,1],X[Y==0,4])
 plt.scatter(X[Y==1,1],X[Y==1,4])
-plt.ylabel('BL/GP Nov.-Apr. Precip.')
+plt.ylabel('GP/BL Nov.-Apr. Precip.')
 plt.xlabel('Fort Chip. DDF')
 
 plt.figure()
 plt.scatter(X[Y==0,6],X[Y==0,4])
 plt.scatter(X[Y==1,6],X[Y==1,4])
-plt.ylabel('BL/GP Nov.-Apr. Precip.')
+plt.ylabel('GP/BL Nov.-Apr. Precip.')
 plt.xlabel('Freeze-up Stage (Beltaos, 2014)')
 
 plt.figure()
 plt.scatter(X[Y==0,7],X[Y==0,4])
 plt.scatter(X[Y==1,7],X[Y==1,4])
-plt.ylabel('BL/GP Nov.-Apr. Precip.')
+plt.ylabel('GP/BL Nov.-Apr. Precip.')
 plt.xlabel('Melt Test')
 
 # Iterative model building
@@ -159,7 +159,7 @@ resBase = copy.deepcopy(res_GLM)
 #boot_betas,bootstrap_X,bootstrap_Y=mimic_bootstrap(res_GLM,X_boot,Y_boot,M_boot=50)
 
 #pair plot of the beta empirical distribution
-betas_boot_df = pd.DataFrame(data=beta_boot, columns = ['Constant', 'DDF Fort Verm.', 'BL/GP Precip.'])
+betas_boot_df = pd.DataFrame(data=beta_boot, columns = ['Constant', 'DDF Fort Verm.', 'GP/BL Precip.'])
 sb.set_style('darkgrid')
 sb.pairplot(betas_boot_df, diag_kind = 'kde', plot_kws={"s":13})
 
