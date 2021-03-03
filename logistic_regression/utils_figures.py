@@ -92,7 +92,7 @@ def percentile_fill_plot_double(Y,Y2,title='Wicked Pissah',ylabel='Cumulative Pi
         plt.xlim(xlim)
     fig.tight_layout()
 
-def percentile_fill_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissah',scale='linear',Names='Pissah1',ylim=None,xlim=None,window=20,CIind=0,colPlt='green'):
+def percentile_fill_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissah',scale='linear',Names='Pissah1',ylim=None,xlim=None,window=20,CIind=0,colPlt='green',start=1962,end=2100,Yobs=None,Ypobs=None,years=None):
     """
     Confidence corridor plot for one GCM+RCP at a time. Useful for overlaying multiple confidence levels on one plot.
     """
@@ -103,13 +103,18 @@ def percentile_fill_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissa
     count=0
     for i in range(CIind,half):
         if count > 0:
-            #ax1.fill_between(np.arange(0,155,1), plt_perc[i,:],plt_perc[-(i+1),:],color=colormap(i/half))
-            ax1.fill_between(np.arange(1962+(window-1),2100,1), Y[i,:],Y[-(i+1),:],color=colPlt,alpha=0.5)
+            if years is not None:
+                ax1.fill_between(years, Y[i,:],Y[-(i+1),:],color=colPlt,alpha=0.5)
+            else:
+                #ax1.fill_between(np.arange(0,155,1), plt_perc[i,:],plt_perc[-(i+1),:],color=colormap(i/half))
+                ax1.fill_between(np.arange(start+(window-1),end,1), Y[i,:],Y[-(i+1),:],color=colPlt,alpha=0.5)
         else:
-            ax1.fill_between(np.arange(1962+(window-1),2100,1), Y[i,:],Y[-(i+1),:],color=colPlt,alpha=0.5,label=Names)
+            if years is not None:
+                ax1.fill_between(years, Y[i,:],Y[-(i+1),:],color=colPlt,alpha=0.5,label=Names)
+            else:
+                ax1.fill_between(np.arange(start+(window-1),end,1), Y[i,:],Y[-(i+1),:],color=colPlt,alpha=0.5,label=Names)
             count=count+1
         
-    ax1.legend()
     ax1.set_yscale(scale)
     ax1.set_title(title, fontsize=15)
     ax1.tick_params(labelsize=11.5)
@@ -119,6 +124,18 @@ def percentile_fill_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissa
         plt.ylim(ylim)
     if xlim != None:
         plt.xlim(xlim)
+    if Ypobs is not None:
+        if years is not None:
+            plt.plot(years,moving_average(Ypobs,window),linewidth=2, label='Predicted from Observed Data', ls = '--', marker = 'D')
+        else:
+            plt.plot(np.arange(start+(window-1),end,1),moving_average(Ypobs,window),linewidth=2, label='Predicted from Observed Data', ls = '--', marker = 'D')
+    if Yobs is not None:
+        if years is not None:
+            plt.plot(years,moving_average(Yobs,window),linewidth=2, label='Observed Data', ls = '--', marker = 'o', c = 'r')
+        else:
+            plt.plot(np.arange(start+(window-1),end,1),moving_average(Yobs,window),linewidth=2, label='Observed Data', ls = '--', marker = 'o', c = 'r')
+            #plt.scatter(np.arange(start,end,1),Yobs, label = 'Floods', marker = 'o', c = 'r')
+    ax1.legend()
     fig.tight_layout()
 
 def percentile_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissah',scale='linear',ylim=None,xlim=None,split='scenario',Names=['Pissah1','Pissah2'],window=20):
