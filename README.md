@@ -35,4 +35,4 @@ See license file.
 
 # Code Repository Citation
 Smith, J.D., and J.R. Lamontagne. (2018). PAD_IceJamFloods. Online GitHub Repository. https://github.com/jds485/PAD_IceJamFloods
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4474827.svg)](https://doi.org/10.5281/zenodo.4474827)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4474826.svg)](https://doi.org/10.5281/zenodo.4474826)
