@@ -64,7 +64,7 @@ def RunningMedian(seq, M):
         medians.append(median())  
     return medians
 
-def percentile_fill_plot_double(Y,Y2,title='Wicked Pissah',ylabel='Cumulative Pissah',scale='linear',Names=['Pissah1','Pissah2'],ylim=None,xlim=None,window=20,CIind=1):
+def percentile_fill_plot_double(Y,Y2,title='Wicked Pissah',ylabel='Cumulative Pissah',scale='linear',Names=['Pissah1','Pissah2'],ylim=None,xlim=None,window=20,CIind=1,years=None):
     """
     Confidence corridor plot with RCP45 (Y) and RCP85 (Y2) on the same plot.
     """
@@ -73,13 +73,19 @@ def percentile_fill_plot_double(Y,Y2,title='Wicked Pissah',ylabel='Cumulative Pi
     fig, (ax1) = plt.subplots(nrows=1, ncols=1, sharex=True, figsize=(8,4))
     #ax1.plot(np.arange(1946,2100,1),Y[half,:],color='k')
     for i in range(CIind,half):
-        #ax1.fill_between(np.arange(0,155,1), plt_perc[i,:],plt_perc[-(i+1),:],color=colormap(i/half))
-        ax1.fill_between(np.arange(1962+(window-1),2100,1), Y[i,:],Y[-(i+1),:],color="green",alpha=0.5,label=Names[0])#blue
+        if years is not None:
+            ax1.fill_between(years, Y[i,:],Y[-(i+1),:],color="green",alpha=0.5,label=Names[0])#blue
+        else:
+            #ax1.fill_between(np.arange(0,155,1), plt_perc[i,:],plt_perc[-(i+1),:],color=colormap(i/half))
+            ax1.fill_between(np.arange(1962+(window-1),2100,1), Y[i,:],Y[-(i+1),:],color="green",alpha=0.5,label=Names[0])#blue
 
     #ax1.plot(np.arange(1946,2100,1),Y2[half,:],color='k')
     for i in range(CIind,half):
-        #ax1.fill_between(np.arange(0,155,1), plt_perc[i,:],plt_perc[-(i+1),:],color=colormap(i/half))
-        ax1.fill_between(np.arange(1962+(window-1),2100,1), Y2[i,:],Y2[-(i+1),:],color="blue",alpha=0.5,label=Names[1])#red
+        if years is not None:
+            ax1.fill_between(years, Y2[i,:],Y2[-(i+1),:],color="blue",alpha=0.5,label=Names[1])#red
+        else:
+            #ax1.fill_between(np.arange(0,155,1), plt_perc[i,:],plt_perc[-(i+1),:],color=colormap(i/half))
+            ax1.fill_between(np.arange(1962+(window-1),2100,1), Y2[i,:],Y2[-(i+1),:],color="blue",alpha=0.5,label=Names[1])#red
     ax1.legend()
     ax1.set_yscale(scale)
     ax1.set_title(title, fontsize=15)
