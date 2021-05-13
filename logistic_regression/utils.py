@@ -22,7 +22,7 @@ import statsmodels.stats.tests.test_influence
 import os
 
 owd = os.getcwd()
-os.chdir('C:\\Users\\js4yd\\Documents\\LogisticPADIJF\\FirthRegression')
+os.chdir('C:\\Users\\js4yd\\OneDrive - University of Virginia\\LogisticPADIJF\\FirthRegression')
 from firth_regression import *
 os.chdir(owd)
 del owd
@@ -460,3 +460,32 @@ def mimic_bootstrap(results,X,Y,M_boot=10):
 #Compution expected wait times
 #Compute median wait times
 #GCM master
+    
+
+#Do random Simulation starting from probability
+def simulate_GCM_futures_probStart(hist_flood,prob,N_prob=1000):
+    """
+    Simulate future ice jam flood timeseries with the provided probability array
+    N_prob specifies the number of replicates from each of the probability array rows.
+    prob is years (1962-2099) by 12 GCM/RCP by N_prob
+    """
+    #Initialize
+    N_scen = np.shape(prob)[1]#Number of GCM/RCP scenarios
+    M_boot = np.shape(prob)[2]
+    flood = np.zeros([np.shape(prob)[0],N_scen,N_prob,M_boot])#138 years (1962-2099) by 12 GCM/RCP by N_prob by M_boot
+    cum_flood = np.zeros([np.shape(prob)[0],N_scen,N_prob,M_boot])#138 years (1962-2099) by 12 GCM/RCP by N_prob by M_boot
+    waits = np.zeros([np.shape(prob)[0],N_scen,N_prob,M_boot])#138 years (1962-2099) by 12 GCM/RCP by N_prob by M_boot
+    #Loop over boot
+    for boot in range(M_boot):
+        #Loop over scenario
+        for scenario in range(N_scen):
+            #Simulate Floods
+            flood[:,scenario,:,boot] = simulate_ice_jams(prob[:,scenario,boot],N_prob)
+            #Splice in Historical Floods
+            flood = splice_flood(flood,scenario,boot,hist_flood,N_prob)
+            #Count Cum Floods
+            [cum_flood[:,scenario,:,boot],cum_quant] = make_cum(flood[:,scenario,:,boot])
+            waits[:,scenario,:,boot]=projected_waits(cum_flood[:,scenario,:,boot])
+            #Wait Times
+        print(boot)
+    return flood,cum_flood,waits
