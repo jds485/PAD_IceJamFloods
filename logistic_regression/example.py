@@ -183,6 +183,9 @@ betas_boot_df = pd.DataFrame(data=beta_boot, columns = ['Constant', 'DDF Fort Ve
 sb.set_style('darkgrid')
 sb.pairplot(betas_boot_df, diag_kind = 'kde', plot_kws={"s":13})
 
+#Save betas for plotting in another package
+betas_boot_df.to_csv("betas_boot.csv", index=False)
+
 #How many points are excluded when axes are trimmed
 ExcludedPtsPct = (len(np.where((beta_boot[:,0] < -15))[0]) + len(np.where((beta_boot[:,1] < -6))[0]) + len(np.where((beta_boot[:,2] > 6))[0]) 
 - len(np.where((beta_boot[:,0] < -15) & (beta_boot[:,1] < -6))[0])
@@ -337,9 +340,11 @@ for i in range(len(betas_boot_df.iloc[:,0])):
 percentiles = [2.5,25,50,75,97.5]
 #Probability
 plt_perc = np.percentile(YMA,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,34:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1952,end=2021,xlim=[1950,2020],Ypobs = Y_HistPred[34:103])
-#With observed data
-percentile_fill_plot_single(plt_perc[:,34:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1952,end=2021,xlim=[1950,2020],Yobs=Y_All[34:103], Ypobs = Y_HistPred[34:103])
+percentile_fill_plot_single(plt_perc[:,35:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1953,end=2021,xlim=[1950,2020],Ypobs = Y_HistPred[35:103])
+#With observed data - backward looking
+percentile_fill_plot_single(plt_perc[:,35:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1953,end=2021,xlim=[1950,2020],Yobs=Y_All[35:103], Ypobs = Y_HistPred[35:103])
+#With observed data - centered
+percentile_fill_plot_single(plt_perc[:,40:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1953,end=2016,xlim=[1950,2020],Yobs=Y_All[40:103], Ypobs = Y_HistPred[40:103])
 ##All data to 1915
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1915,end=2021,xlim=[1910,2020],Ypobs = Y_HistPred,years=years_All[(window-1):(np.shape(years_All)[0])])
 #With observed data: large floods only
