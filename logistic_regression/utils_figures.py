@@ -64,7 +64,7 @@ def RunningMedian(seq, M):
         medians.append(median())  
     return medians
 
-def percentile_fill_plot_double(Y,Y2,title='Wicked Pissah',ylabel='Cumulative Pissah',scale='linear',Names=['Pissah1','Pissah2'],ylim=None,xlim=None,window=20,CIind=1,years=None):
+def percentile_fill_plot_double(Y,Y2,title='Wicked Pissah',ylabel='Cumulative Pissah',scale='linear',Names=['Pissah1','Pissah2'],ylim=None,xlim=None,window=20,CIind=1,years=None,twoYax=False,ylabel2=None,ylim2=None):
     """
     Confidence corridor plot with RCP45 (Y) and RCP85 (Y2) on the same plot.
     """
@@ -79,24 +79,41 @@ def percentile_fill_plot_double(Y,Y2,title='Wicked Pissah',ylabel='Cumulative Pi
             #ax1.fill_between(np.arange(0,155,1), plt_perc[i,:],plt_perc[-(i+1),:],color=colormap(i/half))
             ax1.fill_between(np.arange(1962+(window-1),2100,1), Y[i,:],Y[-(i+1),:],color="green",alpha=0.5,label=Names[0])#blue
 
-    #ax1.plot(np.arange(1946,2100,1),Y2[half,:],color='k')
-    for i in range(CIind,half):
-        if years is not None:
-            ax1.fill_between(years, Y2[i,:],Y2[-(i+1),:],color="blue",alpha=0.5,label=Names[1])#red
-        else:
-            #ax1.fill_between(np.arange(0,155,1), plt_perc[i,:],plt_perc[-(i+1),:],color=colormap(i/half))
-            ax1.fill_between(np.arange(1962+(window-1),2100,1), Y2[i,:],Y2[-(i+1),:],color="blue",alpha=0.5,label=Names[1])#red
-    ax1.legend()
+    if twoYax:
+        ax2 = ax1.twinx()
+        for i in range(CIind,half):
+            if years is not None:
+                ax2.fill_between(years, Y2[i,:],Y2[-(i+1),:],color="blue",alpha=0.5,label=Names[1])#red
+            else:
+                ax2.fill_between(np.arange(1962+(window-1),2100,1), Y2[i,:],Y2[-(i+1),:],color="blue",alpha=0.5,label=Names[1])#red
+        ax2.set_yscale(scale)
+        ax2.set_ylabel(ylabel2, fontsize=14)
+        ax2.tick_params(labelsize=11.5)
+        ax2.tick_params(axis='y', which='minor', length = 0)
+        if ylim2 is not None:
+            ax2.set_ylim(ylim2)
+        fig.legend(loc = "upper right", bbox_to_anchor=(1,1), bbox_transform=ax2.transAxes)
+        
+    else:
+        for i in range(CIind,half):
+            if years is not None:
+                ax1.fill_between(years, Y2[i,:],Y2[-(i+1),:],color="blue",alpha=0.5,label=Names[1])#red
+            else:
+                #ax1.fill_between(np.arange(0,155,1), plt_perc[i,:],plt_perc[-(i+1),:],color=colormap(i/half))
+                ax1.fill_between(np.arange(1962+(window-1),2100,1), Y2[i,:],Y2[-(i+1),:],color="blue",alpha=0.5,label=Names[1])#red
+        ax1.legend()
     ax1.set_yscale(scale)
     ax1.set_title(title, fontsize=15)
     ax1.tick_params(labelsize=11.5)
+    ax1.tick_params(axis='y', which='minor', length = 0)
     ax1.set_xlabel('Year', fontsize=14)
     ax1.set_ylabel(ylabel, fontsize=14)
     if ylim != None:
-        plt.ylim(ylim)
+        ax1.set_ylim(ylim)
     if xlim != None:
         plt.xlim(xlim)
     fig.tight_layout()
+
 
 def percentile_fill_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissah',scale='linear',Names='Pissah1',ylim=None,xlim=None,window=20,CIind=0,colPlt='green',start=1962,end=2100,Yobs=None,Ypobs=None,years=None):
     """

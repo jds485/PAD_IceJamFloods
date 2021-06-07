@@ -360,7 +360,7 @@ def splice_flood(flood,scenario,boot,hist_flood,N_prob):
     return flood
         
 #Do random Simulation
-def simulate_GCM_futures(hist_flood,bootstrap_X,bootstrap_Y,beta_boot,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000):
+def simulate_GCM_futures(hist_flood,bootstrap_X,bootstrap_Y,beta_boot,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000, histSplice=True):
     """
     Simulate future ice jam flood timeseries with the provided bootstrapped data and GCM temp and precip.
     N_prob specifies the number of replicates from each of the bootstrapped betas.
@@ -390,8 +390,9 @@ def simulate_GCM_futures(hist_flood,bootstrap_X,bootstrap_Y,beta_boot,Temp_GCM,P
             prob[:,scenario,boot] = compute_prob(beta_fu,forc)
             #Simulate Floods
             flood[:,scenario,:,boot] = simulate_ice_jams(prob[:,scenario,boot],N_prob)
-            #Splice in Historical Floods
-            flood = splice_flood(flood,scenario,boot,hist_flood,N_prob)
+            if histSplice:
+                #Splice in Historical Floods
+                flood = splice_flood(flood,scenario,boot,hist_flood,N_prob)
             #Count Cum Floods
             [cum_flood[:,scenario,:,boot],cum_quant] = make_cum(flood[:,scenario,:,boot])
             waits[:,scenario,:,boot]=projected_waits(cum_flood[:,scenario,:,boot])

@@ -23,6 +23,33 @@ np.random.seed(123020)
 [years,Y,X] = load_data()
 [years,Y,X] = clean_dats(years,Y,X,column=[0,1,3,5,6],fill_years = False)
 
+#Figure 3
+#EDA with real axes - precip multiplied by historical avg. transformation
+plt.figure()
+plt.scatter(X[Y==0,1],X[Y==0,3]*150.6115385, label = 'Not Large Flood')
+plt.scatter(X[Y==1,1],X[Y==1,3]*150.6115385, label = 'Large Flood')
+plt.ylabel('GP/BL Nov.-Apr. Precip. (mm)')
+plt.legend()
+plt.xlabel('Fort Verm. DDF')
+
+plt.figure()
+plt.scatter(X[Y==0,0],X[Y==0,3]*150.6115385)
+plt.scatter(X[Y==1,0],X[Y==1,3]*150.6115385)
+plt.ylabel('GP/BL Nov.-Apr. Precip. (mm)')
+plt.xlabel('Fort Chip. DDF')
+
+plt.figure()
+plt.scatter(X[Y==0,5],X[Y==0,3]*150.6115385)
+plt.scatter(X[Y==1,5],X[Y==1,3]*150.6115385)
+plt.ylabel('GP/BL Nov.-Apr. Precip. (mm)')
+plt.xlabel('Freeze-up Stage (m) (Beltaos, 2014)')
+
+plt.figure()
+plt.scatter(X[Y==0,6],X[Y==0,3]*150.6115385)
+plt.scatter(X[Y==1,6],X[Y==1,3]*150.6115385)
+plt.ylabel('GP/BL Nov.-Apr. Precip. (mm)')
+plt.xlabel('Melt Test (days)')
+
 #Evaluate square root of temperature as predictor with GP/BL precip
 X_sqrt = np.concatenate((X[:,[0,1,3]],np.sqrt(-X[:,[0,1]])),axis=1)
 
@@ -45,7 +72,7 @@ del resBase
 logit=sm.Logit(Y,X[:,[0,2,4]])
 res_SM = logit.fit()
 
-#Looking at seperation
+#Looking at seperation on normalized variables
 plt.figure()
 plt.scatter(X[Y==0,2],Y[Y==0])
 plt.scatter(X[Y==1,2],Y[Y==1])
@@ -178,13 +205,11 @@ resBase = copy.deepcopy(res_GLM)
 #Alternative parametric bootstrap using MVN dist. Does not get tails of dist.
 #boot_betas,bootstrap_X,bootstrap_Y=mimic_bootstrap(res_GLM,X_boot,Y_boot,M_boot=50)
 
+#Figure 5
 #pair plot of the beta empirical distribution
 betas_boot_df = pd.DataFrame(data=beta_boot, columns = ['Constant', 'DDF Fort Verm.', 'GP/BL Precip.'])
 sb.set_style('darkgrid')
 sb.pairplot(betas_boot_df, diag_kind = 'kde', plot_kws={"s":13})
-
-#Save betas for plotting in another package
-betas_boot_df.to_csv("betas_boot.csv", index=False)
 
 #How many points are excluded when axes are trimmed
 ExcludedPtsPct = (len(np.where((beta_boot[:,0] < -15))[0]) + len(np.where((beta_boot[:,1] < -6))[0]) + len(np.where((beta_boot[:,2] > 6))[0]) 
@@ -192,6 +217,14 @@ ExcludedPtsPct = (len(np.where((beta_boot[:,0] < -15))[0]) + len(np.where((beta_
 - len(np.where((beta_boot[:,0] < -15) & (beta_boot[:,2] > 6))[0])
 - len(np.where((beta_boot[:,1] < -6) & (beta_boot[:,2] > 6))[0])
 + len(np.where((beta_boot[:,0] < -15) & (beta_boot[:,1] < -6) & (beta_boot[:,2] > 6))[0]))/1000*100
+
+#Save betas for plotting in another package
+betas_boot_df.to_csv("betas_boot.csv", index=False)
+
+#Standard error in betas
+BetaStdErr = np.std(beta_boot, axis = 0)/np.sqrt(1000)
+#array([0.07311289, 0.03190114, 0.03872068])
+
 
 #Compute IJF probabilities for historical record using the bootstrapped betas
 [years_All,Y_All,X_All] = load_data()
@@ -221,18 +254,27 @@ prob,flood,cum_flood,waits = simulate_GCM_futures(Y_GCM,bootstrap_X[:,[1,3],:],b
 #For use with MVN dist. parametric bootstrap
 #prob,flood,cum_flood,waits = simulate_GCM_futures(Y_GCM,bootstrap_X,bootstrap_Y,boot_betas,Temp_GCM,Precip_GCM,M_boot=5000,N_prob=1000)
 
-#Standard error in betas
-BetaStdErr = np.std(beta_boot, axis = 0)/np.sqrt(1000)
-#array([0.07311289, 0.03190114, 0.03872068])
-
 #Standard error in probability for each year
 plt.hist(np.std(prob[:,1,:], axis=1)/np.sqrt(1000),bins=50)
-plt.plot(np.std(prob[:,1,:], axis=1)/np.sqrt(1000))
+#plt.plot(np.std(prob[:,1,:], axis=1)/np.sqrt(1000))
 
 #Run analysis for the GCM temperature and precip over the historical record.
 #Using Nprob = 1 because only historical info is needed
 Temp_GCM_NoHistSplice,Precip_GCM_NoHistSplice,Years_GCM_NoHistSplice = load_GCMS(X_GCM[:,1],X_GCM[:,3],histSplice=False)
 prob_nhs,flood_nhs,cum_flood_nhs,waits_nhs = simulate_GCM_futures(Y_GCM,bootstrap_X[:,[1,3],:],bootstrap_Y,beta_boot,Temp_GCM_NoHistSplice,Precip_GCM_NoHistSplice,M_boot=1000,N_prob=1)
+
+#Also run without splicing in historical floods (use probability of flood to generate distribution of floods in historical years)
+prob_nhsf,flood_nhsf,cum_flood_nhsf,waits_nhsf = simulate_GCM_futures(Y_GCM,bootstrap_X[:,[1,3],:],bootstrap_Y,beta_boot,Temp_GCM,Precip_GCM,M_boot=1000,N_prob=1000, histSplice=False)
+
+#Table 5
+#Wait time percentiles from data and from the probability of flood over historical record
+wait1962obs = np.percentile(waits[0,:,:,:], q=[2.5,25,50,75,97.5])
+wait1962pred = np.percentile(waits_nhsf[0,:,:,:], q=[2.5,25,50,75,97.5])
+wait1990obs = np.percentile(waits[28,:,:,:], q=[2.5,25,50,75,97.5])
+wait1990pred = np.percentile(waits_nhsf[28,:,:,:], q=[2.5,25,50,75,97.5])
+wait2010obs = np.percentile(waits[48,:,:,:], q=[2.5,25,50,75,97.5])
+wait2010pred = np.percentile(waits_nhsf[48,:,:,:], q=[2.5,25,50,75,97.5])
+
 
 #Now plots#####################################################################
 GCMs=['HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR']
@@ -284,6 +326,49 @@ for scenario in range(6):
         #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
     percentile_fill_plot_double(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.0001,1],Names=RCPs,window=window)
 del scenario, plt_perc, plt_perc2, percentiles, i
+# PAPER Revision = Moving Average in Real Space with a plot in log scale, backwards looking, correct CI on 20-yr average
+for scenario in range(6):
+    percentiles = [10,25,50,75,90]
+    
+    probMA = np.zeros([np.shape(Temp_GCM)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
+    probMA2 = np.zeros([np.shape(Temp_GCM)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
+    for i in range(len(betas_boot_df.iloc[:,0])):
+        probMA[:,i] = moving_average(prob[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob[:,scenario+6,i],window)
+    #Probability
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_double(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.0001,1],Names=RCPs,window=window)
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
+# PAPER Revision = Moving Average in Real Space with a plot in log scale, centered, correct CI on 20-yr average
+for scenario in range(6):
+    percentiles = [10,25,50,75,90]
+    
+    probMA = np.zeros([np.shape(Temp_GCM)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
+    probMA2 = np.zeros([np.shape(Temp_GCM)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
+    for i in range(len(betas_boot_df.iloc[:,0])):
+        probMA[:,i] = moving_average(prob[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob[:,scenario+6,i],window)
+    #Probability
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_double(plt_perc,plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.0001,1],Names=RCPs,window=window,years=np.array(range(1961,2100)[int(window/2):int(len(range(1961,2100))-window/2)]), CIind=1, xlim=[1960,2100])
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
+#Figure 8
+# PAPER Revision = Moving Average in Real Space with a plot in log scale, centered, return period second y axis, correct CI on 20-yr average
+for scenario in range(6):
+    percentiles = [10,25,50,75,90]
+    
+    probMA = np.zeros([np.shape(Temp_GCM)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
+    probMA2 = np.zeros([np.shape(Temp_GCM)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
+    for i in range(len(betas_boot_df.iloc[:,0])):
+        probMA[:,i] = moving_average(prob[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob[:,scenario+6,i],window)
+    #Probability
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_double(plt_perc,1/plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.0001,1],Names=RCPs,window=window,years=np.array(range(1961,2100)[int(window/2):int(len(range(1961,2100))-window/2)]), CIind=1, xlim=[1960,2100], ylim2=[1/0.0001, 1], twoYax=True,ylabel2='IJF Return Period')
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 # PAPER = Moving Average in Real Space with a plot in log scale with IQR and 95% corridors
 for scenario in range(6):
     percentiles = [2.5,25,50,75,97.5]
@@ -297,9 +382,41 @@ for scenario in range(6):
         #for j in range((np.shape(Temp_GCM)[0]-(window-1)),np.shape(Temp_GCM)[0]):
         #    plt_perc[i,j] = np.mean(plt_perc[i,j:np.shape(Temp_GCM)[0]])
         #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
-    percentile_fill_plot_single(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green')
-    percentile_fill_plot_single(plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue')
+    percentile_fill_plot_single(plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green', xlim=[1980,2100])
+    percentile_fill_plot_single(plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue', xlim=[1980,2100])
 del scenario, plt_perc, plt_perc2, percentiles, i
+# PAPER Revision = Moving Average in Real Space with a plot in log scale, backward looking, correct CI on 20-yr average
+for scenario in range(6):
+    percentiles = [2.5,25,50,75,97.5]
+    
+    probMA = np.zeros([np.shape(Temp_GCM)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
+    probMA2 = np.zeros([np.shape(Temp_GCM)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
+    for i in range(len(betas_boot_df.iloc[:,0])):
+        probMA[:,i] = moving_average(prob[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob[:,scenario+6,i],window)
+    #Probability
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_single(plt_perc,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green', years=np.array(range(1961,2100)[window:int(len(range(1961,2100)))]), xlim=[1980,2100])
+    percentile_fill_plot_single(plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue', years=np.array(range(1961,2100)[window:int(len(range(1961,2100)))]), xlim=[1980,2100])
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
+#Figure 9
+# PAPER Revision = Moving Average in Real Space with a plot in log scale, centered, correct CI on 20-yr average
+for scenario in range(6):
+    percentiles = [2.5,25,50,75,97.5]
+    
+    probMA = np.zeros([np.shape(Temp_GCM)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
+    probMA2 = np.zeros([np.shape(Temp_GCM)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
+    for i in range(len(betas_boot_df.iloc[:,0])):
+        probMA[:,i] = moving_average(prob[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob[:,scenario+6,i],window)
+    #Probability
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_single(plt_perc,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green', years=np.array(range(1961,2100)[int(window/2):int(len(range(1961,2100))-window/2)]), xlim=[1960,2100])
+    percentile_fill_plot_single(plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue', years=np.array(range(1961,2100)[int(window/2):int(len(range(1961,2100))-window/2)]), xlim=[1960,2100])
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
+
 # Moving Average in Real Space with a plot in log scale with 95%CI
 for scenario in range(6):
     percentiles = [10,2.5,50,97.5,90]
@@ -332,7 +449,7 @@ for i in range(5):
     plt_perc[i,0:(np.shape(years_All)[0]-(window-1))]=moving_average(plt_perc[i,:],window)    
 percentile_fill_plot_single(plt_perc[:,31:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1949,end=2021,xlim=[1950,2020],Yobs=Y_All[31:103], Ypobs = Y_HistPred[31:103])
 del plt_perc, percentiles, i
-# PRESENTATION = Moving Average in Real Space with a plot in real space Correct CIs test
+# PRESENTATION = Moving Average in Real Space with a plot in real space Correct CIs for 20 year moving average
 #Y moving average
 YMA = np.zeros([np.shape(years_All)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
 for i in range(len(betas_boot_df.iloc[:,0])):
@@ -343,7 +460,8 @@ plt_perc = np.percentile(YMA,percentiles,axis=1)
 percentile_fill_plot_single(plt_perc[:,35:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1953,end=2021,xlim=[1950,2020],Ypobs = Y_HistPred[35:103])
 #With observed data - backward looking
 percentile_fill_plot_single(plt_perc[:,35:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1953,end=2021,xlim=[1950,2020],Yobs=Y_All[35:103], Ypobs = Y_HistPred[35:103])
-#With observed data - centered
+#Figure 6
+#PAPER - Revision: With observed data - centered
 percentile_fill_plot_single(plt_perc[:,40:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1953,end=2016,xlim=[1950,2020],Yobs=Y_All[40:103], Ypobs = Y_HistPred[40:103])
 ##All data to 1915
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1915,end=2021,xlim=[1910,2020],Ypobs = Y_HistPred,years=years_All[(window-1):(np.shape(years_All)[0])])
@@ -355,8 +473,20 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_All)[0]-(window-1))],ti
 #With observed data: large + moderate + small floods
 Y_AllLMS = np.loadtxt('cleaned_dataLMS.csv',delimiter=',',skiprows=1,usecols=2)
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1915,end=2021,xlim=[1910,2020],Yobs=Y_AllLMS, Ypobs = Y_HistPred,years=years_All[(window-1):(np.shape(years_All)[0])])
-
 del plt_perc, percentiles, i
+
+#Figure S.2
+#PAPER Revision
+window=1
+#Y moving average
+YMA = np.zeros([np.shape(years_All)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
+for i in range(len(betas_boot_df.iloc[:,0])):
+    YMA[:,i] = moving_average(Y_HistBootPred[:,i],window)
+percentiles = [2.5,25,50,75,97.5]
+#Probability
+plt_perc = np.percentile(YMA,percentiles,axis=1)
+#With observed data - centered
+percentile_fill_plot_single(plt_perc[:,44:(np.shape(years_All)[0]-(window-1))],title='IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[-0.05,1.05],Names='Bootstrapped 50% and 95% CIs',window=window,start=1962,end=2021,xlim=[1960,2022],Yobs=Y_All[44:103], Ypobs = Y_HistPred[44:103])
 
 window=20
 # Moving Median in Real Space with a plot in log scale
@@ -452,6 +582,21 @@ for scenario in range(6):
         #    plt_perc2[i,j] = np.mean(plt_perc2[i,j:np.shape(Temp_GCM)[0]])
     percentile_fill_plot_double(1/plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],1/plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Return Period',scale='log',ylim=[1,10000],Names=RCPs,window=window)
 del scenario, plt_perc, plt_perc2, percentiles, i
+#Graphical Abstract
+#PAPER Revision = Return period plot for 50% CI using moving average in real space, centered, correct CIs on 20-yr average
+for scenario in range(6):
+    percentiles = [10,25,50,75,90]
+    probMA = np.zeros([np.shape(Temp_GCM)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
+    probMA2 = np.zeros([np.shape(Temp_GCM)[0]-(window-1),len(betas_boot_df.iloc[:,0])])
+    for i in range(len(betas_boot_df.iloc[:,0])):
+        probMA[:,i] = moving_average(prob[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob[:,scenario+6,i],window)
+    #Probability
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_double(1/plt_perc[:,0:(np.shape(Temp_GCM)[0]-(window-1))],1/plt_perc2[:,0:(np.shape(Temp_GCM)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Return Period',scale='log',ylim=[1,10000],Names=RCPs,window=window, years=np.array(range(1961,2100)[int(window/2):int(len(range(1961,2100))-window/2)]), CIind=1, xlim=[1960,2100])
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
+
 # Return period plot for 50% CI using moving median in real space
 for scenario in range(6):
     percentiles = [10,25,50,75,90]
@@ -567,6 +712,7 @@ for i in range(np.shape(Temp_GCM)[1]):
     AvgMedWait[:,i] = moving_average(median[:,i],n=10)
 del i
 
+#Table 5
 GCM2030Waits = median[68,:]
 GCM2050Waits = median[88,:]
 
