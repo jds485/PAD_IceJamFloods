@@ -16,7 +16,7 @@ The matrix of bootstrapped betas that should be obtained after running the examp
 The observed X and Y data used in this study. The file with LMS in it indicates large, moderate, and small floods according to Timoney (2009). The file with PPPR in it provides Peace Point and Peace River X variables.
 
 8. example.py
-The main script that runs the analysis and generates the figures.
+The main script that runs the analysis and generates the figures. Note: during the survival analysis (survival() function) there will be warnings stating "The Hessian for WeibullFitter's fit was not invertible." These warning only occur for 2090-2099 because so few floods are generated at this end of the GCM timeseries. We advise to not use these wait time estimates, and this is one reason that we do not report wait times for these years.
 
 9. requirements.txt
 Python requirements to run the code.
