@@ -2,7 +2,7 @@
 """
 Created on Tue Dec 22 06:31:40 2020
 
-@author: jlamon02
+@author: jlamon02 (Jonathan Lamontagne) and Jared Smith
 """
 import sys
 import warnings

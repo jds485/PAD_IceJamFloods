@@ -2,7 +2,7 @@
 """
 Created on Wed Dec 23 06:58:00 2020
 
-@author: jlamon02
+@author: jlamon02 (Jonathan Lamontagne) and Jared Smith
 """
 
 from utils import *
@@ -274,7 +274,7 @@ wait1990obs = np.percentile(waits[28,:,:,:], q=[2.5,25,50,75,97.5])
 wait1990pred = np.percentile(waits_nhsf[28,:,:,:], q=[2.5,25,50,75,97.5])
 wait2010obs = np.percentile(waits[48,:,:,:], q=[2.5,25,50,75,97.5])
 wait2010pred = np.percentile(waits_nhsf[48,:,:,:], q=[2.5,25,50,75,97.5])
-
+del prob_nhsf, flood_nhsf, cum_flood_nhsf, waits_nhsf
 
 #Now plots#####################################################################
 GCMs=['HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR']
