@@ -2,7 +2,7 @@
 
 This repository provides supporting statistical analysis for two papers:\
 Timoney, K., J.D. Smith, J.R. Lamontagne, and M. Jasek. (2018). [*Discussion of "Frequency of ice-jam flooding of Peace-Athabasca Delta" by S. Beltaos*](https://doi.org/10.1139/cjce-2018-0409) Canadian Journal of Civil Engineering, 46(3).\
-Lamontagne, J.R., M. Jasek, and J.D. Smith. (in prep for Cold Regions Science and Technology). *Coupling physical understanding and statistical modeling to estimate ice jam frequency under climate change*\
+Lamontagne, J.R., M. Jasek, and J.D. Smith. (in revision for Cold Regions Science and Technology). *Coupling physical understanding and statistical modeling to estimate ice jam frequency under climate change*\
 Code Repository Authors: Jared D. Smith (jared.d.smith485@gmail.com) and Jonathan R. Lamontagne (Jonathan.Lamontagne@tufts.edu)
 \
 If you have questions about the repository, please email Jared.
@@ -28,7 +28,7 @@ This directory corresponds to the Lamontagne et al. paper. All paper figures are
 \
 Python 3.7.4 was used for this analysis. The requirements.txt file provides the packages and versions used for this analysis. If needed, you can install these using `pip install -r requirements.txt`\
 The utils.py and utils_figures.py scripts load user-defined functions that are used for this analysis. These functions depend on Jared's [firth_regression](https://gist.github.com/jds485/fd737a8314d45485f7e11f588baf88b9) function, which was forked and modified from John Lees' Gist. Click the provided link and place that function script into a directory of your choice. Place that directory name into the utils.py script where os.chdir is located.\
-The example.py script assumes that all files are written to the .\PAD_IceJamFloods\logistic_regression directory. This script takes up to 5 hours to run. The resulting data file is about 39 GB. We estimate that a machine with 16 GB RAM or more is required to run this script.
+The example.py script assumes that all files are written to the .\PAD_IceJamFloods\logistic_regression directory. This script takes up to 5 hours to run. The resulting data file is about 39 GB. We estimate that a machine with 16 GB RAM or more is required to run this script. This script will generate many figures to the plotting window, some of which were not used in the paper. We saved the final paper figures in the PaperFigures directory.
 
 # License
 See license file.
