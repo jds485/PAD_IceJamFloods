@@ -36,17 +36,19 @@ Y_L15sm = np.loadtxt('y.csv',delimiter=',',skiprows=1)
 Yrep_L15sm = np.loadtxt('yrep.csv',delimiter=',',skiprows=1)
 years_L15sm = np.loadtxt('years.csv',delimiter=',',skiprows=1)
 
+sb.set_style('darkgrid')
+
 #Moving window size and percentiles to compute for plots
 window=5
 percentiles=[2.5,25,50,75,97.5]
 
 #Compute moving average of all variables
-pMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-qMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YrepMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
+pMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_L15sm)[0]])
+qMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_L15sm)[0]])
+YMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_L15sm)[0]])
+YrepMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_L15sm)[0]])
 
-for i in range(1001):
+for i in range(np.shape(p_L15sm)[0]):
     YMA_L15sm[:,i] = moving_average(Y_L15sm[i,:],window)
     YrepMA_L15sm[:,i] = moving_average(Yrep_L15sm[i,:],window)
     pMA_L15sm[:,i] = moving_average(p_L15sm[i,:],window)
@@ -54,33 +56,33 @@ for i in range(1001):
 
 #Compute percentiles and plot
 plt_perc = np.percentile(pMA_L15sm,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
 plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 
 plt_perc = np.percentile(qMA_L15sm,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average Probability of Recording IJF for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average Probability of Recording IJF for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
 plt.savefig('HistPredPlot_q_' + str(window) + 'yr.png', dpi = 600)
 
 plt_perc = np.percentile(YMA_L15sm,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average Observed IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average Observed IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
 plt.savefig('HistPredPlot_ObservedY_' + str(window) + 'yr.png', dpi = 600)
 
 plt_perc = np.percentile(YrepMA_L15sm,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])    
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0))
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
 plt_perc = np.percentile(YrepMA_L15sm,percentiles,axis=1)
 plt_perc2 = np.percentile(YMA_L15sm,percentiles,axis=1)
-percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
 plt.savefig('HistPredPlot_PPC_' + str(window) + 'yr.png', dpi = 600)
 
 #p and q
 plt_perc2 = np.percentile(qMA_L15sm,percentiles,axis=1)
 plt_perc = np.percentile(pMA_L15sm,percentiles,axis=1)
-percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['p', 'q'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['p', 'q'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
 plt.savefig('HistPredPlot_pq_' + str(window) + 'yr.png', dpi = 600)
 
 
@@ -89,12 +91,12 @@ window=10
 percentiles=[2.5,25,50,75,97.5]
 
 #Compute moving average of all variables
-pMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-qMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YrepMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
+pMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_L15sm)[0]])
+qMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_L15sm)[0]])
+YMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_L15sm)[0]])
+YrepMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_L15sm)[0]])
 
-for i in range(1001):
+for i in range(np.shape(p_L15sm)[0]):
     YMA_L15sm[:,i] = moving_average(Y_L15sm[i,:],window)
     YrepMA_L15sm[:,i] = moving_average(Yrep_L15sm[i,:],window)
     pMA_L15sm[:,i] = moving_average(p_L15sm[i,:],window)
@@ -102,33 +104,33 @@ for i in range(1001):
 
 #Compute percentiles and plot
 plt_perc = np.percentile(pMA_L15sm,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
 plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 
 plt_perc = np.percentile(qMA_L15sm,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average Probability of Recording IJF for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average Probability of Recording IJF for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
 plt.savefig('HistPredPlot_q_' + str(window) + 'yr.png', dpi = 600)
 
 plt_perc = np.percentile(YMA_L15sm,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average Observed IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average Observed IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
 plt.savefig('HistPredPlot_ObservedY_' + str(window) + 'yr.png', dpi = 600)
 
 plt_perc = np.percentile(YrepMA_L15sm,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])    
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0))
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
 plt_perc = np.percentile(YrepMA_L15sm,percentiles,axis=1)
 plt_perc2 = np.percentile(YMA_L15sm,percentiles,axis=1)
-percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
 plt.savefig('HistPredPlot_PPC_' + str(window) + 'yr.png', dpi = 600)
 
 #p and q
 plt_perc2 = np.percentile(qMA_L15sm,percentiles,axis=1)
 plt_perc = np.percentile(pMA_L15sm,percentiles,axis=1)
-percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['p', 'q'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['p', 'q'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
 plt.savefig('HistPredPlot_pq_' + str(window) + 'yr.png', dpi = 600)
 
 
@@ -158,42 +160,43 @@ prob = np.moveaxis(prob, [2,1], [1,2])
 
 GCMyears = np.loadtxt('year62t2099.csv',delimiter=',',skiprows=1)
 
-sb.set_style('darkgrid')
-
 if not os.path.exists('./GCMs'):
     os.mkdir('GCMs')
 os.chdir('GCMs')
 
-# Moving Average in Real Space with a plot in log scale
-for scenario in range(6):
+# Moving Average in Real Space with a plot in log scale, correct CI on 20-yr average
+for scenario in range(len(GCMs)):
     percentiles = [10,25,50,75,90]
+    
+    probMA = np.zeros([np.shape(prob)[0]-(window-1),np.shape(prob)[2]])
+    probMA2 = np.zeros([np.shape(prob)[0]-(window-1),np.shape(prob)[2]])
+    for i in range(np.shape(prob)[2]):
+        probMA[:,i] = moving_average(prob[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob[:,scenario+6,i],window)
     #Probability
-    plt_perc = np.percentile(prob[:,scenario,:],percentiles,axis=1)
-    plt_perc2 = np.percentile(prob[:,scenario+6,:],percentiles,axis=1)
-
-    for i in range(5):
-        plt_perc[i,0:(np.shape(prob)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
-        plt_perc2[i,0:(np.shape(prob)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
-
-    percentile_fill_plot_double(plt_perc[:,0:(np.shape(prob)[0]-(window-1))],plt_perc2[:,0:(np.shape(prob)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.000001,1],Names=RCPs,window=window,years=GCMyears[(window-1):(np.shape(GCMyears)[0])], xlim=[1980,2100])
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_double(plt_perc,plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.000001,1],Names=RCPs,window=window,years=GCMyears[(window-1):(np.shape(GCMyears)[0])], CIind=1, xlim=[1980,2100])
     plt.savefig('ProjPredPlot_' + GCMs[scenario] + '_' + str(window) + 'yr.png', dpi = 600)
-del scenario, plt_perc, plt_perc2, percentiles, i
-# Moving Average in Real Space with a plot in log scale with IQR and 95% corridors
-for scenario in range(6):
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
+
+# Moving Average in Real Space with a plot in log scale, correct CI on 20-yr average
+for scenario in range(len(GCMs)):
     percentiles = [2.5,25,50,75,97.5]
+    
+    probMA = np.zeros([np.shape(prob)[0]-(window-1),np.shape(prob)[2]])
+    probMA2 = np.zeros([np.shape(prob)[0]-(window-1),np.shape(prob)[2]])
+    for i in range(np.shape(prob)[2]):
+        probMA[:,i] = moving_average(prob[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob[:,scenario+6,i],window)
     #Probability
-    plt_perc = np.percentile(prob[:,scenario,:],percentiles,axis=1)
-    plt_perc2 = np.percentile(prob[:,scenario+6,:],percentiles,axis=1)
-
-    for i in range(5):
-        plt_perc[i,0:(np.shape(prob)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
-        plt_perc2[i,0:(np.shape(prob)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
-
-    percentile_fill_plot_single(plt_perc[:,0:(np.shape(prob)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green',years=GCMyears[(window-1):(np.shape(GCMyears)[0])])
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_single(plt_perc,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green', years=GCMyears[(window-1):(np.shape(GCMyears)[0])], xlim=[1980,2100])
     plt.savefig('ProjPredPlot_CIs_' + GCMs[scenario] + '_' + RCPs[0] + '_' + str(window) + 'yr.png', dpi = 600)
-    percentile_fill_plot_single(plt_perc2[:,0:(np.shape(prob)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue',years=GCMyears[(window-1):(np.shape(GCMyears)[0])])
+    percentile_fill_plot_single(plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue', years=GCMyears[(window-1):(np.shape(GCMyears)[0])], xlim=[1980,2100])
     plt.savefig('ProjPredPlot_CIs_' + GCMs[scenario] + '_' + RCPs[1] + '_' + str(window) + 'yr.png', dpi = 600)
-del scenario, plt_perc, plt_perc2, percentiles, i
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 
 ##Waiting times
 #flood,cum_flood,waits = simulate_GCM_futures_probStart(Y_L15sm[2,42:],prob,N_prob=1000)
@@ -210,7 +213,7 @@ del scenario, plt_perc, plt_perc2, percentiles, i
 #GCM2050Waits = median[88,:]
 #
 #plt.figure()
-#for i in range(6):
+#for i in range(len(GCMs)):
 #    plt.plot(GCMyears[38:89],median[38:89,i],'g',linewidth = 5)
 #    plt.plot(GCMyears[38:89],median[38:89,i+6],'b',linewidth = 5)
 #del i
@@ -220,7 +223,7 @@ del scenario, plt_perc, plt_perc2, percentiles, i
 #
 ##to 2070 - not much data supporting later years
 #plt.figure()
-#for i in range(6):
+#for i in range(len(GCMs)):
 #    plt.plot(GCMyears[38:109],median[38:109,i],'g',linewidth = 5)
 #    plt.plot(GCMyears[38:109],median[38:109,i+6],'b',linewidth = 5)
 #del i
@@ -230,7 +233,7 @@ del scenario, plt_perc, plt_perc2, percentiles, i
 #
 ##to 2100 - not much data supporting later years
 #plt.figure()
-#for i in range(6):
+#for i in range(len(GCMs)):
 #    plt.plot(GCMyears,median[:,i],'g',linewidth = 5)
 #    plt.plot(GCMyears,median[:,i+6],'b',linewidth = 5)
 #del i
@@ -259,7 +262,6 @@ del scenario, plt_perc, plt_perc2, percentiles, i
 
 #1962-present – best model based on only that data
 os.chdir('../../DREAMzs1p')
-sb.set_style('white')
 #Load data from R
 #Prob Z=1|X of flood
 p_vp = np.loadtxt('p.csv',delimiter=',',skiprows=1)
@@ -271,30 +273,30 @@ window=5
 percentiles=[2.5,25,50,75,97.5]
 
 #Compute moving average of all variables
-pMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YrepMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
+pMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_vp)[0]])
+YMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_vp)[0]])
+YrepMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_vp)[0]])
 
-for i in range(1001):
+for i in range(np.shape(p_vp)[0]):
     YMA_vp[:,i] = moving_average(Y_L15sm[i,:],window)
     YrepMA_vp[:,i] = moving_average(Yrep_vp[i,:],window)
     pMA_vp[:,i] = moving_average(p_vp[i,:],window)
 
 #Compute percentiles and plot
 plt_perc = np.percentile(pMA_vp,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
 plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 
 plt_perc = np.percentile(YrepMA_vp,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])    
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0))
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
 plt_perc = np.percentile(YrepMA_vp,percentiles,axis=1)
 plt_perc2 = np.percentile(YMA_vp,percentiles,axis=1)
-percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
 plt.savefig('HistPredPlot_PPC_' + str(window) + 'yr.png', dpi = 600)
 
 
@@ -303,30 +305,30 @@ window=10
 percentiles=[2.5,25,50,75,97.5]
 
 #Compute moving average of all variables
-pMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YrepMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
+pMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_vp)[0]])
+YMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_vp)[0]])
+YrepMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_vp)[0]])
 
-for i in range(1001):
+for i in range(np.shape(p_vp)[0]):
     YMA_vp[:,i] = moving_average(Y_L15sm[i,:],window)
     YrepMA_vp[:,i] = moving_average(Yrep_vp[i,:],window)
     pMA_vp[:,i] = moving_average(p_vp[i,:],window)
 
 #Compute percentiles and plot
 plt_perc = np.percentile(pMA_vp,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
 plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 
 plt_perc = np.percentile(YrepMA_vp,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])    
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0))
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
 plt_perc = np.percentile(YrepMA_vp,percentiles,axis=1)
 plt_perc2 = np.percentile(YMA_vp,percentiles,axis=1)
-percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
 plt.savefig('HistPredPlot_PPC_' + str(window) + 'yr.png', dpi = 600)
 
 
@@ -348,51 +350,55 @@ del p1_hold,p2_hold,p3_hold,p4_hold,p5_hold,p6_hold,p7_hold,p8_hold,p9_hold,p10_
 
 #Re-arrange order of array index to match function
 prob_hold = np.moveaxis(prob_hold, [2,1], [1,2])
+#There are 2 additional years in this dataset because it is not limited by Ft. Smith
+#Remove those 2 years to make the plots the same time points as other models
+prob_hold = np.delete(prob_hold, [14,27], axis=0)
 
 GCMyears_hold = np.loadtxt('year62t2099.csv',delimiter=',',skiprows=1)
-
-sb.set_style('darkgrid')
 
 if not os.path.exists('./GCMs'):
     os.mkdir('GCMs')
 os.chdir('GCMs')
 
-# PAPER = Moving Average in Real Space with a plot in log scale
 window=20
-for scenario in range(6):
+
+# Moving Average in Real Space with a plot in log scale, correct CI on 20-yr average
+for scenario in range(len(GCMs)):
     percentiles = [10,25,50,75,90]
+    
+    probMA = np.zeros([np.shape(prob_hold)[0]-(window-1),np.shape(prob_hold)[2]])
+    probMA2 = np.zeros([np.shape(prob_hold)[0]-(window-1),np.shape(prob_hold)[2]])
+    for i in range(np.shape(prob_hold)[2]):
+        probMA[:,i] = moving_average(prob_hold[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob_hold[:,scenario+6,i],window)
     #Probability
-    plt_perc = np.percentile(prob_hold[:,scenario,:],percentiles,axis=1)
-    plt_perc2 = np.percentile(prob_hold[:,scenario+6,:],percentiles,axis=1)
-
-    for i in range(5):
-        plt_perc[i,0:(np.shape(prob_hold)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
-        plt_perc2[i,0:(np.shape(prob_hold)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
-
-    percentile_fill_plot_double(plt_perc[:,0:(np.shape(prob_hold)[0]-(window-1))],plt_perc2[:,0:(np.shape(prob_hold)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.000001,1],Names=RCPs,window=window,years=GCMyears_hold[(window-1):(np.shape(GCMyears_hold)[0])], xlim=[1980,2100])
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_double(plt_perc,plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.000001,1],Names=RCPs,window=window,years=GCMyears[(window-1):(np.shape(GCMyears)[0])], CIind=1, xlim=[1980,2100])
     plt.savefig('ProjPredPlot_' + GCMs[scenario] + '_' + str(window) + 'yr.png', dpi = 600)
-del scenario, plt_perc, plt_perc2, percentiles, i
-# PAPER = Moving Average in Real Space with a plot in log scale with IQR and 95% corridors
-for scenario in range(6):
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
+
+# Moving Average in Real Space with a plot in log scale, correct CI on 20-yr average
+for scenario in range(len(GCMs)):
     percentiles = [2.5,25,50,75,97.5]
+    
+    probMA = np.zeros([np.shape(prob_hold)[0]-(window-1),np.shape(prob_hold)[2]])
+    probMA2 = np.zeros([np.shape(prob_hold)[0]-(window-1),np.shape(prob_hold)[2]])
+    for i in range(np.shape(prob_hold)[2]):
+        probMA[:,i] = moving_average(prob_hold[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob_hold[:,scenario+6,i],window)
     #Probability
-    plt_perc = np.percentile(prob_hold[:,scenario,:],percentiles,axis=1)
-    plt_perc2 = np.percentile(prob_hold[:,scenario+6,:],percentiles,axis=1)
-
-    for i in range(5):
-        plt_perc[i,0:(np.shape(prob_hold)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
-        plt_perc2[i,0:(np.shape(prob_hold)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
-
-    percentile_fill_plot_single(plt_perc[:,0:(np.shape(prob_hold)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green',years=GCMyears_hold[(window-1):(np.shape(GCMyears_hold)[0])])
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_single(plt_perc,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green', years=GCMyears[(window-1):(np.shape(GCMyears)[0])], xlim=[1980,2100])
     plt.savefig('ProjPredPlot_CIs_' + GCMs[scenario] + '_' + RCPs[0] + '_' + str(window) + 'yr.png', dpi = 600)
-    percentile_fill_plot_single(plt_perc2[:,0:(np.shape(prob_hold)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue',years=GCMyears_hold[(window-1):(np.shape(GCMyears_hold)[0])])
+    percentile_fill_plot_single(plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue', years=GCMyears[(window-1):(np.shape(GCMyears)[0])], xlim=[1980,2100])
     plt.savefig('ProjPredPlot_CIs_' + GCMs[scenario] + '_' + RCPs[1] + '_' + str(window) + 'yr.png', dpi = 600)
-del scenario, plt_perc, plt_perc2, percentiles, i
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 
 
 #1962-present – best model with Ft. Smith
 os.chdir('../../DREAMzs3p_AGU')
-sb.set_style('white')
 #Load data from R
 #Prob Z=1|X of flood
 p_cvsp = np.loadtxt('p.csv',delimiter=',',skiprows=1)
@@ -404,30 +410,30 @@ window=5
 percentiles=[2.5,25,50,75,97.5]
 
 #Compute moving average of all variables
-pMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YrepMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
+pMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_cvsp)[0]])
+YMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_cvsp)[0]])
+YrepMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_cvsp)[0]])
 
-for i in range(1001):
+for i in range(np.shape(p_cvsp)[0]):
     YMA_cvsp[:,i] = moving_average(Y_L15sm[i,:],window)
     YrepMA_cvsp[:,i] = moving_average(Yrep_cvsp[i,:],window)
     pMA_cvsp[:,i] = moving_average(p_cvsp[i,:],window)
 
 #Compute percentiles and plot
 plt_perc = np.percentile(pMA_cvsp,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
 plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 
 plt_perc = np.percentile(YrepMA_cvsp,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])    
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0))
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
 plt_perc = np.percentile(YrepMA_cvsp,percentiles,axis=1)
 plt_perc2 = np.percentile(YMA_cvsp,percentiles,axis=1)
-percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
 plt.savefig('HistPredPlot_PPC_' + str(window) + 'yr.png', dpi = 600)
 
 
@@ -436,30 +442,30 @@ window=10
 percentiles=[2.5,25,50,75,97.5]
 
 #Compute moving average of all variables
-pMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YrepMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
+pMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_cvsp)[0]])
+YMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_cvsp)[0]])
+YrepMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_cvsp)[0]])
 
-for i in range(1001):
+for i in range(np.shape(p_cvsp)[0]):
     YMA_cvsp[:,i] = moving_average(Y_L15sm[i,:],window)
     YrepMA_cvsp[:,i] = moving_average(Yrep_cvsp[i,:],window)
     pMA_cvsp[:,i] = moving_average(p_cvsp[i,:],window)
 
 #Compute percentiles and plot
 plt_perc = np.percentile(pMA_cvsp,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
 plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 
 plt_perc = np.percentile(YrepMA_cvsp,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])    
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0))
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
 plt_perc = np.percentile(YrepMA_cvsp,percentiles,axis=1)
 plt_perc2 = np.percentile(YMA_cvsp,percentiles,axis=1)
-percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
 plt.savefig('HistPredPlot_PPC_' + str(window) + 'yr.png', dpi = 600)
 
 
@@ -484,49 +490,49 @@ prob_cvsp = np.moveaxis(prob_cvsp, [2,1], [1,2])
 
 GCMyears_cvsp = GCMyears
 
-sb.set_style('darkgrid')
-
 if not os.path.exists('./GCMs'):
     os.mkdir('GCMs')
 os.chdir('GCMs')
 
-# PAPER = Moving Average in Real Space with a plot in log scale
 window=20
-for scenario in range(6):
+
+# Moving Average in Real Space with a plot in log scale, correct CI on 20-yr average
+for scenario in range(len(GCMs)):
     percentiles = [10,25,50,75,90]
+    
+    probMA = np.zeros([np.shape(prob_cvsp)[0]-(window-1),np.shape(prob_cvsp)[2]])
+    probMA2 = np.zeros([np.shape(prob_cvsp)[0]-(window-1),np.shape(prob_cvsp)[2]])
+    for i in range(np.shape(prob_cvsp)[2]):
+        probMA[:,i] = moving_average(prob_cvsp[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob_cvsp[:,scenario+6,i],window)
     #Probability
-    plt_perc = np.percentile(prob_cvsp[:,scenario,:],percentiles,axis=1)
-    plt_perc2 = np.percentile(prob_cvsp[:,scenario+6,:],percentiles,axis=1)
-
-    for i in range(5):
-        plt_perc[i,0:(np.shape(prob_cvsp)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
-        plt_perc2[i,0:(np.shape(prob_cvsp)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
-
-    percentile_fill_plot_double(plt_perc[:,0:(np.shape(prob_cvsp)[0]-(window-1))],plt_perc2[:,0:(np.shape(prob_cvsp)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.000001,1],Names=RCPs,window=window,years=GCMyears_cvsp[(window-1):(np.shape(GCMyears_cvsp)[0])], xlim=[1980,2100])
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_double(plt_perc,plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.000001,1],Names=RCPs,window=window,years=GCMyears[(window-1):(np.shape(GCMyears)[0])], CIind=1, xlim=[1980,2100])
     plt.savefig('ProjPredPlot_' + GCMs[scenario] + '_' + str(window) + 'yr.png', dpi = 600)
-del scenario, plt_perc, plt_perc2, percentiles, i
-# PAPER = Moving Average in Real Space with a plot in log scale with IQR and 95% corridors
-for scenario in range(6):
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
+
+# Moving Average in Real Space with a plot in log scale, correct CI on 20-yr average
+for scenario in range(len(GCMs)):
     percentiles = [2.5,25,50,75,97.5]
+    
+    probMA = np.zeros([np.shape(prob_cvsp)[0]-(window-1),np.shape(prob_cvsp)[2]])
+    probMA2 = np.zeros([np.shape(prob_cvsp)[0]-(window-1),np.shape(prob_cvsp)[2]])
+    for i in range(np.shape(prob_cvsp)[2]):
+        probMA[:,i] = moving_average(prob_cvsp[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob_cvsp[:,scenario+6,i],window)
     #Probability
-    plt_perc = np.percentile(prob_cvsp[:,scenario,:],percentiles,axis=1)
-    plt_perc2 = np.percentile(prob_cvsp[:,scenario+6,:],percentiles,axis=1)
-
-    for i in range(5):
-        plt_perc[i,0:(np.shape(prob_cvsp)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
-        plt_perc2[i,0:(np.shape(prob_cvsp)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
-
-    percentile_fill_plot_single(plt_perc[:,0:(np.shape(prob_cvsp)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green',years=GCMyears_cvsp[(window-1):(np.shape(GCMyears_cvsp)[0])])
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_single(plt_perc,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green', years=GCMyears[(window-1):(np.shape(GCMyears)[0])], xlim=[1980,2100])
     plt.savefig('ProjPredPlot_CIs_' + GCMs[scenario] + '_' + RCPs[0] + '_' + str(window) + 'yr.png', dpi = 600)
-    percentile_fill_plot_single(plt_perc2[:,0:(np.shape(prob_cvsp)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue',years=GCMyears_cvsp[(window-1):(np.shape(GCMyears_cvsp)[0])])
+    percentile_fill_plot_single(plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue', years=GCMyears[(window-1):(np.shape(GCMyears)[0])], xlim=[1980,2100])
     plt.savefig('ProjPredPlot_CIs_' + GCMs[scenario] + '_' + RCPs[1] + '_' + str(window) + 'yr.png', dpi = 600)
-del scenario, plt_perc, plt_perc2, percentiles, i
-
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 
 
 #1915-present – no uncertainty considered
 os.chdir('../../DREAMzs_L15_NoUncertainty')
-sb.set_style('white')
 #Load data from R
 #Prob Z=1|X of flood
 p_NoUncertainty = np.loadtxt('p.csv',delimiter=',',skiprows=1)
@@ -538,30 +544,30 @@ window=5
 percentiles=[2.5,25,50,75,97.5]
 
 #Compute moving average of all variables
-pMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YrepMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
+pMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_NoUncertainty)[0]])
+YMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_NoUncertainty)[0]])
+YrepMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_NoUncertainty)[0]])
 
-for i in range(1001):
+for i in range(np.shape(p_NoUncertainty)[0]):
     YMA_NoUncertainty[:,i] = moving_average(Y_L15sm[i,:],window)
     YrepMA_NoUncertainty[:,i] = moving_average(Yrep_NoUncertainty[i,:],window)
     pMA_NoUncertainty[:,i] = moving_average(p_NoUncertainty[i,:],window)
 
 #Compute percentiles and plot
 plt_perc = np.percentile(pMA_NoUncertainty,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
 plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 
 plt_perc = np.percentile(YrepMA_NoUncertainty,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])    
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0))
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
 plt_perc = np.percentile(YrepMA_NoUncertainty,percentiles,axis=1)
 plt_perc2 = np.percentile(YMA_NoUncertainty,percentiles,axis=1)
-percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
 plt.savefig('HistPredPlot_PPC_' + str(window) + 'yr.png', dpi = 600)
 
 
@@ -570,30 +576,30 @@ window=10
 percentiles=[2.5,25,50,75,97.5]
 
 #Compute moving average of all variables
-pMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
-YrepMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),1001])
+pMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_NoUncertainty)[0]])
+YMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_NoUncertainty)[0]])
+YrepMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_NoUncertainty)[0]])
 
-for i in range(1001):
+for i in range(np.shape(p_NoUncertainty)[0]):
     YMA_NoUncertainty[:,i] = moving_average(Y_L15sm[i,:],window)
     YrepMA_NoUncertainty[:,i] = moving_average(Yrep_NoUncertainty[i,:],window)
     pMA_NoUncertainty[:,i] = moving_average(p_NoUncertainty[i,:],window)
 
 #Compute percentiles and plot
 plt_perc = np.percentile(pMA_NoUncertainty,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
 plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 
 plt_perc = np.percentile(YrepMA_NoUncertainty,percentiles,axis=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])])    
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0))
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
 plt_perc = np.percentile(YrepMA_NoUncertainty,percentiles,axis=1)
 plt_perc2 = np.percentile(YMA_NoUncertainty,percentiles,axis=1)
-percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
 plt.savefig('HistPredPlot_PPC_' + str(window) + 'yr.png', dpi = 600)
 
 
@@ -618,301 +624,303 @@ prob_NoUncertainty = np.moveaxis(prob_NoUncertainty, [2,1], [1,2])
 
 GCMyears_NoUncertainty = GCMyears
 
-sb.set_style('darkgrid')
-
 if not os.path.exists('./GCMs'):
     os.mkdir('GCMs')
 os.chdir('GCMs')
 
-# PAPER = Moving Average in Real Space with a plot in log scale
 window=20
-for scenario in range(6):
+
+# Moving Average in Real Space with a plot in log scale, correct CI on 20-yr average
+for scenario in range(len(GCMs)):
     percentiles = [10,25,50,75,90]
+    
+    probMA = np.zeros([np.shape(prob_NoUncertainty)[0]-(window-1),np.shape(prob_NoUncertainty)[2]])
+    probMA2 = np.zeros([np.shape(prob_NoUncertainty)[0]-(window-1),np.shape(prob_NoUncertainty)[2]])
+    for i in range(np.shape(prob_NoUncertainty)[2]):
+        probMA[:,i] = moving_average(prob_NoUncertainty[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob_NoUncertainty[:,scenario+6,i],window)
     #Probability
-    plt_perc = np.percentile(prob_NoUncertainty[:,scenario,:],percentiles,axis=1)
-    plt_perc2 = np.percentile(prob_NoUncertainty[:,scenario+6,:],percentiles,axis=1)
-
-    for i in range(5):
-        plt_perc[i,0:(np.shape(prob_NoUncertainty)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
-        plt_perc2[i,0:(np.shape(prob_NoUncertainty)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
-
-    percentile_fill_plot_double(plt_perc[:,0:(np.shape(prob_NoUncertainty)[0]-(window-1))],plt_perc2[:,0:(np.shape(prob_NoUncertainty)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.000001,1],Names=RCPs,window=window,years=GCMyears_NoUncertainty[(window-1):(np.shape(GCMyears_NoUncertainty)[0])], xlim=[1980,2100])
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_double(plt_perc,plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.000001,1],Names=RCPs,window=window,years=GCMyears[(window-1):(np.shape(GCMyears)[0])], CIind=1, xlim=[1980,2100])
     plt.savefig('ProjPredPlot_' + GCMs[scenario] + '_' + str(window) + 'yr.png', dpi = 600)
-del scenario, plt_perc, plt_perc2, percentiles, i
-# PAPER = Moving Average in Real Space with a plot in log scale with IQR and 95% corridors
-for scenario in range(6):
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
+
+# Moving Average in Real Space with a plot in log scale, correct CI on 20-yr average
+for scenario in range(len(GCMs)):
     percentiles = [2.5,25,50,75,97.5]
+    
+    probMA = np.zeros([np.shape(prob_NoUncertainty)[0]-(window-1),np.shape(prob_NoUncertainty)[2]])
+    probMA2 = np.zeros([np.shape(prob_NoUncertainty)[0]-(window-1),np.shape(prob_NoUncertainty)[2]])
+    for i in range(np.shape(prob_NoUncertainty)[2]):
+        probMA[:,i] = moving_average(prob_NoUncertainty[:,scenario,i],window)
+        probMA2[:,i] = moving_average(prob_NoUncertainty[:,scenario+6,i],window)
     #Probability
-    plt_perc = np.percentile(prob_NoUncertainty[:,scenario,:],percentiles,axis=1)
-    plt_perc2 = np.percentile(prob_NoUncertainty[:,scenario+6,:],percentiles,axis=1)
-
-    for i in range(5):
-        plt_perc[i,0:(np.shape(prob_NoUncertainty)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
-        plt_perc2[i,0:(np.shape(prob_NoUncertainty)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
-
-    percentile_fill_plot_single(plt_perc[:,0:(np.shape(prob_NoUncertainty)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green',years=GCMyears_NoUncertainty[(window-1):(np.shape(GCMyears_NoUncertainty)[0])])
+    plt_perc = np.percentile(probMA,percentiles,axis=1)
+    plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    percentile_fill_plot_single(plt_perc,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green', years=GCMyears[(window-1):(np.shape(GCMyears)[0])], xlim=[1980,2100])
     plt.savefig('ProjPredPlot_CIs_' + GCMs[scenario] + '_' + RCPs[0] + '_' + str(window) + 'yr.png', dpi = 600)
-    percentile_fill_plot_single(plt_perc2[:,0:(np.shape(prob_NoUncertainty)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue',years=GCMyears_NoUncertainty[(window-1):(np.shape(GCMyears_NoUncertainty)[0])])
+    percentile_fill_plot_single(plt_perc2,title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue', years=GCMyears[(window-1):(np.shape(GCMyears)[0])], xlim=[1980,2100])
     plt.savefig('ProjPredPlot_CIs_' + GCMs[scenario] + '_' + RCPs[1] + '_' + str(window) + 'yr.png', dpi = 600)
-del scenario, plt_perc, plt_perc2, percentiles, i
+del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 
 
 
-#Compare the Bayesian beta distribution to the logistic parametric bootstrap
-
-os.chdir('../../../logistic_regression')
-
-#Copy from Lamontagne et al
-from utils import *
-from utils_figures import *
-import numpy as np
-import matplotlib.pyplot as plt
-import copy
-import random
-import seaborn as sb
-import pandas as pd
-from sklearn.decomposition import PCA
-import statsmodels.api as sm
-# set seed
-random.seed(123020)
-np.random.seed(123020)
-
-# Load data
-[years,Y,X] = load_data()
-[years,Y,X] = clean_dats(years,Y,X,column=[0,1,3,5,6],fill_years = False)
-
-#Evaluate square root of temperature as predictor with GP/BL precip
-X_sqrt = np.concatenate((X[:,[0,1,3]],np.sqrt(-X[:,[0,1]])),axis=1)
-
-X = normalize(X)
-X_sqrt = normalize(X_sqrt)
-
-X = add_constant(X,Y)
-X_sqrt = add_constant(X_sqrt,Y)
-
-#Test constant model with GLM vs. logistic regression
-res_GLM = fit_logistic(X[:,[0,2,4]],Y)
-
-resBase = copy.deepcopy(res_GLM)
-#Firth regression method
-res_Firth = fit_logistic(X[:,[0,2,4]],Y,Firth=True, resBase = resBase)
-del resBase
-#Compare with the statsmodel logit function
-#Betas and aic seem the same.  P-values are the same out a ways.  bic are different.
-# SM bic is correct upon investigation. Returning that BIC in functions.
-logit=sm.Logit(Y,X[:,[0,2,4]])
-res_SM = logit.fit()
-
-#Looking at seperation
-plt.figure()
-plt.scatter(X[Y==0,2],Y[Y==0])
-plt.scatter(X[Y==1,2],Y[Y==1])
-plt.xlabel('Fort Verm DDF')
-
-plt.figure()
-plt.scatter(X[Y==0,4],Y[Y==0])
-plt.scatter(X[Y==1,4],Y[Y==1])
-plt.xlabel('GP/BL Nov.-Apr. Precip.')
-
-plt.figure()
-plt.scatter(X[Y==0,2],X[Y==0,4])
-plt.scatter(X[Y==1,2],X[Y==1,4])
-plt.ylabel('GP/BL Nov.-Apr. Precip.')
-plt.xlabel('Fort Verm. DDF')
-
-plt.figure()
-plt.scatter(X[Y==0,1],X[Y==0,4])
-plt.scatter(X[Y==1,1],X[Y==1,4])
-plt.ylabel('GP/BL Nov.-Apr. Precip.')
-plt.xlabel('Fort Chip. DDF')
-
-plt.figure()
-plt.scatter(X[Y==0,6],X[Y==0,4])
-plt.scatter(X[Y==1,6],X[Y==1,4])
-plt.ylabel('GP/BL Nov.-Apr. Precip.')
-plt.xlabel('Freeze-up Stage (Beltaos, 2014)')
-
-plt.figure()
-plt.scatter(X[Y==0,7],X[Y==0,4])
-plt.scatter(X[Y==1,7],X[Y==1,4])
-plt.ylabel('GP/BL Nov.-Apr. Precip.')
-plt.xlabel('Melt Test')
-
-# Iterative model building
-#  All two parameter models (constant + variable)
-[betas, pvalues,aic,aicc,bic]=iterate_logistic(X,Y, fixed_columns = [0])
-#   Firth two parameter models
-[betasf, pvaluesf,aicf,aiccf,bicf]=iterate_logistic(X,Y, fixed_columns = [0],Firth=True)
-# Three parameter models
-[betas3, pvalues3,aic3,aicc3,bic3]=iterate_logistic(X,Y, fixed_columns = [0,4])
-#  Firth three parameter models
-[betas3f, pvalues3f,aic3f,aicc3f,bic3f]=iterate_logistic(X,Y, fixed_columns = [0,4],Firth=True)
-#  Best Freeze-up model with three parameters
-[betas3frf, pvalues3frf,aic3frf,aicc3frf,bic3frf]=iterate_logistic(X,Y, fixed_columns = [0,6],Firth=True)
-# Cross parameter models for X2 and X4 (best model without freezeup)
-cross=np.reshape(X[:,2]*X[:,4],(-1,1))
-X_hold1 = np.concatenate((X[:,[0,2,4]],cross),axis=1)
-res_cross = fit_logistic(X_hold1,Y)
-resBase = copy.deepcopy(res_cross)
-res_cross_Firth = fit_logistic(X_hold1,Y,Firth=True,resBase=resBase)
-del resBase
-#Note: interaction term is not significant with profile likelihood p-value = .134
-#Best model is BL-GP & Fort Vermillion DDF.
-#p-values for best model from profile likelihood in R:
-#Int: 1.252043e-11     B1: 1.532832e-02     B2: 1.969853e-03
-
-#Constant and Interaction Only with Firth regression
-X_hold2 = np.concatenate((X[:,[0]],cross),axis=1)
-resBase = copy.deepcopy(res_cross)
-res_crossOnly_Firth = fit_logistic(X_hold2,Y,Firth=True,resBase=resBase)
-del resBase
-
-#Constant and Principal Components (X2 and X4 only) with Firth regression
-pca = PCA(n_components=2)
-principalComponents = pca.fit_transform(X[:,[2,4]])
-principalComponents = np.concatenate((X[:,[0]],principalComponents),axis=1)
-resBase = copy.deepcopy(res_GLM)
-#  Only 1st PC
-res_PC1_Firth = fit_logistic(principalComponents[:,[0,1]],Y,Firth=True,resBase=resBase)
-del resBase
-resBase = copy.deepcopy(res_GLM)
-#  Both PC
-res_PC_Firth = fit_logistic(principalComponents,Y,Firth=True,resBase=resBase)
-del resBase
-
-#Plot of the PC model and the preferred 2 parameter model
-plt.figure()
-plt.plot(years,res_PC1_Firth.predict,linewidth=2, label='PC1', ls = '--', marker = 'D')
-plt.plot(years,res_Firth.predict,linewidth=2, label='GP + FV', ls = '--', marker = '^')
-plt.scatter(years,Y, label = 'Floods', marker = 'o', c = 'r')
-plt.ylabel('Prob. of Flood')
-plt.xlabel('Year')
-plt.legend(loc = 'center')
-
-# Four parameter models with Firth regression
-[betas4f, pvalues4f,aic4f,aicc4f,bic4f]=iterate_logistic(X,Y, fixed_columns = [0,2,4],Firth=True)
-#  Best with Freezeup
-[betas4frf, pvalues4frf,aic4frf,aicc4frf,bic4frf]=iterate_logistic(X,Y, fixed_columns = [0,4,6],Firth=True)
-# Five parameter models
-[betas5f, pvalues5f,aic5f,aicc5f,bic5f]=iterate_logistic(X,Y, fixed_columns = [0,2,4,8],Firth=True)
-#  Best with Freezeup
-[betas5frf, pvalues5frf,aic5frf,aicc5frf,bic5frf]=iterate_logistic(X,Y, fixed_columns = [0,2,4,6],Firth=True)
-
-#Evaluate square root of temperature models for Fort Chip. and Fort Verm.
-resBase = copy.deepcopy(res_GLM)
-res_sqrtC_Firth = fit_logistic(X_sqrt[:,[0,4]],Y,Firth=True,resBase=resBase)
-res_sqrtV_Firth = fit_logistic(X_sqrt[:,[0,5]],Y,Firth=True,resBase=resBase)
-[betas3f_sqrt, pvalues3f_sqrt,aic3f_sqrt,aicc3f_sqrt,bic3f_sqrt]=iterate_logistic(X_sqrt,Y, fixed_columns = [0,3],Firth=True)
-del resBase
-
-#Contour plot of the best regression model over the 2 perdictors
-evalptsx, evalptsy = np.meshgrid(np.arange(-3,3.2,0.2),np.arange(-3,3.2,0.2), sparse=False)
-evalvals = np.exp(res_Firth.params[0] + evalptsx * res_Firth.params[1] + evalptsy * res_Firth.params[2])/(1+np.exp(res_Firth.params[0] + evalptsx * res_Firth.params[1] + evalptsy * res_Firth.params[2]))
-plt.figure()
-plt.contourf(evalptsx,evalptsy,evalvals, levels = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1], cmap = 'viridis')
-plt.scatter(X[Y==0,2],X[Y==0,4], color = 'black')
-plt.scatter(X[Y==1,2],X[Y==1,4], color = 'orange')
-plt.ylabel('GP/BL Nov.-Apr. Precip.')
-plt.xlabel('Fort Verm. DDF')
-plt.colorbar()
-
-#Plot showing where 1996-97 floods are. One is low prob.
-plt.figure()
-plt.contourf(evalptsx,evalptsy,evalvals, levels = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1], cmap = 'viridis')
-plt.scatter(X[Y==0,2],X[Y==0,4], color = 'black')
-plt.scatter(X[Y==1,2],X[Y==1,4], color = 'orange')
-plt.scatter(X[[30,31],2],X[[30,31],4], color = 'green')
-plt.ylabel('GP/BL Nov.-Apr. Precip.')
-plt.xlabel('Fort Verm. DDF')
-plt.colorbar()
-
-#Now bootstrap#################################################################
-resBase = copy.deepcopy(res_GLM)
-#reload data for use in boot_master function 
-# (removes the constant from X, normalization is completed in the boot_master function)
-[years_boot,Y_boot,X_boot] = load_data()
-[years_boot,Y_boot,X_boot] = clean_dats(years_boot,Y_boot,X_boot,column=[0,1,3,5,6],fill_years = False)
-[beta_boot,bootstrap_X,bootstrap_Y] = boot_master(X_boot,Y_boot,columns=[1,3],M=1000,param=True,res=res_Firth, Firth=True, resBase=resBase)
-
-#Load beta_boot with Bayesian estimated betas
-beta_boot_Bayes = np.loadtxt('../bayesian_regression/DREAMzs1p/BayesBetas_hold.csv',delimiter=',',skiprows=1)
-beta_boot_BayesLg = np.loadtxt('../bayesian_regression/DREAMzs1p/BayesBetasLg_hold.csv',delimiter=',',skiprows=1)
-
-#pair plot of the beta empirical distribution
-betas_boot_df = pd.DataFrame(data=beta_boot, columns = ['Constant', 'DDF Fort Verm.', 'GP/BL Precip.'])
-betas_boot_Bayes_df = pd.DataFrame(data=beta_boot_Bayes, columns = ['Constant', 'DDF Fort Verm.', 'GP/BL Precip.'])
-betas_boot_BayesLg_df = pd.DataFrame(data=beta_boot_BayesLg, columns = ['Constant', 'DDF Fort Verm.', 'GP/BL Precip.'])
-sb.set_style('darkgrid')
-sb.pairplot(betas_boot_df, diag_kind = 'kde', plot_kws={"s":13})
-sb.pairplot(betas_boot_Bayes_df, diag_kind = 'kde', plot_kws={"s":13})
-sb.pairplot(betas_boot_BayesLg_df, diag_kind = 'kde', plot_kws={"s":13})
-
-#Percentiles - extremes more similar than IQR
-np.percentile(beta_boot, [2.5,25,75,97.5],axis=0)
-np.percentile(beta_boot_Bayes, [2.5,25,75,97.5],axis=0)
-np.percentile(beta_boot_BayesLg, [2.5,25,75,97.5],axis=0)
-
-#How many points are excluded when axes are trimmed
-ExcludedPtsPct = (len(np.where((beta_boot[:,0] < -15))[0]) + len(np.where((beta_boot[:,1] < -6))[0]) + len(np.where((beta_boot[:,2] > 6))[0]) 
-- len(np.where((beta_boot[:,0] < -15) & (beta_boot[:,1] < -6))[0])
-- len(np.where((beta_boot[:,0] < -15) & (beta_boot[:,2] > 6))[0])
-- len(np.where((beta_boot[:,1] < -6) & (beta_boot[:,2] > 6))[0])
-+ len(np.where((beta_boot[:,0] < -15) & (beta_boot[:,1] < -6) & (beta_boot[:,2] > 6))[0]))/1000*100
-
-#Compute IJF probabilities for historical record using the bootstrapped betas
-[years_All,Y_All,X_All] = load_data()
-[years_All,Y_All,X_All] = clean_dats(years_All,Y_All,X_All,column=[1,3],fill_years = True)
-#Normalize using only the regression years
-X_All[:,1] = (X_All[:,1]-np.mean(bootstrap_X[:,1,0],0))/np.std(bootstrap_X[:,1,0],0)
-X_All[:,3] = (X_All[:,3]-np.mean(bootstrap_X[:,3,0],0))/np.std(bootstrap_X[:,3,0],0)
-X_All = add_constant(X_All,Y_All)
-Y_HistPred = np.exp(res_Firth.params[0] + X_All[:,2] * res_Firth.params[1] + X_All[:,4] * res_Firth.params[2])/(1+np.exp(res_Firth.params[0] + X_All[:,2] * res_Firth.params[1] + X_All[:,4] * res_Firth.params[2]))
-Y_HistBootPred = np.zeros([len(X_All[:,0]),len(betas_boot_Bayes_df.iloc[:,0])])
-for i in range(len(betas_boot_Bayes_df.iloc[:,0])):
-    Y_HistBootPred[:,i] = np.exp(np.array(betas_boot_Bayes_df.iloc[i,0]) + X_All[:,2] * np.array(betas_boot_Bayes_df.iloc[i,1]) + X_All[:,4] * np.array(betas_boot_Bayes_df.iloc[i,2]))/(1+np.exp(np.array(betas_boot_Bayes_df.iloc[i,0]) + X_All[:,2] * np.array(betas_boot_Bayes_df.iloc[i,1]) + X_All[:,4] * np.array(betas_boot_Bayes_df.iloc[i,2])))
-plt.figure()
-plt.plot(years_All,Y_HistPred,linewidth=2, label='Predicted - Obs. Betas', ls = '--', marker = 'D')
-plt.scatter(years_All,Y_All, label = 'Floods', marker = 'o', c = 'r')
-plt.ylabel('Prob. of Flood')
-plt.xlabel('Year')
-plt.legend(loc = 'center')
-
-#Now GCM#######################################################################
-#Load the dam filling years for plotting purposes
-[years_GCM,Y_GCM,X_GCM] = load_data()
-[years_GCM,Y_GCM,X_GCM] = clean_dats(years_GCM,Y_GCM,X_GCM,column=[0,1,3,5,6],fill_years = True)
-
-Temp_GCM,Precip_GCM,Years_GCM = load_GCMS(X_GCM[:,1],X_GCM[:,3])
-prob_B,flood_B,cum_flood_B,waits_B = simulate_GCM_futures(Y_GCM,bootstrap_X[:,[1,3],:],bootstrap_Y,beta_boot,Temp_GCM,Precip_GCM,M_boot=1000,N_prob=1000)
-
-GCMs=['HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR']
-RCPs=['RCP85','RCP45']
-window = 20
-
-# PAPER = Moving Average in Real Space with a plot in log scale
-for scenario in range(6):
-    percentiles = [10,25,50,75,90]
-    #Probability
-    plt_perc = np.percentile(prob_B[:,scenario,:],percentiles,axis=1)
-    plt_perc2 = np.percentile(prob_B[:,scenario+6,:],percentiles,axis=1)
-
-    for i in range(5):
-        plt_perc[i,0:(np.shape(prob_B)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
-        plt_perc2[i,0:(np.shape(prob_B)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
-
-    percentile_fill_plot_double(plt_perc[:,0:(np.shape(prob_B)[0]-(window-1))],plt_perc2[:,0:(np.shape(prob_B)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.0001,1],Names=RCPs,window=window, xlim=[1980,2100])
-del scenario, plt_perc, plt_perc2, percentiles, i
-# PAPER = Moving Average in Real Space with a plot in log scale with IQR and 95% corridors
-for scenario in range(6):
-    percentiles = [2.5,25,50,75,97.5]
-    #Probability
-    plt_perc = np.percentile(prob_B[:,scenario,:],percentiles,axis=1)
-    plt_perc2 = np.percentile(prob_B[:,scenario+6,:],percentiles,axis=1)
-
-    for i in range(5):
-        plt_perc[i,0:(np.shape(prob_B)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
-        plt_perc2[i,0:(np.shape(prob_B)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
-
-    percentile_fill_plot_single(plt_perc[:,0:(np.shape(prob_B)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green')
-    percentile_fill_plot_single(plt_perc2[:,0:(np.shape(prob_B)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue')
-del scenario, plt_perc, plt_perc2, percentiles, i
+##Compare the Bayesian beta distribution to the logistic parametric bootstrap
+#
+#os.chdir('../../../logistic_regression')
+#
+##Copy from Lamontagne et al
+#from utils import *
+#from utils_figures import *
+#import numpy as np
+#import matplotlib.pyplot as plt
+#import copy
+#import random
+#import seaborn as sb
+#import pandas as pd
+#from sklearn.decomposition import PCA
+#import statsmodels.api as sm
+## set seed
+#random.seed(123020)
+#np.random.seed(123020)
+#
+## Load data
+#[years,Y,X] = load_data()
+#[years,Y,X] = clean_dats(years,Y,X,column=[0,1,3,5,6],fill_years = False)
+#
+##Evaluate square root of temperature as predictor with GP/BL precip
+#X_sqrt = np.concatenate((X[:,[0,1,3]],np.sqrt(-X[:,[0,1]])),axis=1)
+#
+#X = normalize(X)
+#X_sqrt = normalize(X_sqrt)
+#
+#X = add_constant(X,Y)
+#X_sqrt = add_constant(X_sqrt,Y)
+#
+##Test constant model with GLM vs. logistic regression
+#res_GLM = fit_logistic(X[:,[0,2,4]],Y)
+#
+#resBase = copy.deepcopy(res_GLM)
+##Firth regression method
+#res_Firth = fit_logistic(X[:,[0,2,4]],Y,Firth=True, resBase = resBase)
+#del resBase
+##Compare with the statsmodel logit function
+##Betas and aic seem the same.  P-values are the same out a ways.  bic are different.
+## SM bic is correct upon investigation. Returning that BIC in functions.
+#logit=sm.Logit(Y,X[:,[0,2,4]])
+#res_SM = logit.fit()
+#
+##Looking at seperation
+#plt.figure()
+#plt.scatter(X[Y==0,2],Y[Y==0])
+#plt.scatter(X[Y==1,2],Y[Y==1])
+#plt.xlabel('Fort Verm DDF')
+#
+#plt.figure()
+#plt.scatter(X[Y==0,4],Y[Y==0])
+#plt.scatter(X[Y==1,4],Y[Y==1])
+#plt.xlabel('GP/BL Nov.-Apr. Precip.')
+#
+#plt.figure()
+#plt.scatter(X[Y==0,2],X[Y==0,4])
+#plt.scatter(X[Y==1,2],X[Y==1,4])
+#plt.ylabel('GP/BL Nov.-Apr. Precip.')
+#plt.xlabel('Fort Verm. DDF')
+#
+#plt.figure()
+#plt.scatter(X[Y==0,1],X[Y==0,4])
+#plt.scatter(X[Y==1,1],X[Y==1,4])
+#plt.ylabel('GP/BL Nov.-Apr. Precip.')
+#plt.xlabel('Fort Chip. DDF')
+#
+#plt.figure()
+#plt.scatter(X[Y==0,6],X[Y==0,4])
+#plt.scatter(X[Y==1,6],X[Y==1,4])
+#plt.ylabel('GP/BL Nov.-Apr. Precip.')
+#plt.xlabel('Freeze-up Stage (Beltaos, 2014)')
+#
+#plt.figure()
+#plt.scatter(X[Y==0,7],X[Y==0,4])
+#plt.scatter(X[Y==1,7],X[Y==1,4])
+#plt.ylabel('GP/BL Nov.-Apr. Precip.')
+#plt.xlabel('Melt Test')
+#
+## Iterative model building
+##  All two parameter models (constant + variable)
+#[betas, pvalues,aic,aicc,bic]=iterate_logistic(X,Y, fixed_columns = [0])
+##   Firth two parameter models
+#[betasf, pvaluesf,aicf,aiccf,bicf]=iterate_logistic(X,Y, fixed_columns = [0],Firth=True)
+## Three parameter models
+#[betas3, pvalues3,aic3,aicc3,bic3]=iterate_logistic(X,Y, fixed_columns = [0,4])
+##  Firth three parameter models
+#[betas3f, pvalues3f,aic3f,aicc3f,bic3f]=iterate_logistic(X,Y, fixed_columns = [0,4],Firth=True)
+##  Best Freeze-up model with three parameters
+#[betas3frf, pvalues3frf,aic3frf,aicc3frf,bic3frf]=iterate_logistic(X,Y, fixed_columns = [0,6],Firth=True)
+## Cross parameter models for X2 and X4 (best model without freezeup)
+#cross=np.reshape(X[:,2]*X[:,4],(-1,1))
+#X_hold1 = np.concatenate((X[:,[0,2,4]],cross),axis=1)
+#res_cross = fit_logistic(X_hold1,Y)
+#resBase = copy.deepcopy(res_cross)
+#res_cross_Firth = fit_logistic(X_hold1,Y,Firth=True,resBase=resBase)
+#del resBase
+##Note: interaction term is not significant with profile likelihood p-value = .134
+##Best model is BL-GP & Fort Vermillion DDF.
+##p-values for best model from profile likelihood in R:
+##Int: 1.252043e-11     B1: 1.532832e-02     B2: 1.969853e-03
+#
+##Constant and Interaction Only with Firth regression
+#X_hold2 = np.concatenate((X[:,[0]],cross),axis=1)
+#resBase = copy.deepcopy(res_cross)
+#res_crossOnly_Firth = fit_logistic(X_hold2,Y,Firth=True,resBase=resBase)
+#del resBase
+#
+##Constant and Principal Components (X2 and X4 only) with Firth regression
+#pca = PCA(n_components=2)
+#principalComponents = pca.fit_transform(X[:,[2,4]])
+#principalComponents = np.concatenate((X[:,[0]],principalComponents),axis=1)
+#resBase = copy.deepcopy(res_GLM)
+##  Only 1st PC
+#res_PC1_Firth = fit_logistic(principalComponents[:,[0,1]],Y,Firth=True,resBase=resBase)
+#del resBase
+#resBase = copy.deepcopy(res_GLM)
+##  Both PC
+#res_PC_Firth = fit_logistic(principalComponents,Y,Firth=True,resBase=resBase)
+#del resBase
+#
+##Plot of the PC model and the preferred 2 parameter model
+#plt.figure()
+#plt.plot(years,res_PC1_Firth.predict,linewidth=2, label='PC1', ls = '--', marker = 'D')
+#plt.plot(years,res_Firth.predict,linewidth=2, label='GP + FV', ls = '--', marker = '^')
+#plt.scatter(years,Y, label = 'Floods', marker = 'o', c = 'r')
+#plt.ylabel('Prob. of Flood')
+#plt.xlabel('Year')
+#plt.legend(loc = 'center')
+#
+## Four parameter models with Firth regression
+#[betas4f, pvalues4f,aic4f,aicc4f,bic4f]=iterate_logistic(X,Y, fixed_columns = [0,2,4],Firth=True)
+##  Best with Freezeup
+#[betas4frf, pvalues4frf,aic4frf,aicc4frf,bic4frf]=iterate_logistic(X,Y, fixed_columns = [0,4,6],Firth=True)
+## Five parameter models
+#[betas5f, pvalues5f,aic5f,aicc5f,bic5f]=iterate_logistic(X,Y, fixed_columns = [0,2,4,8],Firth=True)
+##  Best with Freezeup
+#[betas5frf, pvalues5frf,aic5frf,aicc5frf,bic5frf]=iterate_logistic(X,Y, fixed_columns = [0,2,4,6],Firth=True)
+#
+##Evaluate square root of temperature models for Fort Chip. and Fort Verm.
+#resBase = copy.deepcopy(res_GLM)
+#res_sqrtC_Firth = fit_logistic(X_sqrt[:,[0,4]],Y,Firth=True,resBase=resBase)
+#res_sqrtV_Firth = fit_logistic(X_sqrt[:,[0,5]],Y,Firth=True,resBase=resBase)
+#[betas3f_sqrt, pvalues3f_sqrt,aic3f_sqrt,aicc3f_sqrt,bic3f_sqrt]=iterate_logistic(X_sqrt,Y, fixed_columns = [0,3],Firth=True)
+#del resBase
+#
+##Contour plot of the best regression model over the 2 perdictors
+#evalptsx, evalptsy = np.meshgrid(np.arange(-3,3.2,0.2),np.arange(-3,3.2,0.2), sparse=False)
+#evalvals = np.exp(res_Firth.params[0] + evalptsx * res_Firth.params[1] + evalptsy * res_Firth.params[2])/(1+np.exp(res_Firth.params[0] + evalptsx * res_Firth.params[1] + evalptsy * res_Firth.params[2]))
+#plt.figure()
+#plt.contourf(evalptsx,evalptsy,evalvals, levels = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1], cmap = 'viridis')
+#plt.scatter(X[Y==0,2],X[Y==0,4], color = 'black')
+#plt.scatter(X[Y==1,2],X[Y==1,4], color = 'orange')
+#plt.ylabel('GP/BL Nov.-Apr. Precip.')
+#plt.xlabel('Fort Verm. DDF')
+#plt.colorbar()
+#
+##Plot showing where 1996-97 floods are. One is low prob.
+#plt.figure()
+#plt.contourf(evalptsx,evalptsy,evalvals, levels = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1], cmap = 'viridis')
+#plt.scatter(X[Y==0,2],X[Y==0,4], color = 'black')
+#plt.scatter(X[Y==1,2],X[Y==1,4], color = 'orange')
+#plt.scatter(X[[30,31],2],X[[30,31],4], color = 'green')
+#plt.ylabel('GP/BL Nov.-Apr. Precip.')
+#plt.xlabel('Fort Verm. DDF')
+#plt.colorbar()
+#
+##Now bootstrap#################################################################
+#resBase = copy.deepcopy(res_GLM)
+##reload data for use in boot_master function 
+## (removes the constant from X, normalization is completed in the boot_master function)
+#[years_boot,Y_boot,X_boot] = load_data()
+#[years_boot,Y_boot,X_boot] = clean_dats(years_boot,Y_boot,X_boot,column=[0,1,3,5,6],fill_years = False)
+#[beta_boot,bootstrap_X,bootstrap_Y] = boot_master(X_boot,Y_boot,columns=[1,3],M=1000,param=True,res=res_Firth, Firth=True, resBase=resBase)
+#
+##Load beta_boot with Bayesian estimated betas
+#beta_boot_Bayes = np.loadtxt('../bayesian_regression/DREAMzs1p/BayesBetas_hold.csv',delimiter=',',skiprows=1)
+#beta_boot_BayesLg = np.loadtxt('../bayesian_regression/DREAMzs1p/BayesBetasLg_hold.csv',delimiter=',',skiprows=1)
+#
+##pair plot of the beta empirical distribution
+#betas_boot_df = pd.DataFrame(data=beta_boot, columns = ['Constant', 'DDF Fort Verm.', 'GP/BL Precip.'])
+#betas_boot_Bayes_df = pd.DataFrame(data=beta_boot_Bayes, columns = ['Constant', 'DDF Fort Verm.', 'GP/BL Precip.'])
+#betas_boot_BayesLg_df = pd.DataFrame(data=beta_boot_BayesLg, columns = ['Constant', 'DDF Fort Verm.', 'GP/BL Precip.'])
+#sb.set_style('darkgrid')
+#sb.pairplot(betas_boot_df, diag_kind = 'kde', plot_kws={"s":13})
+#sb.pairplot(betas_boot_Bayes_df, diag_kind = 'kde', plot_kws={"s":13})
+#sb.pairplot(betas_boot_BayesLg_df, diag_kind = 'kde', plot_kws={"s":13})
+#
+##Percentiles - extremes more similar than IQR
+#np.percentile(beta_boot, [2.5,25,75,97.5],axis=0)
+#np.percentile(beta_boot_Bayes, [2.5,25,75,97.5],axis=0)
+#np.percentile(beta_boot_BayesLg, [2.5,25,75,97.5],axis=0)
+#
+##How many points are excluded when axes are trimmed
+#ExcludedPtsPct = (len(np.where((beta_boot[:,0] < -15))[0]) + len(np.where((beta_boot[:,1] < -6))[0]) + len(np.where((beta_boot[:,2] > 6))[0]) 
+#- len(np.where((beta_boot[:,0] < -15) & (beta_boot[:,1] < -6))[0])
+#- len(np.where((beta_boot[:,0] < -15) & (beta_boot[:,2] > 6))[0])
+#- len(np.where((beta_boot[:,1] < -6) & (beta_boot[:,2] > 6))[0])
+#+ len(np.where((beta_boot[:,0] < -15) & (beta_boot[:,1] < -6) & (beta_boot[:,2] > 6))[0]))/1000*100
+#
+##Compute IJF probabilities for historical record using the bootstrapped betas
+#[years_All,Y_All,X_All] = load_data()
+#[years_All,Y_All,X_All] = clean_dats(years_All,Y_All,X_All,column=[1,3],fill_years = True)
+##Normalize using only the regression years
+#X_All[:,1] = (X_All[:,1]-np.mean(bootstrap_X[:,1,0],0))/np.std(bootstrap_X[:,1,0],0)
+#X_All[:,3] = (X_All[:,3]-np.mean(bootstrap_X[:,3,0],0))/np.std(bootstrap_X[:,3,0],0)
+#X_All = add_constant(X_All,Y_All)
+#Y_HistPred = np.exp(res_Firth.params[0] + X_All[:,2] * res_Firth.params[1] + X_All[:,4] * res_Firth.params[2])/(1+np.exp(res_Firth.params[0] + X_All[:,2] * res_Firth.params[1] + X_All[:,4] * res_Firth.params[2]))
+#Y_HistBootPred = np.zeros([len(X_All[:,0]),len(betas_boot_Bayes_df.iloc[:,0])])
+#for i in range(len(betas_boot_Bayes_df.iloc[:,0])):
+#    Y_HistBootPred[:,i] = np.exp(np.array(betas_boot_Bayes_df.iloc[i,0]) + X_All[:,2] * np.array(betas_boot_Bayes_df.iloc[i,1]) + X_All[:,4] * np.array(betas_boot_Bayes_df.iloc[i,2]))/(1+np.exp(np.array(betas_boot_Bayes_df.iloc[i,0]) + X_All[:,2] * np.array(betas_boot_Bayes_df.iloc[i,1]) + X_All[:,4] * np.array(betas_boot_Bayes_df.iloc[i,2])))
+#plt.figure()
+#plt.plot(years_All,Y_HistPred,linewidth=2, label='Predicted - Obs. Betas', ls = '--', marker = 'D')
+#plt.scatter(years_All,Y_All, label = 'Floods', marker = 'o', c = 'r')
+#plt.ylabel('Prob. of Flood')
+#plt.xlabel('Year')
+#plt.legend(loc = 'center')
+#
+##Now GCM#######################################################################
+##Load the dam filling years for plotting purposes
+#[years_GCM,Y_GCM,X_GCM] = load_data()
+#[years_GCM,Y_GCM,X_GCM] = clean_dats(years_GCM,Y_GCM,X_GCM,column=[0,1,3,5,6],fill_years = True)
+#
+#Temp_GCM,Precip_GCM,Years_GCM = load_GCMS(X_GCM[:,1],X_GCM[:,3])
+#prob_B,flood_B,cum_flood_B,waits_B = simulate_GCM_futures(Y_GCM,bootstrap_X[:,[1,3],:],bootstrap_Y,beta_boot,Temp_GCM,Precip_GCM,M_boot=1000,N_prob=1000)
+#
+#GCMs=['HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR']
+#RCPs=['RCP85','RCP45']
+#window = 20
+#
+## PAPER = Moving Average in Real Space with a plot in log scale
+#for scenario in range(len(GCMs)):
+#    percentiles = [10,25,50,75,90]
+#    #Probability
+#    plt_perc = np.percentile(prob_B[:,scenario,:],percentiles,axis=1)
+#    plt_perc2 = np.percentile(prob_B[:,scenario+6,:],percentiles,axis=1)
+#
+#    for i in range(5):
+#        plt_perc[i,0:(np.shape(prob_B)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
+#        plt_perc2[i,0:(np.shape(prob_B)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
+#
+#    percentile_fill_plot_double(plt_perc[:,0:(np.shape(prob_B)[0]-(window-1))],plt_perc2[:,0:(np.shape(prob_B)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.0001,1],Names=RCPs,window=window, xlim=[1980,2100])
+#del scenario, plt_perc, plt_perc2, percentiles, i
+## PAPER = Moving Average in Real Space with a plot in log scale with IQR and 95% corridors
+#for scenario in range(len(GCMs)):
+#    percentiles = [2.5,25,50,75,97.5]
+#    #Probability
+#    plt_perc = np.percentile(prob_B[:,scenario,:],percentiles,axis=1)
+#    plt_perc2 = np.percentile(prob_B[:,scenario+6,:],percentiles,axis=1)
+#
+#    for i in range(5):
+#        plt_perc[i,0:(np.shape(prob_B)[0]-(window-1))]=moving_average(plt_perc[i,:],window)
+#        plt_perc2[i,0:(np.shape(prob_B)[0]-(window-1))]=moving_average(plt_perc2[i,:],window)
+#
+#    percentile_fill_plot_single(plt_perc[:,0:(np.shape(prob_B)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[0],window=window,CIind=0,colPlt='green')
+#    percentile_fill_plot_single(plt_perc2[:,0:(np.shape(prob_B)[0]-(window-1))],title=GCMs[scenario],ylabel='IJF Probability',scale='log',ylim=[0.00000001,1],Names=RCPs[1],window=window,CIind=0,colPlt='blue')
+#del scenario, plt_perc, plt_perc2, percentiles, i
