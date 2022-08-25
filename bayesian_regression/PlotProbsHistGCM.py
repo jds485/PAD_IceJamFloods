@@ -39,6 +39,54 @@ years_L15sm = np.loadtxt('years.csv',delimiter=',',skiprows=1)
 sb.set_style('darkgrid')
 
 #Moving window size and percentiles to compute for plots
+window=1
+percentiles=[2.5,25,50,75,97.5]
+
+#Compute moving average of all variables
+pMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_L15sm)[0]])
+qMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_L15sm)[0]])
+YMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_L15sm)[0]])
+YrepMA_L15sm = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_L15sm)[0]])
+
+for i in range(np.shape(p_L15sm)[0]):
+    YMA_L15sm[:,i] = moving_average(Y_L15sm[i,:],window)
+    YrepMA_L15sm[:,i] = moving_average(Yrep_L15sm[i,:],window)
+    pMA_L15sm[:,i] = moving_average(p_L15sm[i,:],window)
+    qMA_L15sm[:,i] = moving_average(q_L15sm[i,:],window)
+
+#Compute percentiles and plot
+plt_perc = np.percentile(pMA_L15sm,percentiles,axis=1)
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
+plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
+
+plt_perc = np.percentile(qMA_L15sm,percentiles,axis=1)
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average Probability of Recording IJF for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
+plt.savefig('HistPredPlot_q_' + str(window) + 'yr.png', dpi = 600)
+
+plt_perc = np.percentile(YMA_L15sm,percentiles,axis=1)
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average Observed IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
+plt.savefig('HistPredPlot_ObservedY_' + str(window) + 'yr.png', dpi = 600)
+
+plt_perc = np.percentile(YrepMA_L15sm,percentiles,axis=1)
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
+#Add mean of Y
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020], YBayes=1962)
+plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
+
+#Y and Yrep
+plt_perc = np.percentile(YrepMA_L15sm,percentiles,axis=1)
+plt_perc2 = np.percentile(YMA_L15sm,percentiles,axis=1)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
+plt.savefig('HistPredPlot_PPC_' + str(window) + 'yr.png', dpi = 600)
+
+#p and q
+plt_perc2 = np.percentile(qMA_L15sm,percentiles,axis=1)
+plt_perc = np.percentile(pMA_L15sm,percentiles,axis=1)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['p', 'q'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
+plt.savefig('HistPredPlot_pq_' + str(window) + 'yr.png', dpi = 600)
+
+
+#Moving window size and percentiles to compute for plots
 window=5
 percentiles=[2.5,25,50,75,97.5]
 
@@ -70,7 +118,7 @@ plt.savefig('HistPredPlot_ObservedY_' + str(window) + 'yr.png', dpi = 600)
 plt_perc = np.percentile(YrepMA_L15sm,percentiles,axis=1)
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020], YBayes=1962)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
@@ -118,7 +166,7 @@ plt.savefig('HistPredPlot_ObservedY_' + str(window) + 'yr.png', dpi = 600)
 plt_perc = np.percentile(YrepMA_L15sm,percentiles,axis=1)
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020], YBayes=1962)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
@@ -269,6 +317,38 @@ p_vp = np.loadtxt('p.csv',delimiter=',',skiprows=1)
 Yrep_vp = np.loadtxt('yrep.csv',delimiter=',',skiprows=1)
 
 #Moving window size and percentiles to compute for plots
+window=1
+percentiles=[2.5,25,50,75,97.5]
+
+#Compute moving average of all variables
+pMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_vp)[0]])
+YMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_vp)[0]])
+YrepMA_vp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_vp)[0]])
+
+for i in range(np.shape(p_vp)[0]):
+    YMA_vp[:,i] = moving_average(Y_L15sm[i,:],window)
+    YrepMA_vp[:,i] = moving_average(Yrep_vp[i,:],window)
+    pMA_vp[:,i] = moving_average(p_vp[i,:],window)
+
+#Compute percentiles and plot
+plt_perc = np.percentile(pMA_vp,percentiles,axis=1)
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
+plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
+
+plt_perc = np.percentile(YrepMA_vp,percentiles,axis=1)
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
+#Add mean of Y
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020], YBayes=1962)
+plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
+
+#Y and Yrep
+plt_perc = np.percentile(YrepMA_vp,percentiles,axis=1)
+plt_perc2 = np.percentile(YMA_vp,percentiles,axis=1)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
+plt.savefig('HistPredPlot_PPC_' + str(window) + 'yr.png', dpi = 600)
+
+
+#Moving window size and percentiles to compute for plots
 window=5
 percentiles=[2.5,25,50,75,97.5]
 
@@ -290,7 +370,7 @@ plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 plt_perc = np.percentile(YrepMA_vp,percentiles,axis=1)
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020], YBayes=1962)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
@@ -322,7 +402,7 @@ plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 plt_perc = np.percentile(YrepMA_vp,percentiles,axis=1)
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020], YBayes=1962)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
@@ -406,6 +486,38 @@ p_cvsp = np.loadtxt('p.csv',delimiter=',',skiprows=1)
 Yrep_cvsp = np.loadtxt('yrep.csv',delimiter=',',skiprows=1)
 
 #Moving window size and percentiles to compute for plots
+window=1
+percentiles=[2.5,25,50,75,97.5]
+
+#Compute moving average of all variables
+pMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_cvsp)[0]])
+YMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_cvsp)[0]])
+YrepMA_cvsp = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_cvsp)[0]])
+
+for i in range(np.shape(p_cvsp)[0]):
+    YMA_cvsp[:,i] = moving_average(Y_L15sm[i,:],window)
+    YrepMA_cvsp[:,i] = moving_average(Yrep_cvsp[i,:],window)
+    pMA_cvsp[:,i] = moving_average(p_cvsp[i,:],window)
+
+#Compute percentiles and plot
+plt_perc = np.percentile(pMA_cvsp,percentiles,axis=1)
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
+plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
+
+plt_perc = np.percentile(YrepMA_cvsp,percentiles,axis=1)
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
+#Add mean of Y
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020], YBayes=1962)
+plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
+
+#Y and Yrep
+plt_perc = np.percentile(YrepMA_cvsp,percentiles,axis=1)
+plt_perc2 = np.percentile(YMA_cvsp,percentiles,axis=1)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
+plt.savefig('HistPredPlot_PPC_' + str(window) + 'yr.png', dpi = 600)
+
+
+#Moving window size and percentiles to compute for plots
 window=5
 percentiles=[2.5,25,50,75,97.5]
 
@@ -427,7 +539,7 @@ plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 plt_perc = np.percentile(YrepMA_cvsp,percentiles,axis=1)
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020], YBayes=1962)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
@@ -459,7 +571,7 @@ plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 plt_perc = np.percentile(YrepMA_cvsp,percentiles,axis=1)
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020], YBayes=1962)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
@@ -540,6 +652,38 @@ p_NoUncertainty = np.loadtxt('p.csv',delimiter=',',skiprows=1)
 Yrep_NoUncertainty = np.loadtxt('yrep.csv',delimiter=',',skiprows=1)
 
 #Moving window size and percentiles to compute for plots
+window=1
+percentiles=[2.5,25,50,75,97.5]
+
+#Compute moving average of all variables
+pMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_NoUncertainty)[0]])
+YMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_NoUncertainty)[0]])
+YrepMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_NoUncertainty)[0]])
+
+for i in range(np.shape(p_NoUncertainty)[0]):
+    YMA_NoUncertainty[:,i] = moving_average(Y_L15sm[i,:],window)
+    YrepMA_NoUncertainty[:,i] = moving_average(Yrep_NoUncertainty[i,:],window)
+    pMA_NoUncertainty[:,i] = moving_average(p_NoUncertainty[i,:],window)
+
+#Compute percentiles and plot
+plt_perc = np.percentile(pMA_NoUncertainty,percentiles,axis=1)
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])
+plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
+
+plt_perc = np.percentile(YrepMA_NoUncertainty,percentiles,axis=1)
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
+#Add mean of Y
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020], YBayes=1962)
+plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
+
+#Y and Yrep
+plt_perc = np.percentile(YrepMA_NoUncertainty,percentiles,axis=1)
+plt_perc2 = np.percentile(YMA_NoUncertainty,percentiles,axis=1)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names=['Yrep', 'Y'],window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], CIind=0, xlim=[1920,2020])
+plt.savefig('HistPredPlot_PPC_' + str(window) + 'yr.png', dpi = 600)
+
+
+#Moving window size and percentiles to compute for plots
 window=5
 percentiles=[2.5,25,50,75,97.5]
 
@@ -561,7 +705,7 @@ plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 plt_perc = np.percentile(YrepMA_NoUncertainty,percentiles,axis=1)
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020], YBayes=1962)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
@@ -593,7 +737,7 @@ plt.savefig('HistPredPlot_p_' + str(window) + 'yr.png', dpi = 600)
 plt_perc = np.percentile(YrepMA_NoUncertainty,percentiles,axis=1)
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], xlim=[1920,2020])    
 #Add mean of Y
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],title=str(window)+'-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], Yobs=np.mean(Y_L15sm,axis=0), xlim=[1920,2020], YBayes=1962)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 
 #Y and Yrep
