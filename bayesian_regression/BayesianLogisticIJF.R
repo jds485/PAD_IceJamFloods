@@ -482,48 +482,49 @@ outDREAMzs_1p$Neff = effectiveSize(outDREAMzs_1p$chain[,1:3])
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_1p$chain[[1]])-1000):nrow(outDREAMzs_1p$chain[[1]])
 
-png('DREAMzs1p/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
+dir.create('DREAMzs1p/MCMC', showWarnings = FALSE)
+png('DREAMzs1p/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_1p$chain[,1:3], size = 0.05)
 dev.off()
 
-png('DREAMzs1p/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs1p/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
 correlationPlot(outDREAMzs_1p$chain[sample_chain_inds,1:3], method = 'spearman')
 dev.off()
 
-png('DREAMzs1p/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs1p/MCMC/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_1p, plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs1p/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs1p/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_1p$chain[sample_chain_inds,1:3], prior = prior2$sampler(n = 50000), singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15))))
 dev.off()
 
-png('DREAMzs1p/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs1p/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_pairs(outDREAMzs_1p$chain[sample_chain_inds,1:3], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-6,1),c(0,6),c(-15,0),c(-6,1),c(0,6),c(-15,0),c(-6,1),c(0,6)),
            ylim = rbind(c(0,NA),c(-15,0),c(-15,0),c(-6,0),c(0,NA),c(-6,0),c(0,6),c(0,6),c(0,NA)))
 dev.off()
 
-png('DREAMzs1p/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs1p/MCMC/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_1p$chain[[1]][-1,1:3], lag.max = 100)
 dev.off()
 
-png('DREAMzs1p/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs1p/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs_1p$chain, pars = outDREAMzs_1p$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs1p/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs1p/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_1p$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs1p/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs1p/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_1p$chain[sample_chain_inds,], pars = outDREAMzs_1p$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs1p/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs1p/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_1p$chain[sample_chain_inds,], pars = outDREAMzs_1p$setup$names,
                prob_outer = 0.95)
 dev.off()
@@ -680,48 +681,49 @@ outDREAMzs_3p_AGU$Neff = effectiveSize(outDREAMzs_3p_AGU$chain[,1:3])
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_3p_AGU$chain[[1]])-1000):nrow(outDREAMzs_3p_AGU$chain[[1]])
 
-png('DREAMzs3p_AGU/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
+dir.create('DREAMzs3p_AGU/MCMC', showWarnings = FALSE)
+png('DREAMzs3p_AGU/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_3p_AGU$chain[,1:3], size = 0.05)
 dev.off()
 
-png('DREAMzs3p_AGU/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs3p_AGU/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
 correlationPlot(outDREAMzs_3p_AGU$chain[sample_chain_inds,1:3], method = 'spearman')
 dev.off()
 
-png('DREAMzs3p_AGU/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs3p_AGU/MCMC/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_3p_AGU, plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs3p_AGU/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs3p_AGU/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_3p_AGU$chain[sample_chain_inds,1:3], prior = prior2$sampler(n = 50000), singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15))))
 dev.off()
 
-png('DREAMzs3p_AGU/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs3p_AGU/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_pairs(outDREAMzs_3p_AGU$chain[sample_chain_inds,1:3], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-1,6),c(-1,6),c(-15,0),c(-1,6),c(-1,6),c(-15,0),c(-1,6),c(-1,6)),
            ylim = rbind(c(0,NA),c(-15,0),c(-15,0),c(-1,6),c(0,NA),c(-1,6),c(-1,6),c(-1,6),c(0,NA)))
 dev.off()
 
-png('DREAMzs3p_AGU/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs3p_AGU/MCMC/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_3p_AGU$chain[[1]][-1,1:3], lag.max = 100)
 dev.off()
 
-png('DREAMzs3p_AGU/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs3p_AGU/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs_3p_AGU$chain, pars = outDREAMzs_3p_AGU$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs3p_AGU/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs3p_AGU/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_3p_AGU$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs3p_AGU/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs3p_AGU/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_3p_AGU$chain[sample_chain_inds,], pars = outDREAMzs_3p_AGU$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs3p_AGU/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs3p_AGU/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_3p_AGU$chain[sample_chain_inds,], pars = outDREAMzs_3p_AGU$setup$names,
                prob_outer = 0.95)
 dev.off()
@@ -781,48 +783,49 @@ outDREAMzs_NoUncertainty$Neff = effectiveSize(outDREAMzs_NoUncertainty$chain[,1:
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_NoUncertainty$chain[[1]])-1000):nrow(outDREAMzs_NoUncertainty$chain[[1]])
 
-png('DREAMzs_L15_NoUncertainty/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
+dir.create('DREAMzs_L15_NoUncertainty/MCMC', showWarnings = FALSE)
+png('DREAMzs_L15_NoUncertainty/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_NoUncertainty$chain[,1:3], size = 0.05)
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_NoUncertainty/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
 correlationPlot(outDREAMzs_NoUncertainty$chain[sample_chain_inds,1:3], method = 'spearman')
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_NoUncertainty/MCMC/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_NoUncertainty, plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_NoUncertainty/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_NoUncertainty$chain[sample_chain_inds,1:3], prior = prior2$sampler(n = 50000), singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15))))
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_NoUncertainty/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_pairs(outDREAMzs_NoUncertainty$chain[sample_chain_inds,1:3], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-1,6),c(-1,6),c(-15,0),c(-1,6),c(-1,6),c(-15,0),c(-1,6),c(-1,6)),
            ylim = rbind(c(0,NA),c(-15,0),c(-15,0),c(-1,6),c(0,NA),c(-1,6),c(-1,6),c(-1,6),c(0,NA)))
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_NoUncertainty/MCMC/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_NoUncertainty$chain[[1]][-1,1:3], lag.max = 100)
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_NoUncertainty/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs_NoUncertainty$chain, pars = outDREAMzs_NoUncertainty$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_NoUncertainty/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_NoUncertainty$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_NoUncertainty/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_NoUncertainty$chain[sample_chain_inds,], pars = outDREAMzs_NoUncertainty$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_NoUncertainty/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_NoUncertainty$chain[sample_chain_inds,], pars = outDREAMzs_NoUncertainty$setup$names,
                prob_outer = 0.95)
 dev.off()
@@ -1384,28 +1387,29 @@ outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$Neff = effectiveSize(outDREAMzs_L15
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
+dir.create('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC', showWarnings = FALSE)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:8], size = 0.05)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
 correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], method = 'spearman')
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:6], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,7:8], plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], 
              prior = prior_L15_unif_SensSpec_Hist$sampler(n = 50000), singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
@@ -1426,26 +1430,26 @@ mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,
                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA)))
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]][-1,1:8], lag.max = 100)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain, 
          pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,], 
            pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,], 
                pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$names,
                prob_outer = 0.95)
@@ -1506,55 +1510,56 @@ outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$Neff = effectiveSize(outDREAMz
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/traceplot2_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+dir.create('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC', showWarnings = FALSE)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/traceplot2_panel1.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,1:9], size = 0.05)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/traceplot2_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/traceplot2_panel2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,10:14], size = 0.05)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/traceplot2_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/traceplot2_panel3.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,15:19], size = 0.05)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/traceplot2_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/traceplot2_panel4.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,20:24], size = 0.05)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
 correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,1:24], method = 'spearman')
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,1:6], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,7:12], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/gelmanplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/gelmanplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,13:18], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/gelmanplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/gelmanplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,19:24], plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/marginalplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/marginalplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,1:9], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,1:9], 
              singlePanel = FALSE, xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/marginalplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/marginalplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,10:14], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,10:14], 
              singlePanel = FALSE, xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/marginalplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/marginalplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,15:19], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,15:19], 
              singlePanel = FALSE, xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/marginalplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/marginalplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,20:24], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,20:24], 
              singlePanel = FALSE, xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
 
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,1:8], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-6,1),c(0,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
@@ -1575,35 +1580,35 @@ mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_
                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA)))
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,1:9], lag.max = 100)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/autocorrplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/autocorrplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,10:14], lag.max = 100)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/autocorrplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/autocorrplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,15:19], lag.max = 100)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/autocorrplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/autocorrplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,20:24], lag.max = 100)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs__L15_pSensSpec_PCAcvs_Historical1s_pAll$chain, 
          pars = outDREAMzs__L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,], 
            pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,], 
                pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names,
                prob_outer = 0.95)
@@ -1684,87 +1689,88 @@ outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$Neff =
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/traceplot2.png', res = 300, units = 'in', 
+dir.create('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC', showWarnings = FALSE)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/traceplot2.png', res = 300, units = 'in', 
     width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,1:46], size = 0.05)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/correlplot.png', res = 300, units = 'in',
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/correlplot.png', res = 300, units = 'in',
     width = 14, height = 14)
 correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,1:46], method = 'spearman')
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/gelmanplot_panel1.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,1:6], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/gelmanplot_panel2.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,7:12], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/gelmanplot_panel3.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel3.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,13:18], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/gelmanplot_panel4.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel4.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,19:24], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/gelmanplot_panel5.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel5.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,25:30], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/gelmanplot_panel6.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel6.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,31:36], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/gelmanplot_panel7.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel7.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,37:42], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/gelmanplot_panel8.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel8.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,43:46], plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/marginalplot_panel1.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/marginalplot_panel1.png', res = 300, units = 'in', 
     width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,1:9], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,1:9], singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/marginalplot_panel2.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/marginalplot_panel2.png', res = 300, units = 'in', 
     width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,10:18], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,10:18], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/marginalplot_panel3.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/marginalplot_panel3.png', res = 300, units = 'in', 
     width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,19:27], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,19:27], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/marginalplot_panel4.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/marginalplot_panel4.png', res = 300, units = 'in', 
     width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,28:36], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,28:36], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/marginalplot_panel5.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/marginalplot_panel5.png', res = 300, units = 'in', 
     width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,37:45], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,37:45], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/marginalplot_panel6.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/marginalplot_panel6.png', res = 300, units = 'in', 
     width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,45:46], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,45:46], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1))))
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/PairPlot.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/PairPlot.png', res = 300, units = 'in', 
     width = 7, height = 7)
 mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,1:8], diag_fun = 'dens', 
            off_diag_fun = 'scatter', 
@@ -1787,23 +1793,23 @@ mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_
                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA)))
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain, 
          pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$names, lags = 100)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/densOverlay.png', res = 300, units = 'in', 
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/densOverlay.png', res = 300, units = 'in', 
     width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,], 
            pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,], 
                pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$names,
                prob_outer = 0.95)
@@ -1906,7 +1912,7 @@ yrepSum97p5 = quantile(x = yrepSum, probs = 0.975)
 yrepSum2p5_0 = quantile(x = ncol(ppc$y)-yrepSum, probs = 0.025)
 yrepSum97p5_0 = quantile(x = ncol(ppc$y)-yrepSum, probs = 0.975)
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/ppcbars.png', res=300, height = 5, width = 5, units = 'in')
+png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/ppcbars.png', res=300, height = 5, width = 5, units = 'in')
 #plot bars for the uncertain y
 barplot(height = c(mean(ncol(ppc$y)-ySum), mean(ySum)), space = 0, names.arg = c(0,1), col = 'gray', 
         border = 'white', ylim = c(0,100))
