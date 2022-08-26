@@ -156,7 +156,7 @@ def percentile_fill_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissa
         if years is not None:
             plt.plot(years,moving_average(Yobs,window),linewidth=2, label='Observed Data', ls = '--', marker = 'o', c = 'r')
             if YBayes is not None:
-                plt.plot(years[:np.where(years == YBayes)[0][0]],moving_average(Yobs,window)[:np.where(years == YBayes)[0][0]],linewidth=2, label='Inferred Data', ls = '--', marker = 'o', c = 'm')
+                plt.plot(years[:np.where(years == YBayes)[0][0]],moving_average(Yobs,window)[:np.where(years == YBayes)[0][0]],linewidth=2, label='Inferred Data Mean', ls = '--', marker = 'o', c = 'm')
         else:
             plt.plot(np.arange(start+(window-1),end,1),moving_average(Yobs,window),linewidth=2, label='Observed Data', ls = '--', marker = 'o', c = 'r')
             #plt.scatter(np.arange(start,end,1),Yobs, label = 'Floods', marker = 'o', c = 'r')
