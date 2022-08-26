@@ -435,7 +435,7 @@ geweke.plot(x = outDREAMzs_1$chain[,1:3],ask = FALSE, nbins = 8)
 stopParallel(setUpDREAMzs_1)
 
 #  DREAMzs: prior #2 - normal, 0 mean----
-dir.create(path = 'DREAMzs1p', showWarnings = FALSE)
+dir.create(path = 'DREAMzs_L15_VermPrecip_1962-2020', showWarnings = FALSE)
 setUpDREAMzs_1p <- createBayesianSetup(likelihood, prior = prior2, parallel = 7, 
                                       parallelOptions = list(packages=list('BayesianTools'), 
                                                              variables=list('X_hold','Y_hold'), dlls=NULL), 
@@ -482,49 +482,49 @@ outDREAMzs_1p$Neff = effectiveSize(outDREAMzs_1p$chain[,1:3])
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_1p$chain[[1]])-1000):nrow(outDREAMzs_1p$chain[[1]])
 
-dir.create('DREAMzs1p/MCMC', showWarnings = FALSE)
-png('DREAMzs1p/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
+dir.create('DREAMzs_L15_VermPrecip_1962-2020/MCMC', showWarnings = FALSE)
+png('DREAMzs_L15_VermPrecip_1962-2020/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_1p$chain[,1:3], size = 0.05)
 dev.off()
 
-png('DREAMzs1p/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
 correlationPlot(outDREAMzs_1p$chain[sample_chain_inds,1:3], method = 'spearman')
 dev.off()
 
-png('DREAMzs1p/MCMC/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020/MCMC/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_1p, plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs1p/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_1p$chain[sample_chain_inds,1:3], prior = prior2$sampler(n = 50000), singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15))))
 dev.off()
 
-png('DREAMzs1p/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_pairs(outDREAMzs_1p$chain[sample_chain_inds,1:3], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-6,1),c(0,6),c(-15,0),c(-6,1),c(0,6),c(-15,0),c(-6,1),c(0,6)),
            ylim = rbind(c(0,NA),c(-15,0),c(-15,0),c(-6,0),c(0,NA),c(-6,0),c(0,6),c(0,6),c(0,NA)))
 dev.off()
 
-png('DREAMzs1p/MCMC/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020/MCMC/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_1p$chain[[1]][-1,1:3], lag.max = 100)
 dev.off()
 
-png('DREAMzs1p/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs_1p$chain, pars = outDREAMzs_1p$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs1p/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_1p$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs1p/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_1p$chain[sample_chain_inds,], pars = outDREAMzs_1p$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs1p/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_1p$chain[sample_chain_inds,], pars = outDREAMzs_1p$setup$names,
                prob_outer = 0.95)
 dev.off()
@@ -633,7 +633,7 @@ stopParallel(setUpDREAMzs_3p)
 
 # AGU Large Floods 1962-2020 FtSmith PCA----
 #  DREAMzs: prior #2----
-dir.create(path = 'DREAMzs3p_AGU', showWarnings = FALSE)
+dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020', showWarnings = FALSE)
 setUpDREAMzs_3p_AGU <- createBayesianSetup(likelihood_sm, prior = prior2, parallel = 7, 
                                        parallelOptions = list(packages=list('BayesianTools'), 
                                                               variables=list('X_holdsm','Y_holdsm', 'PCAcvs'), 
@@ -681,49 +681,49 @@ outDREAMzs_3p_AGU$Neff = effectiveSize(outDREAMzs_3p_AGU$chain[,1:3])
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_3p_AGU$chain[[1]])-1000):nrow(outDREAMzs_3p_AGU$chain[[1]])
 
-dir.create('DREAMzs3p_AGU/MCMC', showWarnings = FALSE)
-png('DREAMzs3p_AGU/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
+dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC', showWarnings = FALSE)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_3p_AGU$chain[,1:3], size = 0.05)
 dev.off()
 
-png('DREAMzs3p_AGU/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
 correlationPlot(outDREAMzs_3p_AGU$chain[sample_chain_inds,1:3], method = 'spearman')
 dev.off()
 
-png('DREAMzs3p_AGU/MCMC/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_3p_AGU, plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs3p_AGU/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_3p_AGU$chain[sample_chain_inds,1:3], prior = prior2$sampler(n = 50000), singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15))))
 dev.off()
 
-png('DREAMzs3p_AGU/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_pairs(outDREAMzs_3p_AGU$chain[sample_chain_inds,1:3], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-1,6),c(-1,6),c(-15,0),c(-1,6),c(-1,6),c(-15,0),c(-1,6),c(-1,6)),
            ylim = rbind(c(0,NA),c(-15,0),c(-15,0),c(-1,6),c(0,NA),c(-1,6),c(-1,6),c(-1,6),c(0,NA)))
 dev.off()
 
-png('DREAMzs3p_AGU/MCMC/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_3p_AGU$chain[[1]][-1,1:3], lag.max = 100)
 dev.off()
 
-png('DREAMzs3p_AGU/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs_3p_AGU$chain, pars = outDREAMzs_3p_AGU$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs3p_AGU/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_3p_AGU$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs3p_AGU/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_3p_AGU$chain[sample_chain_inds,], pars = outDREAMzs_3p_AGU$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs3p_AGU/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_3p_AGU$chain[sample_chain_inds,], pars = outDREAMzs_3p_AGU$setup$names,
                prob_outer = 0.95)
 dev.off()
@@ -734,7 +734,7 @@ stopParallel(setUpDREAMzs_3p_AGU)
 
 #Large Floods, 1915 - 2020, no data uncertainty----
 #  DREAMzs: prior #2----
-dir.create(path = 'DREAMzs_L15_NoUncertainty', showWarnings = FALSE)
+dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020', showWarnings = FALSE)
 setUpDREAMzs_NoUncertainty <- createBayesianSetup(likelihood_sm_1915, prior = prior2, parallel = 7, 
                                            parallelOptions = list(packages=list('BayesianTools'), 
                                                                   variables=list('X_L15sm','Y_L15sm', 'PCAcvs'), 
@@ -783,49 +783,49 @@ outDREAMzs_NoUncertainty$Neff = effectiveSize(outDREAMzs_NoUncertainty$chain[,1:
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_NoUncertainty$chain[[1]])-1000):nrow(outDREAMzs_NoUncertainty$chain[[1]])
 
-dir.create('DREAMzs_L15_NoUncertainty/MCMC', showWarnings = FALSE)
-png('DREAMzs_L15_NoUncertainty/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
+dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/MCMC', showWarnings = FALSE)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_NoUncertainty$chain[,1:3], size = 0.05)
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
 correlationPlot(outDREAMzs_NoUncertainty$chain[sample_chain_inds,1:3], method = 'spearman')
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/MCMC/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/MCMC/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_NoUncertainty, plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_NoUncertainty$chain[sample_chain_inds,1:3], prior = prior2$sampler(n = 50000), singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15))))
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_pairs(outDREAMzs_NoUncertainty$chain[sample_chain_inds,1:3], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-1,6),c(-1,6),c(-15,0),c(-1,6),c(-1,6),c(-15,0),c(-1,6),c(-1,6)),
            ylim = rbind(c(0,NA),c(-15,0),c(-15,0),c(-1,6),c(0,NA),c(-1,6),c(-1,6),c(-1,6),c(0,NA)))
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/MCMC/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/MCMC/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_NoUncertainty$chain[[1]][-1,1:3], lag.max = 100)
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs_NoUncertainty$chain, pars = outDREAMzs_NoUncertainty$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_NoUncertainty$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_NoUncertainty$chain[sample_chain_inds,], pars = outDREAMzs_NoUncertainty$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs_L15_NoUncertainty/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_NoUncertainty$chain[sample_chain_inds,], pars = outDREAMzs_NoUncertainty$setup$names,
                prob_outer = 0.95)
 dev.off()
@@ -1338,7 +1338,7 @@ settingsDREAMzs_L15_Hist = list(iterations = 2000000, gamma= NULL, eps = 0, e = 
                                   burnin = 50000, adaptation = 50000, thin = 100, message = FALSE, startValue = 7)
 
 # DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s----
-dir.create(path = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s', showWarnings = FALSE)
+dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020', showWarnings = FALSE)
 setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s <- createBayesianSetup(likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s, prior = prior_L15_unif_SensSpec_Hist, parallel = 7, 
                                                                     parallelOptions = list(packages=list('BayesianTools'), 
                                                                                            variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 'FloodMag_L15sm', 
@@ -1387,29 +1387,29 @@ outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$Neff = effectiveSize(outDREAMzs_L15
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])
 
-dir.create('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC', showWarnings = FALSE)
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
+dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC', showWarnings = FALSE)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:8], size = 0.05)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
 correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], method = 'spearman')
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:6], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,7:8], plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], 
              prior = prior_L15_unif_SensSpec_Hist$sampler(n = 50000), singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
@@ -1430,26 +1430,26 @@ mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,
                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA)))
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]][-1,1:8], lag.max = 100)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain, 
          pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,], 
            pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,], 
                pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$names,
                prob_outer = 0.95)
@@ -1460,7 +1460,7 @@ geweke.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:8], ask = 
 stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s)
 
 # DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s, pAll----
-dir.create(path = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll', showWarnings = FALSE)
+dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll', showWarnings = FALSE)
 setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll <- createBayesianSetup(likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll, prior = prior_L15_unif_SensSpec_pAll, parallel = 7, 
                                                                         parallelOptions = list(packages=list('BayesianTools'), 
                                                                                                variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 'FloodMag_L15sm', 
@@ -1510,56 +1510,56 @@ outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$Neff = effectiveSize(outDREAMz
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])
 
-dir.create('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC', showWarnings = FALSE)
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/traceplot2_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC', showWarnings = FALSE)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/traceplot2_panel1.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,1:9], size = 0.05)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/traceplot2_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/traceplot2_panel2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,10:14], size = 0.05)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/traceplot2_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/traceplot2_panel3.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,15:19], size = 0.05)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/traceplot2_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/traceplot2_panel4.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,20:24], size = 0.05)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
 correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,1:24], method = 'spearman')
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,1:6], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,7:12], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/gelmanplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/gelmanplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,13:18], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/gelmanplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/gelmanplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,19:24], plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/marginalplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/marginalplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,1:9], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,1:9], 
              singlePanel = FALSE, xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/marginalplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/marginalplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,10:14], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,10:14], 
              singlePanel = FALSE, xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/marginalplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/marginalplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,15:19], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,15:19], 
              singlePanel = FALSE, xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/marginalplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/marginalplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,20:24], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,20:24], 
              singlePanel = FALSE, xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
 
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,1:8], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-6,1),c(0,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
@@ -1580,35 +1580,35 @@ mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_
                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA)))
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,1:9], lag.max = 100)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/autocorrplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,10:14], lag.max = 100)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/autocorrplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,15:19], lag.max = 100)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/autocorrplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,20:24], lag.max = 100)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs__L15_pSensSpec_PCAcvs_Historical1s_pAll$chain, 
          pars = outDREAMzs__L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,], 
            pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,], 
                pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names,
                prob_outer = 0.95)
@@ -1619,7 +1619,7 @@ geweke.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,1:24], 
 stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll)
 
 # DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s, pAll, theta----
-dir.create(path = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta', showWarnings = FALSE)
+dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta', showWarnings = FALSE)
 setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta <- 
   createBayesianSetup(likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll_theta, 
                       prior = prior_L15_unif_SensSpec_pAll_theta, 
@@ -1689,88 +1689,88 @@ outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$Neff =
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])
 
-dir.create('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC', showWarnings = FALSE)
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/traceplot2.png', res = 300, units = 'in', 
+dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC', showWarnings = FALSE)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/traceplot2.png', res = 300, units = 'in', 
     width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,1:46], size = 0.05)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/correlplot.png', res = 300, units = 'in',
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/correlplot.png', res = 300, units = 'in',
     width = 14, height = 14)
 correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,1:46], method = 'spearman')
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,1:6], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,7:12], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel3.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel3.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,13:18], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel4.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel4.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,19:24], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel5.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel5.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,25:30], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel6.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel6.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,31:36], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel7.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel7.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,37:42], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/gelmanplot_panel8.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel8.png', res = 300, units = 'in', 
     width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,43:46], plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/marginalplot_panel1.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel1.png', res = 300, units = 'in', 
     width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,1:9], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,1:9], singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/marginalplot_panel2.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel2.png', res = 300, units = 'in', 
     width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,10:18], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,10:18], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/marginalplot_panel3.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel3.png', res = 300, units = 'in', 
     width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,19:27], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,19:27], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/marginalplot_panel4.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel4.png', res = 300, units = 'in', 
     width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,28:36], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,28:36], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/marginalplot_panel5.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel5.png', res = 300, units = 'in', 
     width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,37:45], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,37:45], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/marginalplot_panel6.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel6.png', res = 300, units = 'in', 
     width = 7, height = 7)
 marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,45:46], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,45:46], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1))))
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/PairPlot.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/PairPlot.png', res = 300, units = 'in', 
     width = 7, height = 7)
 mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,1:8], diag_fun = 'dens', 
            off_diag_fun = 'scatter', 
@@ -1793,23 +1793,23 @@ mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_
                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA)))
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain, 
          pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$names, lags = 100)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/densOverlay.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/densOverlay.png', res = 300, units = 'in', 
     width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,], 
            pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s_pAll_theta/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,], 
                pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$names,
                prob_outer = 0.95)
@@ -1912,7 +1912,7 @@ yrepSum97p5 = quantile(x = yrepSum, probs = 0.975)
 yrepSum2p5_0 = quantile(x = ncol(ppc$y)-yrepSum, probs = 0.025)
 yrepSum97p5_0 = quantile(x = ncol(ppc$y)-yrepSum, probs = 0.975)
 
-png('DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/MCMC/ppcbars.png', res=300, height = 5, width = 5, units = 'in')
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/ppcbars.png', res=300, height = 5, width = 5, units = 'in')
 #plot bars for the uncertain y
 barplot(height = c(mean(ncol(ppc$y)-ySum), mean(ySum)), space = 0, names.arg = c(0,1), col = 'gray', 
         border = 'white', ylim = c(0,100))
@@ -1930,11 +1930,11 @@ legend('topright', legend=c('y', 'yrep', 'certain y', 'uncertain y'), col = c('b
 dev.off()
 
 #Save data for plotting with premade python functions
-write.csv(ppc$y, file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/y.csv', row.names = FALSE)
-write.csv(ppc$yrep, file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/yrep.csv', row.names = FALSE)
-write.csv(ppc$pi, file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/p.csv', row.names = FALSE)
-write.csv(ppc$qi, file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/q.csv', row.names = FALSE)
-write.csv(years_L15sm, file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/years.csv', row.names = FALSE)
+write.csv(ppc$y, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/y.csv', row.names = FALSE)
+write.csv(ppc$yrep, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/yrep.csv', row.names = FALSE)
+write.csv(ppc$pi, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/p.csv', row.names = FALSE)
+write.csv(ppc$qi, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/q.csv', row.names = FALSE)
+write.csv(years_L15sm, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/years.csv', row.names = FALSE)
 
 #Sample from posterior, Lamontagne et al. model----
 ppSample_BestLamonMod = function(BTout, #output from a BayesianTools MCMC 
@@ -1993,14 +1993,14 @@ bayesplot::ppc_bars(y = Y_hold, yrep = ppc_BestLamonMod$yrep)
 ppc_BestLamonMod_1915 = ppSample_BestLamonMod(BTout = outDREAMzs_1p, n = 143, Xp = X[-which(is.na(X$Fort.Smith)),c(2,4)], 
                                               seed = 35, start1915 = TRUE, years = years_L15sm)
 
-write.csv(ppc_BestLamonMod_1915$yrep, file = 'DREAMzs1p/yrep.csv', row.names = FALSE)
-write.csv(ppc_BestLamonMod_1915$pi, file = 'DREAMzs1p/p.csv', row.names = FALSE)
+write.csv(ppc_BestLamonMod_1915$yrep, file = 'DREAMzs_L15_VermPrecip_1962-2020/yrep.csv', row.names = FALSE)
+write.csv(ppc_BestLamonMod_1915$pi, file = 'DREAMzs_L15_VermPrecip_1962-2020/p.csv', row.names = FALSE)
 
 #Save betas
-write.csv(ppc_BestLamonMod$param, file = 'DREAMzs1p/BayesBetas_hold.csv', row.names = FALSE)
-write.csv(ppc_BestLamonMod_LgSample$param, file = 'DREAMzs1p/BayesBetasLg_hold.csv', row.names = FALSE)
+write.csv(ppc_BestLamonMod$param, file = 'DREAMzs_L15_VermPrecip_1962-2020/BayesBetas_hold.csv', row.names = FALSE)
+write.csv(ppc_BestLamonMod_LgSample$param, file = 'DREAMzs_L15_VermPrecip_1962-2020/BayesBetasLg_hold.csv', row.names = FALSE)
 
-#Sample from posterior, DREAMzs3p_AGU----
+#Sample from posterior, DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020----
 ppSample_3p = function(BTout, #output from a BayesianTools MCMC 
                        n = 1000,     #number of posterior samples to draw from each chain
                        Xp,      #the X data to use in regression 
@@ -2060,8 +2060,8 @@ ppc_3p = ppSample_3p(BTout = outDREAMzs_3p_AGU, n = 143, Xp = predict(PCAcvs, X_
 ppc_3p_1915 = ppSample_3p(BTout = outDREAMzs_3p_AGU, n = 143, Xp = X[-which(is.na(X$Fort.Smith)),], 
                                               seed = 35, start1915 = TRUE, years = years_L15sm, PCA = PCAcvs)
 
-write.csv(ppc_3p_1915$yrep, file = 'DREAMzs3p_AGU/yrep.csv', row.names = FALSE)
-write.csv(ppc_3p_1915$pi, file = 'DREAMzs3p_AGU/p.csv', row.names = FALSE)
+write.csv(ppc_3p_1915$yrep, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/yrep.csv', row.names = FALSE)
+write.csv(ppc_3p_1915$pi, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/p.csv', row.names = FALSE)
 
 
 #Sample from posterior, no uncertainty 1915-2020----
@@ -2104,8 +2104,8 @@ ppSample_NoUncertainty = function(BTout, #output from a BayesianTools MCMC
 ppc_NoUncertainty = ppSample_NoUncertainty(BTout = outDREAMzs_NoUncertainty, n = 143, 
                                            Xp = predict(PCAcvs, X_L15sm), seed = 35)
 
-write.csv(ppc_NoUncertainty$yrep, file = 'DREAMzs_L15_NoUncertainty/yrep.csv', row.names = FALSE)
-write.csv(ppc_NoUncertainty$pi, file = 'DREAMzs_L15_NoUncertainty/p.csv', row.names = FALSE)
+write.csv(ppc_NoUncertainty$yrep, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/yrep.csv', row.names = FALSE)
+write.csv(ppc_NoUncertainty$pi, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/p.csv', row.names = FALSE)
 
 
 #Load in GCM predicted temperature and precipitation----
@@ -2212,67 +2212,67 @@ pmatGCM_3p = GCMprob(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc_3p_1915, yea
 pmatGCM_NoUncertainty = GCMprob(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc_NoUncertainty, years_L15sm)
 
 #Save for loading into plotting functions in Python
-write.csv(pmatGCM[,1,], file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/GCMp_Had85.csv', row.names = FALSE)
-write.csv(pmatGCM[,2,], file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/GCMp_Acc85.csv', row.names = FALSE)
-write.csv(pmatGCM[,3,], file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/GCMp_Can85.csv', row.names = FALSE)
-write.csv(pmatGCM[,4,], file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/GCMp_CCS85.csv', row.names = FALSE)
-write.csv(pmatGCM[,5,], file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/GCMp_CNR85.csv', row.names = FALSE)
-write.csv(pmatGCM[,6,], file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/GCMp_MPI85.csv', row.names = FALSE)
-write.csv(pmatGCM[,7,], file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/GCMp_Had45.csv', row.names = FALSE)
-write.csv(pmatGCM[,8,], file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/GCMp_Acc45.csv', row.names = FALSE)
-write.csv(pmatGCM[,9,], file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/GCMp_Can45.csv', row.names = FALSE)
-write.csv(pmatGCM[,10,], file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/GCMp_CCS45.csv', row.names = FALSE)
-write.csv(pmatGCM[,11,], file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/GCMp_CNR45.csv', row.names = FALSE)
-write.csv(pmatGCM[,12,], file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/GCMp_MPI45.csv', row.names = FALSE)
+write.csv(pmatGCM[,1,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Had85.csv', row.names = FALSE)
+write.csv(pmatGCM[,2,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Acc85.csv', row.names = FALSE)
+write.csv(pmatGCM[,3,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Can85.csv', row.names = FALSE)
+write.csv(pmatGCM[,4,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_CCS85.csv', row.names = FALSE)
+write.csv(pmatGCM[,5,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_CNR85.csv', row.names = FALSE)
+write.csv(pmatGCM[,6,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_MPI85.csv', row.names = FALSE)
+write.csv(pmatGCM[,7,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Had45.csv', row.names = FALSE)
+write.csv(pmatGCM[,8,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Acc45.csv', row.names = FALSE)
+write.csv(pmatGCM[,9,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Can45.csv', row.names = FALSE)
+write.csv(pmatGCM[,10,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_CCS45.csv', row.names = FALSE)
+write.csv(pmatGCM[,11,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_CNR45.csv', row.names = FALSE)
+write.csv(pmatGCM[,12,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_MPI45.csv', row.names = FALSE)
 
-write.csv(pmatGCM_hold[,1,], file = 'DREAMzs1p/GCMp_Had85_hold.csv', row.names = FALSE)
-write.csv(pmatGCM_hold[,2,], file = 'DREAMzs1p/GCMp_Acc85_hold.csv', row.names = FALSE)
-write.csv(pmatGCM_hold[,3,], file = 'DREAMzs1p/GCMp_Can85_hold.csv', row.names = FALSE)
-write.csv(pmatGCM_hold[,4,], file = 'DREAMzs1p/GCMp_CCS85_hold.csv', row.names = FALSE)
-write.csv(pmatGCM_hold[,5,], file = 'DREAMzs1p/GCMp_CNR85_hold.csv', row.names = FALSE)
-write.csv(pmatGCM_hold[,6,], file = 'DREAMzs1p/GCMp_MPI85_hold.csv', row.names = FALSE)
-write.csv(pmatGCM_hold[,7,], file = 'DREAMzs1p/GCMp_Had45_hold.csv', row.names = FALSE)
-write.csv(pmatGCM_hold[,8,], file = 'DREAMzs1p/GCMp_Acc45_hold.csv', row.names = FALSE)
-write.csv(pmatGCM_hold[,9,], file = 'DREAMzs1p/GCMp_Can45_hold.csv', row.names = FALSE)
-write.csv(pmatGCM_hold[,10,], file = 'DREAMzs1p/GCMp_CCS45_hold.csv', row.names = FALSE)
-write.csv(pmatGCM_hold[,11,], file = 'DREAMzs1p/GCMp_CNR45_hold.csv', row.names = FALSE)
-write.csv(pmatGCM_hold[,12,], file = 'DREAMzs1p/GCMp_MPI45_hold.csv', row.names = FALSE)
+write.csv(pmatGCM_hold[,1,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_Had85_hold.csv', row.names = FALSE)
+write.csv(pmatGCM_hold[,2,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_Acc85_hold.csv', row.names = FALSE)
+write.csv(pmatGCM_hold[,3,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_Can85_hold.csv', row.names = FALSE)
+write.csv(pmatGCM_hold[,4,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_CCS85_hold.csv', row.names = FALSE)
+write.csv(pmatGCM_hold[,5,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_CNR85_hold.csv', row.names = FALSE)
+write.csv(pmatGCM_hold[,6,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_MPI85_hold.csv', row.names = FALSE)
+write.csv(pmatGCM_hold[,7,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_Had45_hold.csv', row.names = FALSE)
+write.csv(pmatGCM_hold[,8,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_Acc45_hold.csv', row.names = FALSE)
+write.csv(pmatGCM_hold[,9,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_Can45_hold.csv', row.names = FALSE)
+write.csv(pmatGCM_hold[,10,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_CCS45_hold.csv', row.names = FALSE)
+write.csv(pmatGCM_hold[,11,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_CNR45_hold.csv', row.names = FALSE)
+write.csv(pmatGCM_hold[,12,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_MPI45_hold.csv', row.names = FALSE)
 
-write.csv(pmatGCM_3p[,1,], file = 'DREAMzs3p_AGU/GCMp_Had85_cvsp.csv', row.names = FALSE)
-write.csv(pmatGCM_3p[,2,], file = 'DREAMzs3p_AGU/GCMp_Acc85_cvsp.csv', row.names = FALSE)
-write.csv(pmatGCM_3p[,3,], file = 'DREAMzs3p_AGU/GCMp_Can85_cvsp.csv', row.names = FALSE)
-write.csv(pmatGCM_3p[,4,], file = 'DREAMzs3p_AGU/GCMp_CCS85_cvsp.csv', row.names = FALSE)
-write.csv(pmatGCM_3p[,5,], file = 'DREAMzs3p_AGU/GCMp_CNR85_cvsp.csv', row.names = FALSE)
-write.csv(pmatGCM_3p[,6,], file = 'DREAMzs3p_AGU/GCMp_MPI85_cvsp.csv', row.names = FALSE)
-write.csv(pmatGCM_3p[,7,], file = 'DREAMzs3p_AGU/GCMp_Had45_cvsp.csv', row.names = FALSE)
-write.csv(pmatGCM_3p[,8,], file = 'DREAMzs3p_AGU/GCMp_Acc45_cvsp.csv', row.names = FALSE)
-write.csv(pmatGCM_3p[,9,], file = 'DREAMzs3p_AGU/GCMp_Can45_cvsp.csv', row.names = FALSE)
-write.csv(pmatGCM_3p[,10,], file = 'DREAMzs3p_AGU/GCMp_CCS45_cvsp.csv', row.names = FALSE)
-write.csv(pmatGCM_3p[,11,], file = 'DREAMzs3p_AGU/GCMp_CNR45_cvsp.csv', row.names = FALSE)
-write.csv(pmatGCM_3p[,12,], file = 'DREAMzs3p_AGU/GCMp_MPI45_cvsp.csv', row.names = FALSE)
+write.csv(pmatGCM_3p[,1,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/GCMp_Had85_cvsp.csv', row.names = FALSE)
+write.csv(pmatGCM_3p[,2,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/GCMp_Acc85_cvsp.csv', row.names = FALSE)
+write.csv(pmatGCM_3p[,3,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/GCMp_Can85_cvsp.csv', row.names = FALSE)
+write.csv(pmatGCM_3p[,4,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/GCMp_CCS85_cvsp.csv', row.names = FALSE)
+write.csv(pmatGCM_3p[,5,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/GCMp_CNR85_cvsp.csv', row.names = FALSE)
+write.csv(pmatGCM_3p[,6,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/GCMp_MPI85_cvsp.csv', row.names = FALSE)
+write.csv(pmatGCM_3p[,7,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/GCMp_Had45_cvsp.csv', row.names = FALSE)
+write.csv(pmatGCM_3p[,8,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/GCMp_Acc45_cvsp.csv', row.names = FALSE)
+write.csv(pmatGCM_3p[,9,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/GCMp_Can45_cvsp.csv', row.names = FALSE)
+write.csv(pmatGCM_3p[,10,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/GCMp_CCS45_cvsp.csv', row.names = FALSE)
+write.csv(pmatGCM_3p[,11,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/GCMp_CNR45_cvsp.csv', row.names = FALSE)
+write.csv(pmatGCM_3p[,12,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/GCMp_MPI45_cvsp.csv', row.names = FALSE)
 
-write.csv(pmatGCM_NoUncertainty[,1,], file = 'DREAMzs_L15_NoUncertainty/GCMp_Had85_NoUncertainty.csv', row.names = FALSE)
-write.csv(pmatGCM_NoUncertainty[,2,], file = 'DREAMzs_L15_NoUncertainty/GCMp_Acc85_NoUncertainty.csv', row.names = FALSE)
-write.csv(pmatGCM_NoUncertainty[,3,], file = 'DREAMzs_L15_NoUncertainty/GCMp_Can85_NoUncertainty.csv', row.names = FALSE)
-write.csv(pmatGCM_NoUncertainty[,4,], file = 'DREAMzs_L15_NoUncertainty/GCMp_CCS85_NoUncertainty.csv', row.names = FALSE)
-write.csv(pmatGCM_NoUncertainty[,5,], file = 'DREAMzs_L15_NoUncertainty/GCMp_CNR85_NoUncertainty.csv', row.names = FALSE)
-write.csv(pmatGCM_NoUncertainty[,6,], file = 'DREAMzs_L15_NoUncertainty/GCMp_MPI85_NoUncertainty.csv', row.names = FALSE)
-write.csv(pmatGCM_NoUncertainty[,7,], file = 'DREAMzs_L15_NoUncertainty/GCMp_Had45_NoUncertainty.csv', row.names = FALSE)
-write.csv(pmatGCM_NoUncertainty[,8,], file = 'DREAMzs_L15_NoUncertainty/GCMp_Acc45_NoUncertainty.csv', row.names = FALSE)
-write.csv(pmatGCM_NoUncertainty[,9,], file = 'DREAMzs_L15_NoUncertainty/GCMp_Can45_NoUncertainty.csv', row.names = FALSE)
-write.csv(pmatGCM_NoUncertainty[,10,], file = 'DREAMzs_L15_NoUncertainty/GCMp_CCS45_NoUncertainty.csv', row.names = FALSE)
-write.csv(pmatGCM_NoUncertainty[,11,], file = 'DREAMzs_L15_NoUncertainty/GCMp_CNR45_NoUncertainty.csv', row.names = FALSE)
-write.csv(pmatGCM_NoUncertainty[,12,], file = 'DREAMzs_L15_NoUncertainty/GCMp_MPI45_NoUncertainty.csv', row.names = FALSE)
+write.csv(pmatGCM_NoUncertainty[,1,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_Had85_NoUncertainty.csv', row.names = FALSE)
+write.csv(pmatGCM_NoUncertainty[,2,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_Acc85_NoUncertainty.csv', row.names = FALSE)
+write.csv(pmatGCM_NoUncertainty[,3,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_Can85_NoUncertainty.csv', row.names = FALSE)
+write.csv(pmatGCM_NoUncertainty[,4,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_CCS85_NoUncertainty.csv', row.names = FALSE)
+write.csv(pmatGCM_NoUncertainty[,5,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_CNR85_NoUncertainty.csv', row.names = FALSE)
+write.csv(pmatGCM_NoUncertainty[,6,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_MPI85_NoUncertainty.csv', row.names = FALSE)
+write.csv(pmatGCM_NoUncertainty[,7,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_Had45_NoUncertainty.csv', row.names = FALSE)
+write.csv(pmatGCM_NoUncertainty[,8,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_Acc45_NoUncertainty.csv', row.names = FALSE)
+write.csv(pmatGCM_NoUncertainty[,9,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_Can45_NoUncertainty.csv', row.names = FALSE)
+write.csv(pmatGCM_NoUncertainty[,10,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_CCS45_NoUncertainty.csv', row.names = FALSE)
+write.csv(pmatGCM_NoUncertainty[,11,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_CNR45_NoUncertainty.csv', row.names = FALSE)
+write.csv(pmatGCM_NoUncertainty[,12,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_MPI45_NoUncertainty.csv', row.names = FALSE)
 
 #Save all floods for use in plotting
 Y_L62t20 = Data$Flood[Data$Year >= 1962]
-write.csv(Y_L62t20, file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/yL62t20.csv', row.names = FALSE)
-write.csv(Y_L15sm[years_L15sm > 1961], file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/yL15sm62t20.csv', 
+write.csv(Y_L62t20, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/yL62t20.csv', row.names = FALSE)
+write.csv(Y_L15sm[years_L15sm > 1961], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/yL15sm62t20.csv', 
           row.names = FALSE)
-write.csv(Y_hold[years_hold>1961], file = 'DREAMzs1p/y62t20.csv', row.names = FALSE)
+write.csv(Y_hold[years_hold>1961], file = 'DREAMzs_L15_VermPrecip_1962-2020/y62t20.csv', row.names = FALSE)
 #Save years
-write.csv(DDFChip$year, file = 'DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s/year62t2099.csv', row.names = FALSE)
-write.csv(DDFChip_hold$year, file = 'DREAMzs1p/year62t2099.csv', row.names = FALSE)
+write.csv(DDFChip$year, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/year62t2099.csv', row.names = FALSE)
+write.csv(DDFChip_hold$year, file = 'DREAMzs_L15_VermPrecip_1962-2020/year62t2099.csv', row.names = FALSE)
 
 #Diagnose GCMs----
 #Vermillion consistently warmer than others. Smith and Chip most similar
