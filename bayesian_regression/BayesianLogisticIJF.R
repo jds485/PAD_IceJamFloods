@@ -2137,6 +2137,10 @@ DDFVerm = DDFVerm[-which(!(DDFVerm$year %in% years_L15sm) & (DDFVerm$year <= 202
 DDFSmith = DDFSmith[-which(!(DDFSmith$year %in% years_L15sm) & (DDFSmith$year <= 2020)),]
 PrecipGPBL = PrecipGPBL[-which(!(PrecipGPBL$year %in% years_L15sm) & (PrecipGPBL$year <= 2020)),]
 
+#Names of GCMs and RCPs
+names_GCMs = c(paste(c('HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR'), 'RCP85', sep = '_'),
+               paste(c('HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR'), 'RCP45', sep = '_'))
+
 #GCM probability
 GCMprob = function(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc, years_L15sm){
   #Transform with standardization and PCA loadings
@@ -2158,6 +2162,18 @@ GCMprob = function(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc, years_L15sm){
     colnames(mati) = colnames(X)[1:4]
     #Get PCs with same transformation as before, and retain first 2
     PCi = predict(object = PCAcvs, newdata = mati)[,1:2]
+    
+    png(paste0('GCM_',names_GCMs[i], '_PCs.png'), res = 300, units = 'in', width = 5, height = 5)
+    plot(predPCAcvs[,1], predPCAcvs[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, col = 'gray',
+         xlab = 'PC1', ylab = 'PC2', main = names_GCMs[i], cex.axis = 0.5, cex.lab = 0.9)
+    par(new = T)
+    plot(predPCAcvs[Y_L15sm == 1,1], predPCAcvs[Y_L15sm == 1,2], ylim = c(-3,6), 
+         xlim = c(-10,5), pch = 16, col = 'orange', axes = FALSE, xlab = '', ylab = '')
+    par(new = T)
+    plot(PCi[,1], PCi[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, axes = FALSE, xlab = '', ylab = '')
+    legend('bottomleft', legend = c('Projected Conditions', '1915-2020 Conditions', 'Recorded Large Floods'),
+           col = c('black', 'gray', 'orange'), pch = 16)
+    dev.off()
     
     #Use PCs to predict IJFs with sampled params matrix
     #Get predicted p prob for each of the parameter sets
@@ -2188,6 +2204,19 @@ GCMprob_hold = function(DDFVerm_hold, PrecipGPBL_hold, X, ppc_BestLamonMod, year
     #Matrix of variables for PCA
     mati = cbind((DDFVerm_hold[,i+1] - MeanGCM[2])/SdGCM[2], 
                  (PrecipGPBL_hold[,i+1] - MeanGCM[4])/SdGCM[4])
+    
+    png(paste0('GCM_',names_GCMs[i], '_FtVermGPBL.png'), res = 300, units = 'in', width = 5, height = 5)
+    plot(X_hold[,3], X_hold[,5], pch = 16, col = 'gray',
+         xlab = 'Ft. Vermillion DDF', ylab = 'GP/BL Precipitation', main = names_GCMs[i], 
+         cex.axis = 0.5, cex.lab = 0.9, xlim = c(-5,5), ylim = c(-4,5))
+    par(new = T)
+    plot(X_hold[Y_hold == 1,3], X_hold[Y_hold == 1,5], 
+         xlim = c(-5,5), ylim = c(-4,5), pch = 16, col = 'orange', axes = FALSE, xlab = '', ylab = '')
+    par(new = T)
+    plot(mati[,1], mati[,2], xlim = c(-5,5), ylim = c(-4,5), pch = 16, axes = FALSE, xlab = '', ylab = '')
+    legend('bottomleft', legend = c('Projected Conditions', '1915-2020 Conditions', 'Recorded Large Floods'),
+           col = c('black', 'gray', 'orange'), pch = 16)
+    dev.off()
     
     #Predict IJFs with sampled params matrix
     #Get predicted p prob for each of the parameter sets
