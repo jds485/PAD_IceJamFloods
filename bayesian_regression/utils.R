@@ -156,8 +156,8 @@ plot_EDA_PCA_MSFloodsPre1962_color = function(fname, X, X_label, Y_label, Y, Flo
          title = expression(bold('Flood Magnitude')), title.adj = 0.1,
          col = c('orange3', 'orange', 'green', 'blue', 'pink', 'black', gray(0.6)), pch = 16, cex = .7, bty = 'n')
   par(xpd = TRUE)
-  text(x = -6.9, y = 3.2, 'More\nSnow')
-  text(x = 5, y = -4, 'Colder')
+  #text(x = -6.9, y = 3.2, 'More\nSnow')
+  #text(x = 5, y = -4, 'Colder')
   par(xpd = FALSE)
   dev.off()
 }
@@ -216,8 +216,8 @@ plot_EDA_PCA_MSFloodsPre1962_fill = function(fname, X, X_label, Y_label, Y, Floo
          col = gray(0.6), 
          pch = c(16,1), cex = .7, bty = 'n')
   par(xpd = TRUE)
-  text(x = -6.9, y = 3.2, 'More\nSnow')
-  text(x = 5, y = -4, 'Colder')
+  #text(x = -6.9, y = 3.2, 'More\nSnow')
+  #text(x = 5, y = -4, 'Colder')
   par(xpd = FALSE)
   if(!is.null(label_mag)){
     if(label_mag == 'L'){

@@ -1459,6 +1459,11 @@ geweke.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:8], ask = 
 
 stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s)
 
+# Figure 3----
+pdf('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/Fig3-densOverlay.pdf', width = 7, height = 7)
+mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], color_chains = FALSE)
+dev.off()
+
 # DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s, pAll----
 dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll', showWarnings = FALSE)
 setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll <- createBayesianSetup(likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll, prior = prior_L15_unif_SensSpec_pAll, parallel = 7, 
@@ -2142,6 +2147,9 @@ names_GCMs = c(paste(c('HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MP
                paste(c('HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MPI-ESM-LR'), 'RCP45', sep = '_'))
 
 #GCM probability
+dir.create('EDA/ProjectedPCsGCMs', showWarnings = FALSE)
+dir.create('EDA/ProjectedPCsGCMs/RawAxes', showWarnings = FALSE)
+dir.create('EDA/ProjectedPCsGCMs/PCAxes', showWarnings = FALSE)
 GCMprob = function(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc, years_L15sm){
   #Transform with standardization and PCA loadings
   MeanGCM = as.numeric(colMeans(X[!apply(X = is.na(as.matrix(X[,c(1,2,3,4)])), MARGIN = 1, FUN = any),]))
@@ -2163,7 +2171,7 @@ GCMprob = function(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc, years_L15sm){
     #Get PCs with same transformation as before, and retain first 2
     PCi = predict(object = PCAcvs, newdata = mati)[,1:2]
     
-    png(paste0('GCM_',names_GCMs[i], '_PCs.png'), res = 300, units = 'in', width = 5, height = 5)
+    png(paste0('EDA/ProjectedPCsGCMs/PCAxes/GCM_',names_GCMs[i], '_PCs.png'), res = 300, units = 'in', width = 5, height = 5)
     plot(predPCAcvs[,1], predPCAcvs[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, col = 'gray',
          xlab = 'PC1', ylab = 'PC2', main = names_GCMs[i], cex.axis = 0.5, cex.lab = 0.9)
     par(new = T)
@@ -2172,7 +2180,7 @@ GCMprob = function(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc, years_L15sm){
     par(new = T)
     plot(PCi[,1], PCi[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, axes = FALSE, xlab = '', ylab = '')
     legend('bottomleft', legend = c('Projected Conditions', '1915-2020 Conditions', 'Recorded Large Floods'),
-           col = c('black', 'gray', 'orange'), pch = 16)
+           col = c('black', 'gray', 'orange'), pch = 16, cex = 0.7)
     dev.off()
     
     #Use PCs to predict IJFs with sampled params matrix
@@ -2205,7 +2213,7 @@ GCMprob_hold = function(DDFVerm_hold, PrecipGPBL_hold, X, ppc_BestLamonMod, year
     mati = cbind((DDFVerm_hold[,i+1] - MeanGCM[2])/SdGCM[2], 
                  (PrecipGPBL_hold[,i+1] - MeanGCM[4])/SdGCM[4])
     
-    png(paste0('GCM_',names_GCMs[i], '_FtVermGPBL.png'), res = 300, units = 'in', width = 5, height = 5)
+    png(paste0('EDA/ProjectedPCsGCMs/RawAxes/GCM_',names_GCMs[i], '_FtVermGPBL.png'), res = 300, units = 'in', width = 5, height = 5)
     plot(X_hold[,3], X_hold[,5], pch = 16, col = 'gray',
          xlab = 'Ft. Vermillion DDF', ylab = 'GP/BL Precipitation', main = names_GCMs[i], 
          cex.axis = 0.5, cex.lab = 0.9, xlim = c(-5,5), ylim = c(-4,5))
@@ -2215,7 +2223,7 @@ GCMprob_hold = function(DDFVerm_hold, PrecipGPBL_hold, X, ppc_BestLamonMod, year
     par(new = T)
     plot(mati[,1], mati[,2], xlim = c(-5,5), ylim = c(-4,5), pch = 16, axes = FALSE, xlab = '', ylab = '')
     legend('bottomleft', legend = c('Projected Conditions', '1915-2020 Conditions', 'Recorded Large Floods'),
-           col = c('black', 'gray', 'orange'), pch = 16)
+           col = c('black', 'gray', 'orange'), pch = 16, cex = 0.7)
     dev.off()
     
     #Predict IJFs with sampled params matrix
