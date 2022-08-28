@@ -24,7 +24,7 @@ random.seed(51321)
 np.random.seed(51321)
 
 #Model Considering uncertainty in historical data
-os.chdir('./DREAMzs2_L15_FixY_PCAcvs_pSensSpec_Historical1s')
+os.chdir('./DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020')
 #Load data from R
 #Prob Z=1|X of flood
 p_L15sm = np.loadtxt('p.csv',delimiter=',',skiprows=1)
@@ -421,7 +421,7 @@ del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 
 
 #1962-present – best model based on only that data
-os.chdir('../../DREAMzs1p')
+os.chdir('../../DREAMzs_L15_VermPrecip_1962-2020')
 #Load data from R
 #Prob Z=1|X of flood
 p_vp = np.loadtxt('p.csv',delimiter=',',skiprows=1)
@@ -662,7 +662,7 @@ del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 
 
 #1962-present – best model with Ft. Smith
-os.chdir('../../DREAMzs3p_AGU')
+os.chdir('../../DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020')
 #Load data from R
 #Prob Z=1|X of flood
 p_cvsp = np.loadtxt('p.csv',delimiter=',',skiprows=1)
@@ -900,7 +900,7 @@ del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 
 
 #1915-present – no uncertainty considered
-os.chdir('../../DREAMzs_L15_NoUncertainty')
+os.chdir('../../DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020')
 #Load data from R
 #Prob Z=1|X of flood
 p_NoUncertainty = np.loadtxt('p.csv',delimiter=',',skiprows=1)
@@ -1321,8 +1321,8 @@ del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 #[beta_boot,bootstrap_X,bootstrap_Y] = boot_master(X_boot,Y_boot,columns=[1,3],M=1000,param=True,res=res_Firth, Firth=True, resBase=resBase)
 #
 ##Load beta_boot with Bayesian estimated betas
-#beta_boot_Bayes = np.loadtxt('../bayesian_regression/DREAMzs1p/BayesBetas_hold.csv',delimiter=',',skiprows=1)
-#beta_boot_BayesLg = np.loadtxt('../bayesian_regression/DREAMzs1p/BayesBetasLg_hold.csv',delimiter=',',skiprows=1)
+#beta_boot_Bayes = np.loadtxt('../bayesian_regression/DREAMzs_L15_VermPrecip_1962-2020/BayesBetas_hold.csv',delimiter=',',skiprows=1)
+#beta_boot_BayesLg = np.loadtxt('../bayesian_regression/DREAMzs_L15_VermPrecip_1962-2020/BayesBetasLg_hold.csv',delimiter=',',skiprows=1)
 #
 ##pair plot of the beta empirical distribution
 #betas_boot_df = pd.DataFrame(data=beta_boot, columns = ['Constant', 'DDF Fort Verm.', 'GP/BL Precip.'])
