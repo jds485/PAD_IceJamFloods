@@ -223,27 +223,27 @@ plot_EDA_PCA_MSFloodsPre1962_fill = function(fname, X, X_label, Y_label, Y, Floo
     if(label_mag == 'L'){
       text(x = X$x[,1][which((Y == 1) & (FloodMag == 'L') & (years < 1962))],
            y = X$x[,2][which((Y == 1) & (FloodMag == 'L') & (years < 1962))],
-           paste0('pL', seq(1,6,1)))
+           paste0('L', seq(1,6,1)))
     }
     if(label_mag == 'M'){
       text(x = X$x[,1][which((Y == 1) & (FloodMag == 'M') & (years < 1962))],
            y = X$x[,2][which((Y == 1) & (FloodMag == 'M') & (years < 1962))],
-           paste0('pM', seq(1,5,1)))
+           paste0('M', seq(1,5,1)))
     }
     if(label_mag == 'S'){
       text(x = X$x[,1][which((Y == 1) & (FloodMag == 'S') & (years < 1962))],
            y = X$x[,2][which((Y == 1) & (FloodMag == 'S') & (years < 1962))],
-           paste0('pS', seq(1,5,1)))
+           paste0('S', seq(1,5,1)))
     }
     if(label_mag == 'U'){
       text(x = X$x[,1][which((FloodMag == 'U'))],
            y = X$x[,2][which((FloodMag == 'U'))],
-           paste0('pU', seq(1,4,1)))
+           paste0('U', seq(1,4,1)))
     }
     if(label_mag == 'N'){
       text(x = X$x[,1][which((FloodMag == 'N') & (years < 1962))],
            y = X$x[,2][which((FloodMag == 'N') & (years < 1962))],
-           paste0('pN', seq(1,length(which((FloodMag == 'N') & (years < 1962))),1)), col = 'purple', cex = 0.7)
+           paste0('N', seq(1,length(which((FloodMag == 'N') & (years < 1962))),1)), col = 'purple', cex = 0.7)
     }
   }
   dev.off()

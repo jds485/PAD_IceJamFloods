@@ -1343,7 +1343,7 @@ setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s <- createBayesianSetup(likelihood
                                                                     parallelOptions = list(packages=list('BayesianTools'), 
                                                                                            variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 'FloodMag_L15sm', 
                                                                                                           'years_L15sm'), dlls=NULL), 
-                                                                    names = c('Int', 'PC1', 'PC2', 'pLL', 'pML', 'pSL', 'pUL', 'pNN'), 
+                                                                    names = c('Int', 'PC1', 'PC2', 'pLL', 'pLM', 'pLS', 'pLU', 'pNN'), 
                                                                     plotLower = c(-15, -1, -1,0,0,0,0,0), plotUpper = c(0, 6, 6,1,1,1,1,1), 
                                                                     plotBest = c(as.numeric(res_Firth_L15_PC3$coefficients),0.8,0.5,0.2,0.5,0.5))
 set.seed(26440)
@@ -1461,7 +1461,8 @@ stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s)
 
 # Figure 3----
 pdf('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/Fig3-densOverlay.pdf', width = 7, height = 7)
-mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], color_chains = FALSE)
+mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], color_chains = FALSE) +
+  theme(strip.text.x = element_text(size=14))
 dev.off()
 
 # DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s, pAll----
@@ -1470,8 +1471,8 @@ setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll <- createBayesianSetup(likel
                                                                         parallelOptions = list(packages=list('BayesianTools'), 
                                                                                                variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 'FloodMag_L15sm', 
                                                                                                               'years_L15sm'), dlls=NULL), 
-                                                                        names = c('Int', 'PC1', 'PC2', paste0('pLL',seq(1,6,1)), paste0('pML',seq(1,5,1)), 
-                                                                                  paste0('pSL',seq(1,5,1)), paste0('pUL',seq(1,4,1)), 'pNN'), 
+                                                                        names = c('Int', 'PC1', 'PC2', paste0('pLL',seq(1,6,1)), paste0('pLM',seq(1,5,1)), 
+                                                                                  paste0('pLS',seq(1,5,1)), paste0('pLU',seq(1,4,1)), 'pNN'), 
                                                                         plotLower = c(-15, -6, 0,rep(0,21)), plotUpper = c(0, 2, 6,rep(1,21)), 
                                                                         plotBest = c(as.numeric(res_Firth$coefficients),rep(0.5,21)))
 set.seed(26441)
@@ -1632,8 +1633,8 @@ setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta <-
                                                            variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 
                                                                           'FloodMag_L15sm', 'years_L15sm'), dlls=NULL), 
                                                                         
-                      names = c('Int', 'PC1', 'PC2', paste0('pLL',seq(1,6,1)), paste0('pML',seq(1,5,1)), 
-                                paste0('pSL',seq(1,5,1)), paste0('pUL',seq(1,4,1)), paste0('pNN',seq(1,23,1))), 
+                      names = c('Int', 'PC1', 'PC2', paste0('pLL',seq(1,6,1)), paste0('pLM',seq(1,5,1)), 
+                                paste0('pLS',seq(1,5,1)), paste0('pLU',seq(1,4,1)), paste0('pNN',seq(1,23,1))), 
                       plotLower = c(-15, -6, 0,rep(0,43)), plotUpper = c(0, 2, 6,rep(1,43)), 
                       plotBest = c(as.numeric(res_Firth$coefficients),rep(0.5,43)))
 set.seed(31422)
