@@ -341,7 +341,33 @@ for scenario in range(len(GCMs)):
         probMA2[:,i] = moving_average(prob[:,scenario+6,i],window)
     #Probability
     plt_perc = np.percentile(probMA,percentiles,axis=1)
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]])
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]])
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]])
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]])
+    
     plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]])
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]])
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]])
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]])
+    
     percentile_fill_plot_single(plt_perc,
                                 title=GCMs[scenario]+': '+str(window)+'-year Average IJF Probability\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                 ylabel='IJF Probability',
@@ -641,7 +667,33 @@ for scenario in range(len(GCMs)):
         probMA2[:,i] = moving_average(prob_hold[:,scenario+6,i],window)
     #Probability
     plt_perc = np.percentile(probMA,percentiles,axis=1)
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]])
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]])
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]])
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]])
+    
     plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]])
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]])
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]])
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]])
+    
     percentile_fill_plot_single(plt_perc,
                                 title=GCMs[scenario]+': '+str(window)+'-year Average IJF Probability\nModel: Lamontagne et al. Best Model, Trained 1962-2020',
                                 ylabel='IJF Probability',
@@ -879,7 +931,34 @@ for scenario in range(len(GCMs)):
         probMA2[:,i] = moving_average(prob_cvsp[:,scenario+6,i],window)
     #Probability
     plt_perc = np.percentile(probMA,percentiles,axis=1)
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]])
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]])
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]])
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]])
+    
+    
     plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]])
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]])
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]])
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]])
+    
     percentile_fill_plot_single(plt_perc,
                                 title=GCMs[scenario]+': '+str(window)+'-year Average IJF Probability\nModel: Best Model with Ft. Smith, Trained 1962-2020',
                                 ylabel='IJF Probability',
@@ -1120,7 +1199,34 @@ for scenario in range(len(GCMs)):
         probMA2[:,i] = moving_average(prob_NoUncertainty[:,scenario+6,i],window)
     #Probability
     plt_perc = np.percentile(probMA,percentiles,axis=1)
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]])
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]])
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]])
+    #np.average(probMA,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    #plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    np.diff(plt_perc[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]])
+    
+    
     plt_perc2 = np.percentile(probMA2,percentiles,axis=1)
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2020)[0][0]])
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2040)[0][0]])
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2060)[0][0]])
+    #np.average(probMA2,axis=1)[np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    #plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]]
+    np.diff(plt_perc2[[1,3],np.where(GCMyears[(window-1):(np.shape(GCMyears)[0])] == 2080)[0][0]])
+    
     percentile_fill_plot_single(plt_perc,
                                 title=GCMs[scenario]+': '+str(window)+'-year Average IJF Probability\nModel: No Historical Uncertainty, Trained 1915-2020',
                                 ylabel='IJF Probability',
