@@ -1,5 +1,7 @@
 #Code source
 #https://rdrr.io/cran/bayesplot/src/R/mcmc-scatterplots.R#sym-is_lower_tri
+#Edits are made to the mcmc_pairs function to add xlim and ylim args.
+
 
 check_ignored_arguments <- function(..., ok_args = character()) {
   dots <- list(...)
