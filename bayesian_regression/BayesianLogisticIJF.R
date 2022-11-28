@@ -1,4 +1,5 @@
 #Bayesian Logistic Regression Model of Peace Athabasca Delta Large Ice Jam Floods
+# Developed in R version 3.5.3 on Windows
 # The working directory should be the location of this R script:
 # "LogisticPADIJF\\PAD_IceJamFloods\\bayesian_regression"
 
@@ -116,53 +117,59 @@ plot_EDA_MSFloodsPre1962('EDA/EDA_GPBLPrecip+FtSmithDDF_MSFloodsPre1962.png', X_
 PCAcvs_All15 = prcomp(x = X_All15sm[,c(2,3,4,5)])
 PCAcvs_All15$varRatio = PCAcvs_All15$sdev^2 / sum(PCAcvs_All15$sdev^2)
 plot_EDA_PCA_MSFloodsPre1962_color(fname = 'EDA/PCAcvsp_MSFloodsPre1962_Color.png', X = PCAcvs_All15,
-                                   X_label = 'PC1 - Mostly Winter Degree-Days Freezing (81% variance)',
-                                   Y_label = 'PC2 - Mostly Winter Snowpack (15% variance)', 
+                                   X_label = 'PC1 (81% variance)',
+                                   Y_label = 'PC2 (15% variance)', 
                                    Y = Y_All15sm, FloodMag = FloodMag_All15sm, years = years_All15sm)
 
 plot_EDA_PCA_MSFloodsPre1962_fill(fname = 'EDA/PCAcvsp_MSFloodsPre1962_Fill.png', X = PCAcvs_All15,
-                                   X_label = 'PC1 - Mostly Winter Degree-Days Freezing (81% variance)',
-                                   Y_label = 'PC2 - Mostly Winter Snowpack (15% variance)', 
+                                   X_label = 'PC1 (81% variance)',
+                                   Y_label = 'PC2 (15% variance)', 
                                    Y = Y_All15sm, FloodMag = FloodMag_All15sm, years = years_All15sm)
 
 #  Figure 2----
 plot_EDA_PCA_MSFloodsPre1962_fill(fname = 'EDA/Fig2-PCA_fill.pdf', X = PCAcvs_All15,
-                                  X_label = 'PC1 - Mostly Winter Degree-Days Freezing (81% variance)',
-                                  Y_label = 'PC2 - Mostly Winter Snowpack (15% variance)', 
+                                  X_label = 'PC1 (81% variance)',
+                                  Y_label = 'PC2 (15% variance)', 
                                   Y = Y_All15sm, FloodMag = FloodMag_All15sm, years = years_All15sm, pdf = TRUE)
+
+#for PPT animation
+plot_EDA_PCA_MSFloodsPre1962_fill_animation(fname = 'EDA/Fig2-PCA_fill_animate', X = PCAcvs_All15,
+                                  X_label = 'PC1 (81% variance): Mostly Winter Degree-Days Freezing',
+                                  Y_label = 'PC2 (15% variance): Mostly Winter Snowpack', 
+                                  Y = Y_All15sm, FloodMag = FloodMag_All15sm, years = years_All15sm)
 
 #  Labeled uncertain years----
 plot_EDA_PCA_MSFloodsPre1962_fill(fname = 'EDA/PCA_MSPre1962_LargeLabeled.png', X = PCAcvs_All15,
-                                  X_label = 'PC1 - Mostly Winter Degree-Days Freezing (81% variance)',
-                                  Y_label = 'PC2 - Mostly Winter Snowpack (15% variance)', 
+                                  X_label = 'PC1 (81% variance): Mostly Winter Degree-Days Freezing',
+                                  Y_label = 'PC2 (15% variance): Mostly Winter Snowpack', 
                                   Y = Y_All15sm, FloodMag = FloodMag_All15sm, years = years_All15sm, label_mag = 'L')
 
 plot_EDA_PCA_MSFloodsPre1962_fill(fname = 'EDA/PCA_MSPre1962_MedLabeled.png', X = PCAcvs_All15,
-                                  X_label = 'PC1 - Mostly Winter Degree-Days Freezing (81% variance)',
-                                  Y_label = 'PC2 - Mostly Winter Snowpack (15% variance)', 
+                                  X_label = 'PC1 (81% variance): Mostly Winter Degree-Days Freezing',
+                                  Y_label = 'PC2 (15% variance): Mostly Winter Snowpack', 
                                   Y = Y_All15sm, FloodMag = FloodMag_All15sm, years = years_All15sm, label_mag = 'M')
 
 plot_EDA_PCA_MSFloodsPre1962_fill(fname = 'EDA/PCA_MSPre1962_SmallLabeled.png', X = PCAcvs_All15,
-                                  X_label = 'PC1 - Mostly Winter Degree-Days Freezing (81% variance)',
-                                  Y_label = 'PC2 - Mostly Winter Snowpack (15% variance)', 
+                                  X_label = 'PC1 (81% variance): Mostly Winter Degree-Days Freezing',
+                                  Y_label = 'PC2 (15% variance): Mostly Winter Snowpack',
                                   Y = Y_All15sm, FloodMag = FloodMag_All15sm, years = years_All15sm, label_mag = 'S')
 
 plot_EDA_PCA_MSFloodsPre1962_fill(fname = 'EDA/PCA_MSPre1962_UnknownLabeled.png', X = PCAcvs_All15,
-                                  X_label = 'PC1 - Mostly Winter Degree-Days Freezing (81% variance)',
-                                  Y_label = 'PC2 - Mostly Winter Snowpack (15% variance)', 
+                                  X_label = 'PC1 (81% variance): Mostly Winter Degree-Days Freezing',
+                                  Y_label = 'PC2 (15% variance): Mostly Winter Snowpack',
                                   Y = Y_All15sm, FloodMag = FloodMag_All15sm, years = years_All15sm, label_mag = 'U')
 
 plot_EDA_PCA_MSFloodsPre1962_fill(fname = 'EDA/PCA_MSPre1962_NoFloodLabeled.png', X = PCAcvs_All15,
-                                  X_label = 'PC1 - Mostly Winter Degree-Days Freezing (81% variance)',
-                                  Y_label = 'PC2 - Mostly Winter Snowpack (15% variance)', 
+                                  X_label = 'PC1 (81% variance): Mostly Winter Degree-Days Freezing',
+                                  Y_label = 'PC2 (15% variance): Mostly Winter Snowpack',
                                   Y = Y_All15sm, FloodMag = FloodMag_All15sm, years = years_All15sm, label_mag = 'N')
 
 #Firth Logistic Regression Model----
 # Best model from Lamontagne et al. 1962-2020 ----
-res_Firth = logistf(formula = Y_hold ~ X_hold$Fort.Verm.DDF + X_hold$GP.BL.Precip.pct.Avg, 
+res_Firth_L21 = logistf(formula = Y_hold ~ X_hold$Fort.Verm.DDF + X_hold$GP.BL.Precip.pct.Avg, 
                     pl = TRUE, alpha = 0.05, firth = TRUE)
-res_Firth$aic = aic(res_Firth)
-res_Firth$aicc = aicc(res_Firth)
+res_Firth_L21$aic = aic(res_Firth_L21)
+res_Firth_L21$aicc = aicc(res_Firth_L21)
 #  Interaction model----
 res_Firth_cross = logistf(formula = Y_hold ~ X_hold$Fort.Verm.DDF * X_hold$GP.BL.Precip.pct.Avg, 
                           pl = TRUE, alpha = 0.05, firth = TRUE)
@@ -175,25 +182,57 @@ res_Firth_Meltcross = logistf(formula = Y_hold ~ I(X_hold$MeltTest * X_hold$Fort
 res_Firth_Meltcross$aic = aic(res_Firth_Meltcross)
 res_Firth_Meltcross$aicc = aicc(res_Firth_Meltcross)
 
-#  PCA - Chip, Verm, Smith, Precip----
-#using PCA with all available data
-predPCAcvs_All15 = predict(PCAcvs_All15)
-res_Firth_sm = logistf(formula = Y_holdsm ~ predict(PCAcvs_All15, X_holdsm)[,1] + predict(PCAcvs_All15, X_holdsm)[,2], 
+#  Discovering best model with Ft. Smith and precip, Only Ft. Smith years----
+res_Firth_Sm = logistf(formula = Y_holdsm ~ X_holdsm$Fort.Smith + X_holdsm$GP.BL.Precip.pct.Avg, 
+                    pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_Sm$aic = aic(res_Firth_Sm)
+res_Firth_Sm$aicc = aicc(res_Firth_Sm)
+res_Firth_Verm = logistf(formula = Y_holdsm ~ X_holdsm$Fort.Verm.DDF + X_holdsm$GP.BL.Precip.pct.Avg, 
                        pl = TRUE, alpha = 0.05, firth = TRUE)
-res_Firth_sm$aic = aic(res_Firth_sm)
-res_Firth_sm$aicc = aicc(res_Firth_sm)
+res_Firth_Verm$aic = aic(res_Firth_Verm)
+res_Firth_Verm$aicc = aicc(res_Firth_Verm)
+res_Firth_Chip = logistf(formula = Y_holdsm ~ X_holdsm$Fort.Chip.DDF + X_holdsm$GP.BL.Precip.pct.Avg, 
+                         pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_Chip$aic = aic(res_Firth_Chip)
+res_Firth_Chip$aicc = aicc(res_Firth_Chip)
+#  PCA - Chip, Verm, Smith, Precip----
+#using PCA with all available data to make coefficients comparable
+predPCAcvs_All15 = predict(PCAcvs_All15)
+res_Firth_PCAsm = logistf(formula = Y_holdsm ~ predict(PCAcvs_All15, X_holdsm)[,1] + predict(PCAcvs_All15, X_holdsm)[,2], 
+                       pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_PCAsm$aic = aic(res_Firth_PCAsm)
+res_Firth_PCAsm$aicc = aicc(res_Firth_PCAsm)
 
 # Large floods 1915-2020 (treated as 1, unknown mag = 0, no uncertainty in either)----
+#  Testing Temp only----
+res_Firth_L15_Verm = logistf(formula = Y_L15sm ~ X_L15sm$Fort.Verm.DDF, pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_L15_Verm$aic = aic(res_Firth_L15_Verm)
+res_Firth_L15_Verm$aicc = aicc(res_Firth_L15_Verm)
+res_Firth_L15_Chip = logistf(formula = Y_L15sm ~ X_L15sm$Fort.Chip.DDF, pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_L15_Chip$aic = aic(res_Firth_L15_Chip)
+res_Firth_L15_Chip$aicc = aicc(res_Firth_L15_Chip)
+res_Firth_L15_Sm = logistf(formula = Y_L15sm ~ X_L15sm$Fort.Smith, pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_L15_Sm$aic = aic(res_Firth_L15_Sm)
+res_Firth_L15_Sm$aicc = aicc(res_Firth_L15_Sm)
+# Chip best by itself
 #  Testing Precip and Additive Precip + Temp----
-res_Firth_L15_Prcp = logistf(formula = Y_L15 ~ X_L15$GP.BL.Precip.pct.Avg, pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_L15_Prcp = logistf(formula = Y_L15sm ~ X_L15sm$GP.BL.Precip.pct.Avg, pl = TRUE, alpha = 0.05, firth = TRUE)
 res_Firth_L15_Prcp$aic = aic(res_Firth_L15_Prcp)
 res_Firth_L15_Prcp$aicc = aicc(res_Firth_L15_Prcp)
-res_Firth_L15 = logistf(formula = Y_L15 ~ X_L15$Fort.Verm.DDF + X_L15$GP.BL.Precip.pct.Avg, pl = TRUE, alpha = 0.05, firth = TRUE)
-res_Firth_L15$aic = aic(res_Firth_L15)
-res_Firth_L15$aicc = aicc(res_Firth_L15)
-res_Firth_L15Cp = logistf(formula = Y_L15 ~ X_L15$Fort.Chip.DDF + X_L15$GP.BL.Precip.pct.Avg, pl = TRUE, alpha = 0.05, firth = TRUE)
+#Precip strongest univariate model predictor. Try with temperature
+res_Firth_L15Vm = logistf(formula = Y_L15sm ~ X_L15sm$Fort.Verm.DDF + X_L15sm$GP.BL.Precip.pct.Avg, pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_L15Vm$aic = aic(res_Firth_L15Vm)
+res_Firth_L15Vm$aicc = aicc(res_Firth_L15Vm)
+res_Firth_L15Cp = logistf(formula = Y_L15sm ~ X_L15sm$Fort.Chip.DDF + X_L15sm$GP.BL.Precip.pct.Avg, pl = TRUE, alpha = 0.05, firth = TRUE)
 res_Firth_L15Cp$aic = aic(res_Firth_L15Cp)
 res_Firth_L15Cp$aicc = aicc(res_Firth_L15Cp)
+res_Firth_L15Sm = logistf(formula = Y_L15sm ~ X_L15sm$Fort.Smith + X_L15sm$GP.BL.Precip.pct.Avg, pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_L15Sm$aic = aic(res_Firth_L15Sm)
+res_Firth_L15Sm$aicc = aicc(res_Firth_L15Sm)
+res_Firth_L15CpI = logistf(formula = Y_L15sm ~ X_L15sm$Fort.Chip.DDF * X_L15sm$GP.BL.Precip.pct.Avg, pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_L15CpI$aic = aic(res_Firth_L15CpI)
+res_Firth_L15CpI$aicc = aicc(res_Firth_L15CpI)
+# Precip + Chip best, slightly better than using Verm, but temp. coefficients are not significant
 #  PCA - Chip, Verm, Smith, Precip----
 PCAcvs = prcomp(x = X_L15sm[,c(2,3,4,5)])
 PCAcvs$varRatio = PCAcvs$sdev^2 / sum(PCAcvs$sdev^2)
@@ -203,6 +242,7 @@ res_Firth_L15_PC3 = logistf(formula = Y_L15sm ~ predict(PCAcvs)[,1] + predict(PC
                             pl = TRUE, alpha = 0.05, firth = TRUE)
 res_Firth_L15_PC3$aic = aic(res_Firth_L15_PC3)
 res_Firth_L15_PC3$aicc = aicc(res_Firth_L15_PC3)
+#Slightly better than additive Precip + Chip model AND coefficients are significant. Try without Smith
 #  PCA - Chip, Verm, Precip - same time period as Ft. Smith----
 PCAcvst = prcomp(x = X_L15sm[,c(2,3,5)])
 PCAcvst$varRatio = PCAcvst$sdev^2 / sum(PCAcvst$sdev^2)
@@ -210,24 +250,31 @@ res_Firth_L15_PC3t = logistf(formula = Y_L15sm ~ predict(PCAcvst)[,1] + predict(
                              pl = TRUE, alpha = 0.05, firth = TRUE)
 res_Firth_L15_PC3t$aic = aic(res_Firth_L15_PC3t)
 res_Firth_L15_PC3t$aicc = aicc(res_Firth_L15_PC3t)
-#  PCA - Chip, Verm, Precip----
-PCA = prcomp(x = X_L15[,c(2,3,5)])
-PCA$varRatio = PCA$sdev^2 / sum(PCA$sdev^2)
-res_Firth_L15_PC2 = logistf(formula = Y_L15 ~ predict(PCA)[,1] + predict(PCA)[,2], pl = TRUE, alpha = 0.05, firth = TRUE)
-res_Firth_L15_PC2$aic = aic(res_Firth_L15_PC2)
-res_Firth_L15_PC2$aicc = aicc(res_Firth_L15_PC2)
-#  PCA- FtVerm----
-PCAv = prcomp(x = X_L15[,c(3,5)])
-PCAv$varRatio = PCAv$sdev^2 / sum(PCAv$sdev^2)
-res_Firth_L15_PC1 = logistf(formula = Y_L15 ~ predict(PCAv)[,1] + predict(PCAv)[,2], pl = TRUE, alpha = 0.05, firth = TRUE)
-res_Firth_L15_PC1$aic = aic(res_Firth_L15_PC1)
-res_Firth_L15_PC1$aicc = aicc(res_Firth_L15_PC1)
+#Slightly worse without Smith and coefficients are less significant, so keep in. Try with 3 PCs
+res_Firth_L15_PC33 = logistf(formula = Y_L15sm ~ predict(PCAcvs)[,1] + predict(PCAcvs)[,2] + predict(PCAcvs)[,3], 
+                            pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_L15_PC33$aic = aic(res_Firth_L15_PC33)
+res_Firth_L15_PC33$aicc = aicc(res_Firth_L15_PC33)
+#Worse by AICc, so use 2 PCs
+#Try melt test
+res_Firth_L15CpMelt = logistf(formula = Y_L15sm ~ X_L15sm$Fort.Chip.DDF + X_L15sm$GP.BL.Precip.pct.Avg + X_L15sm$MeltTest, pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_L15CpMelt$aic = aic(res_Firth_L15CpMelt)
+res_Firth_L15CpMelt$aicc = aicc(res_Firth_L15CpMelt)
+#Slightly better AICc, but coefficients are not significant
 #  PCA - Chip, Verm, Smith, Melt, Precip----
 PCAcvsm_L15 = prcomp(x = X_L15sm[,c(2,3,4,5,7)])
 PCAcvsm_L15$varRatio = PCAcvsm_L15$sdev^2 / sum(PCAcvsm_L15$sdev^2)
-res_Firth_L15_PC4 = logistf(formula = Y_L15sm ~ predict(PCAcvsm_L15)[,1] + predict(PCAcvsm_L15)[,2] + predict(PCAcvsm_L15)[,3], pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_L15_PC4 = logistf(formula = Y_L15sm ~ predict(PCAcvsm_L15)[,1] + predict(PCAcvsm_L15)[,2], pl = TRUE, alpha = 0.05, firth = TRUE)
 res_Firth_L15_PC4$aic = aic(res_Firth_L15_PC4)
 res_Firth_L15_PC4$aicc = aicc(res_Firth_L15_PC4)
+res_Firth_L15_PC43 = logistf(formula = Y_L15sm ~ predict(PCAcvsm_L15)[,1] + predict(PCAcvsm_L15)[,2] + predict(PCAcvsm_L15)[,3], pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_L15_PC43$aic = aic(res_Firth_L15_PC43)
+res_Firth_L15_PC43$aicc = aicc(res_Firth_L15_PC43)
+res_Firth_L15_PC413 = logistf(formula = Y_L15sm ~ predict(PCAcvsm_L15)[,1] + predict(PCAcvsm_L15)[,3], pl = TRUE, alpha = 0.05, firth = TRUE)
+res_Firth_L15_PC413$aic = aic(res_Firth_L15_PC413)
+res_Firth_L15_PC413$aicc = aicc(res_Firth_L15_PC413)
+#Worse with 2 PCs and better by aicc with 3PCs, but 1 of 3 PCs is not significant (p-value 0.67). 
+# So better without melt test
 
 #Best model of large floods only is PCA with Ft verm, chip, smith DDF + GP/BL precip.
 
@@ -235,7 +282,7 @@ res_Firth_L15_PC4$aicc = aicc(res_Firth_L15_PC4)
 #Large Floods, 1962 - 2020, Same Parameters as Lamontagne et al.----
 # Prior Definition----
 #MVN Centered on Firth MAP for non-PCA model
-prior = createTruncatedNormalPrior(mean = as.numeric(res_Firth$coefficients), sd = c(10,10,10), 
+prior = createTruncatedNormalPrior(mean = as.numeric(res_Firth_L21$coefficients), sd = c(10,10,10), 
                                    lower = -Inf, upper = Inf)
 #MVN Centered on 0
 prior2 = createTruncatedNormalPrior(mean = c(0,0,0), sd = c(10,10,10), lower = -Inf, upper = Inf)
@@ -270,7 +317,7 @@ likelihood <- function(param, sum = TRUE){
     ll = -Inf
   }
   
-  #Return sum of the log-likelihoods
+  #Return sum of the log-likelihoods or pointwise likelihoods
   return(if (sum == TRUE) ll else (pll + 0.5*determinant(I, logarithm = TRUE)$modulus[1]/length(Y_hold))) 
 }
 
@@ -300,32 +347,6 @@ likelihood_sm <- function(param, sum = TRUE){
   return(if (sum == TRUE) ll else (pll + 0.5*determinant(I, logarithm = TRUE)$modulus[1]/length(Y_holdsm))) 
 }
 
-#Fort smith data, 1915-2020
-likelihood_sm_1915 <- function(param, sum = TRUE){
-  #point likelihoods
-  Xi = as.matrix(cbind(X_L15sm[,1], predict(PCAcvs, X_L15sm)[,c(1,2)]))
-  #numerator
-  num = exp(param[1] + param[2]*Xi[,2] + param[3]*Xi[,3])
-  #y-hat
-  pred = num/(1+num)
-  #weights
-  w = diag(pred * (1-pred))
-  #Information matrix
-  I = t(Xi) %*% w %*% Xi
-  pll = vector('numeric', length=length(Y_L15sm))
-  for (j in 1:length(Y_L15sm)){
-    pll[j] = Y_L15sm[j]*log(pred[j]) + (1 - Y_L15sm[j])*log(1 - pred[j])
-  }
-  #sum with Firth correction
-  ll = sum(pll) + 0.5*determinant(I, logarithm = TRUE)$modulus[1]
-  if (is.nan(ll)){
-    ll = -Inf
-  }
-  
-  #Return sum of the log-likelihoods
-  return(if (sum == TRUE) ll else (pll + 0.5*determinant(I, logarithm = TRUE)$modulus[1]/length(Y_L15sm))) 
-}
-
 # MCMC Setup----
 settingsDREAMzs_1 = list(iterations = 330000, gamma= NULL, eps = 0, e = 0.05, parallel = NULL, Z = NULL, 
                          ZupdateFrequency = 30, pSnooker = 0.1, DEpairs = 2,
@@ -341,7 +362,7 @@ setUpDREAMzs_1 <- createBayesianSetup(likelihood, prior = prior, parallel = 7,
                                                              variables=list('X_hold','Y_hold'), dlls=NULL), 
                                       names = c('Int', 'Ft.Verm DDF', 'GP/BL Precip.'), 
                                       plotLower = c(-15, -6, 0), plotUpper = c(0, 2, 6), 
-                                      plotBest = as.numeric(res_Firth$coefficients))
+                                      plotBest = as.numeric(res_Firth_L21$coefficients))
 set.seed(16421)
 outDREAMzs_1 <- runMCMC(bayesianSetup = setUpDREAMzs_1, sampler = "DREAMzs", settings = settingsDREAMzs_1)
 #Remove all -Inf in chain. These result from poor initial conditions (prior samples)
@@ -441,7 +462,7 @@ setUpDREAMzs_1p <- createBayesianSetup(likelihood, prior = prior2, parallel = 7,
                                                              variables=list('X_hold','Y_hold'), dlls=NULL), 
                                       names = c('Int', 'Ft.Verm DDF', 'GP/BL Precip.'), 
                                       plotLower = c(-15, -6, 0), plotUpper = c(0, 2, 6), 
-                                      plotBest = as.numeric(res_Firth$coefficients))
+                                      plotBest = as.numeric(res_Firth_L21$coefficients))
 set.seed(16421)
 outDREAMzs_1p <- runMCMC(bayesianSetup = setUpDREAMzs_1p, sampler = "DREAMzs", settings = settingsDREAMzs_1)
 #Remove all -Inf in chain. These result from poor initial conditions (prior samples)
@@ -540,7 +561,7 @@ setUpDREAMzs_3p <- createBayesianSetup(likelihood, prior = prior3, parallel = 7,
                                                               variables=list('X_hold','Y_hold'), dlls=NULL), 
                                        names = c('Int', 'Ft.Verm DDF', 'GP/BL Precip.'), 
                                        plotLower = c(-15, -6, 0), plotUpper = c(0, 2, 6), 
-                                       plotBest = as.numeric(res_Firth$coefficients))
+                                       plotBest = as.numeric(res_Firth_L21$coefficients))
 set.seed(16421)
 outDREAMzs_3p <- runMCMC(bayesianSetup = setUpDREAMzs_3p, sampler = "DREAMzs", settings = settingsDREAMzs_1)
 #Remove all -Inf in chain. These result from poor initial conditions (prior samples)
@@ -631,10 +652,10 @@ geweke.plot(x = outDREAMzs_3p$chain[,1:3], ask = FALSE, nbins = 8)
 
 stopParallel(setUpDREAMzs_3p)
 
-# AGU Large Floods 1962-2020 FtSmith PCA----
+# Large Floods 1962-2020 FtSmith PCA----
 #  DREAMzs: prior #2----
 dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020', showWarnings = FALSE)
-setUpDREAMzs_3p_AGU <- createBayesianSetup(likelihood_sm, prior = prior2, parallel = 7, 
+setUpDREAMzs_3p_PCAcvs <- createBayesianSetup(likelihood_sm, prior = prior2, parallel = 7, 
                                        parallelOptions = list(packages=list('BayesianTools'), 
                                                               variables=list('X_holdsm','Y_holdsm', 'PCAcvs'), 
                                                               dlls=NULL), 
@@ -642,97 +663,123 @@ setUpDREAMzs_3p_AGU <- createBayesianSetup(likelihood_sm, prior = prior2, parall
                                        plotLower = c(-15, -1, -1), plotUpper = c(0, 6, 6), 
                                        plotBest = as.numeric(res_Firth_L15_PC3$coefficients))
 set.seed(16421)
-outDREAMzs_3p_AGU <- runMCMC(bayesianSetup = setUpDREAMzs_3p_AGU, sampler = "DREAMzs", settings = settingsDREAMzs_1)
+outDREAMzs_3p_PCAcvs <- runMCMC(bayesianSetup = setUpDREAMzs_3p_PCAcvs, sampler = "DREAMzs", settings = settingsDREAMzs_1)
 #Remove all -Inf in chain. These result from poor initial conditions (prior samples)
-outDREAMzs_3p_AGU = removeInf(outDREAMzs_3p_AGU)
+outDREAMzs_3p_PCAcvs = removeInf(outDREAMzs_3p_PCAcvs)
 #Check for remaining infinities
-if(any(outDREAMzs_3p_AGU$InfCk > 0)){
+if(any(outDREAMzs_3p_PCAcvs$InfCk > 0)){
   print('infinities remain within MCMC chain posteriors')
 }
-summary(outDREAMzs_3p_AGU)
+summary(outDREAMzs_3p_PCAcvs)
 
 #Compute WAIC and DIC
-outDREAMzs_3p_AGU$WAICBT = WAIC(outDREAMzs_3p_AGU, numSamples = 100000)
-outDREAMzs_3p_AGU$WAIC2BT = WAIC2(outDREAMzs_3p_AGU, numSamples = 100000)
-outDREAMzs_3p_AGU$DIC = DIC(outDREAMzs_3p_AGU)
+outDREAMzs_3p_PCAcvs$WAICBT = WAIC(outDREAMzs_3p_PCAcvs, numSamples = 100000)
+outDREAMzs_3p_PCAcvs$WAIC2BT = WAIC2(outDREAMzs_3p_PCAcvs, numSamples = 100000)
+outDREAMzs_3p_PCAcvs$DIC = DIC(outDREAMzs_3p_PCAcvs)
 #Pointwise log-likelihoods
-outDREAMzs_3p_AGU$pll = outDREAMzs_3p_AGU$setup$likelihood$density(getSample(outDREAMzs_3p_AGU, parametersOnly = F)[,1:outDREAMzs_3p_AGU$setup$numPars], sum = FALSE)
+outDREAMzs_3p_PCAcvs$pll = outDREAMzs_3p_PCAcvs$setup$likelihood$density(getSample(outDREAMzs_3p_PCAcvs, parametersOnly = F)[,1:outDREAMzs_3p_PCAcvs$setup$numPars], sum = FALSE)
 #LOO
-outDREAMzs_3p_AGU$LOO = loo(outDREAMzs_3p_AGU$pll, cores = 7, save_psis = TRUE, 
-                            r_eff = relative_eff(x = exp(outDREAMzs_3p_AGU$pll), 
-                                                 chain_id = c(rep(1,nrow(outDREAMzs_3p_AGU$chain[[1]])), 
-                                                              rep(2,nrow(outDREAMzs_3p_AGU$chain[[1]])), 
-                                                              rep(3,nrow(outDREAMzs_3p_AGU$chain[[1]])), 
-                                                              rep(4,nrow(outDREAMzs_3p_AGU$chain[[1]])), 
-                                                              rep(5,nrow(outDREAMzs_3p_AGU$chain[[1]])), 
-                                                              rep(6,nrow(outDREAMzs_3p_AGU$chain[[1]])), 
-                                                              rep(7,nrow(outDREAMzs_3p_AGU$chain[[1]])))))
-outDREAMzs_3p_AGU$WAIC = waic(x = outDREAMzs_3p_AGU$pll)
-outDREAMzs_3p_AGU$WAIC2 = waic2(x = outDREAMzs_3p_AGU$pll)
+outDREAMzs_3p_PCAcvs$LOO = loo(outDREAMzs_3p_PCAcvs$pll, cores = 7, save_psis = TRUE, 
+                            r_eff = relative_eff(x = exp(outDREAMzs_3p_PCAcvs$pll), 
+                                                 chain_id = c(rep(1,nrow(outDREAMzs_3p_PCAcvs$chain[[1]])), 
+                                                              rep(2,nrow(outDREAMzs_3p_PCAcvs$chain[[1]])), 
+                                                              rep(3,nrow(outDREAMzs_3p_PCAcvs$chain[[1]])), 
+                                                              rep(4,nrow(outDREAMzs_3p_PCAcvs$chain[[1]])), 
+                                                              rep(5,nrow(outDREAMzs_3p_PCAcvs$chain[[1]])), 
+                                                              rep(6,nrow(outDREAMzs_3p_PCAcvs$chain[[1]])), 
+                                                              rep(7,nrow(outDREAMzs_3p_PCAcvs$chain[[1]])))))
+outDREAMzs_3p_PCAcvs$WAIC = waic(x = outDREAMzs_3p_PCAcvs$pll)
+outDREAMzs_3p_PCAcvs$WAIC2 = waic2(x = outDREAMzs_3p_PCAcvs$pll)
 #Rejection rate
-outDREAMzs_3p_AGU$rejectRate = rejectionRate(outDREAMzs_3p_AGU$chain)
+outDREAMzs_3p_PCAcvs$rejectRate = rejectionRate(outDREAMzs_3p_PCAcvs$chain)
 #Highest Posterior Density Intervals
-outDREAMzs_3p_AGU$HPD = HPDinterval(outDREAMzs_3p_AGU$chain)
+outDREAMzs_3p_PCAcvs$HPD = HPDinterval(outDREAMzs_3p_PCAcvs$chain)
 #Credible Intervals
-outDREAMzs_3p_AGU$CI = getCredibleIntervals(outDREAMzs_3p_AGU$chain[[1]])
+outDREAMzs_3p_PCAcvs$CI = getCredibleIntervals(outDREAMzs_3p_PCAcvs$chain[[1]])
 #Effective sample size for each parameter should be similar
-outDREAMzs_3p_AGU$Neff = effectiveSize(outDREAMzs_3p_AGU$chain[,1:3])
+outDREAMzs_3p_PCAcvs$Neff = effectiveSize(outDREAMzs_3p_PCAcvs$chain[,1:3])
 
 #Sample only the last 1000 from each chain
-sample_chain_inds = (nrow(outDREAMzs_3p_AGU$chain[[1]])-1000):nrow(outDREAMzs_3p_AGU$chain[[1]])
+sample_chain_inds = (nrow(outDREAMzs_3p_PCAcvs$chain[[1]])-1000):nrow(outDREAMzs_3p_PCAcvs$chain[[1]])
 
 dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC', showWarnings = FALSE)
 png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_trace(x = outDREAMzs_3p_AGU$chain[,1:3], size = 0.05)
+mcmc_trace(x = outDREAMzs_3p_PCAcvs$chain[,1:3], size = 0.05)
 dev.off()
 
 png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
-correlationPlot(outDREAMzs_3p_AGU$chain[sample_chain_inds,1:3], method = 'spearman')
+correlationPlot(outDREAMzs_3p_PCAcvs$chain[sample_chain_inds,1:3], method = 'spearman')
 dev.off()
 
 png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_3p_AGU, plot = TRUE, thin = 0)
+gelmanDiagnostics(outDREAMzs_3p_PCAcvs, plot = TRUE, thin = 0)
 dev.off()
 
 png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
-marginalPlot(x = outDREAMzs_3p_AGU$chain[sample_chain_inds,1:3], prior = prior2$sampler(n = 50000), singlePanel = FALSE, 
+marginalPlot(x = outDREAMzs_3p_PCAcvs$chain[sample_chain_inds,1:3], prior = prior2$sampler(n = 50000), singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15))))
 dev.off()
 
 png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_pairs(outDREAMzs_3p_AGU$chain[sample_chain_inds,1:3], diag_fun = 'dens', off_diag_fun = 'scatter', 
+mcmc_pairs(outDREAMzs_3p_PCAcvs$chain[sample_chain_inds,1:3], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-1,6),c(-1,6),c(-15,0),c(-1,6),c(-1,6),c(-15,0),c(-1,6),c(-1,6)),
            ylim = rbind(c(0,NA),c(-15,0),c(-15,0),c(-1,6),c(0,NA),c(-1,6),c(-1,6),c(-1,6),c(0,NA)))
 dev.off()
 
 png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
-autocorr.plot(x = outDREAMzs_3p_AGU$chain[[1]][-1,1:3], lag.max = 100)
+autocorr.plot(x = outDREAMzs_3p_PCAcvs$chain[[1]][-1,1:3], lag.max = 100)
 dev.off()
 
 png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_acf(x = outDREAMzs_3p_AGU$chain, pars = outDREAMzs_3p_AGU$setup$names, lags = 20)
+mcmc_acf(x = outDREAMzs_3p_PCAcvs$chain, pars = outDREAMzs_3p_PCAcvs$setup$names, lags = 20)
 dev.off()
 
 png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_dens_overlay(outDREAMzs_3p_AGU$chain[sample_chain_inds,])
+mcmc_dens_overlay(outDREAMzs_3p_PCAcvs$chain[sample_chain_inds,])
 dev.off()
 
 png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_areas(x = outDREAMzs_3p_AGU$chain[sample_chain_inds,], pars = outDREAMzs_3p_AGU$setup$names, 
+mcmc_areas(x = outDREAMzs_3p_PCAcvs$chain[sample_chain_inds,], pars = outDREAMzs_3p_PCAcvs$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
 png('DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_intervals(x = outDREAMzs_3p_AGU$chain[sample_chain_inds,], pars = outDREAMzs_3p_AGU$setup$names,
+mcmc_intervals(x = outDREAMzs_3p_PCAcvs$chain[sample_chain_inds,], pars = outDREAMzs_3p_PCAcvs$setup$names,
                prob_outer = 0.95)
 dev.off()
 
-geweke.plot(x = outDREAMzs_3p_AGU$chain[,1:3], ask = FALSE, nbins = 8)
+geweke.plot(x = outDREAMzs_3p_PCAcvs$chain[,1:3], ask = FALSE, nbins = 8)
 
-stopParallel(setUpDREAMzs_3p_AGU)
+stopParallel(setUpDREAMzs_3p_PCAcvs)
 
 #Large Floods, 1915 - 2020, no data uncertainty----
+# Likelihood Definition----
+#Fort smith data, 1915-2020
+likelihood_sm_1915 <- function(param, sum = TRUE){
+  #point likelihoods
+  Xi = as.matrix(cbind(X_L15sm[,1], predict(PCAcvs, X_L15sm)[,c(1,2)]))
+  #numerator
+  num = exp(param[1] + param[2]*Xi[,2] + param[3]*Xi[,3])
+  #y-hat
+  pred = num/(1+num)
+  #weights
+  w = diag(pred * (1-pred))
+  #Information matrix
+  I = t(Xi) %*% w %*% Xi
+  pll = vector('numeric', length=length(Y_L15sm))
+  for (j in 1:length(Y_L15sm)){
+    pll[j] = Y_L15sm[j]*log(pred[j]) + (1 - Y_L15sm[j])*log(1 - pred[j])
+  }
+  #sum with Firth correction
+  ll = sum(pll) + 0.5*determinant(I, logarithm = TRUE)$modulus[1]
+  if (is.nan(ll)){
+    ll = -Inf
+  }
+  
+  #Return sum of the log-likelihoods
+  return(if (sum == TRUE) ll else (pll + 0.5*determinant(I, logarithm = TRUE)$modulus[1]/length(Y_L15sm))) 
+}
 #  DREAMzs: prior #2----
 dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020', showWarnings = FALSE)
 setUpDREAMzs_NoUncertainty <- createBayesianSetup(likelihood_sm_1915, prior = prior2, parallel = 7, 
@@ -834,19 +881,19 @@ geweke.plot(x = outDREAMzs_NoUncertainty$chain[,1:3], ask = FALSE, nbins = 8)
 
 stopParallel(setUpDREAMzs_NoUncertainty)
 
-#Large Floods, 1915 - 2020----
+#Large Floods, 1915 - 2020, historical data uncertain----
 # Prior Definition----
-#Parameters are from Firth regression with all large floods
-#Followed by eta for historical large
-#Followed by eta for historical moderate
-#Followed by eta for historical small
-#Followed by eta for years with unknown magnitude
-#Followed by theta for historical no flood
-#Uniform priors
-density_L15_unif_SensSpec_Hist = function(par){
-  d1 = dnorm(par[1], mean = as.numeric(res_Firth_L15_PC3$coefficients)[1], sd = 10, log =TRUE)
-  d2 = dnorm(par[2], mean = as.numeric(res_Firth_L15_PC3$coefficients)[2], sd = 10, log =TRUE)
-  d3 = dnorm(par[3], mean = as.numeric(res_Firth_L15_PC3$coefficients)[3], sd = 10, log =TRUE)
+#Parameters are 
+# Firth regression with all large floods
+# Followed by eta for historical large
+# Followed by theta for historical moderate
+# Followed by theta for historical small
+# Followed by theta for years with unknown magnitude
+# Followed by theta for historical no flood
+density_L15_unif_SensSpec_DataAsIs = function(par){
+  d1 = dnorm(par[1], mean = 0, sd = 10, log =TRUE)
+  d2 = dnorm(par[2], mean = 0, sd = 10, log =TRUE)
+  d3 = dnorm(par[3], mean = 0, sd = 10, log =TRUE)
   d4 = dbeta(par[4], shape1 = 1, shape2 = 1, log =TRUE)
   d5 = dbeta(par[5], shape1 = 1, shape2 = 1, log =TRUE)
   d6 = dbeta(par[6], shape1 = 1, shape2 = 1, log =TRUE)
@@ -854,10 +901,10 @@ density_L15_unif_SensSpec_Hist = function(par){
   d8 = dbeta(par[8], shape1 = 1, shape2 = 1, log =TRUE)
   return(d1 + d2 + d3 + d4 + d5 + d6 + d7 + d8)
 }
-sampler_L15_unif_SensSpec_Hist = function(n=1){
-  d1 = rnorm(n, mean = as.numeric(res_Firth_L15_PC3$coefficients)[1], sd = 10)
-  d2 = rnorm(n, mean = as.numeric(res_Firth_L15_PC3$coefficients)[2], sd = 10)
-  d3 = rnorm(n, mean = as.numeric(res_Firth_L15_PC3$coefficients)[3], sd = 10)
+sampler_L15_unif_SensSpec_DataAsIs = function(n=1){
+  d1 = rnorm(n, mean = 0, sd = 10)
+  d2 = rnorm(n, mean = 0, sd = 10)
+  d3 = rnorm(n, mean = 0, sd = 10)
   d4 = rbeta(n, shape1 = 1, shape2 = 1)
   d5 = rbeta(n, shape1 = 1, shape2 = 1)
   d6 = rbeta(n, shape1 = 1, shape2 = 1)
@@ -865,20 +912,19 @@ sampler_L15_unif_SensSpec_Hist = function(n=1){
   d8 = rbeta(n, shape1 = 1, shape2 = 1)
   return(cbind(d1,d2,d3,d4,d5,d6,d7,d8))
 }
-prior_L15_unif_SensSpec_Hist = createPrior(density = density_L15_unif_SensSpec_Hist, 
-                                           sampler = sampler_L15_unif_SensSpec_Hist)
+prior_L15_unif_SensSpec_DataAsIs = createPrior(density = density_L15_unif_SensSpec_DataAsIs, sampler = sampler_L15_unif_SensSpec_DataAsIs)
 
-#Parameters are from Firth regression with all large floods
-#Followed by eta for all historical large
-#Followed by eta for all historical moderate
-#Followed by eta for all historical small
-#Followed by eta for all years with unknown magnitude
-#Followed by theta for historical no flood
-#Uniform priors
+#Parameters are 
+# Firth regression with all large floods
+# Followed by eta for all historical large
+# Followed by theta for all historical moderate
+# Followed by theta for all historical small
+# Followed by theta for all years with unknown magnitude
+# Followed by theta for historical no flood
 density_L15_unif_SensSpec_pAll = function(par){
-  d1 = dnorm(par[1], mean = as.numeric(res_Firth_L15_PC3$coefficients)[1], sd = 10, log =TRUE)
-  d2 = dnorm(par[2], mean = as.numeric(res_Firth_L15_PC3$coefficients)[2], sd = 10, log =TRUE)
-  d3 = dnorm(par[3], mean = as.numeric(res_Firth_L15_PC3$coefficients)[3], sd = 10, log =TRUE)
+  d1 = dnorm(par[1], mean = 0, sd = 10, log =TRUE)
+  d2 = dnorm(par[2], mean = 0, sd = 10, log =TRUE)
+  d3 = dnorm(par[3], mean = 0, sd = 10, log =TRUE)
   #Large
   d4 = dbeta(par[4], shape1 = 1, shape2 = 1, log =TRUE)
   d5 = dbeta(par[5], shape1 = 1, shape2 = 1, log =TRUE)
@@ -908,9 +954,9 @@ density_L15_unif_SensSpec_pAll = function(par){
   return(d1 + d2 + d3 + d4 + d5 + d6 + d7 + d8 + d9 + d10 + d11 + d12 + d13 + d14 + d15 + d16 + d17 + d18 + d19 + d20 + d21 + d22 + d23 + d24)
 }
 sampler_L15_unif_SensSpec_pAll = function(n=1){
-  d1 = rnorm(n, mean = as.numeric(res_Firth_L15_PC3$coefficients)[1], sd = 10)
-  d2 = rnorm(n, mean = as.numeric(res_Firth_L15_PC3$coefficients)[2], sd = 10)
-  d3 = rnorm(n, mean = as.numeric(res_Firth_L15_PC3$coefficients)[3], sd = 10)
+  d1 = rnorm(n, mean = 0, sd = 10)
+  d2 = rnorm(n, mean = 0, sd = 10)
+  d3 = rnorm(n, mean = 0, sd = 10)
   d4 = rbeta(n, shape1 = 1, shape2 = 1)
   d5 = rbeta(n, shape1 = 1, shape2 = 1)
   d6 = rbeta(n, shape1 = 1, shape2 = 1)
@@ -937,11 +983,11 @@ sampler_L15_unif_SensSpec_pAll = function(n=1){
 prior_L15_unif_SensSpec_pAll = createPrior(density = density_L15_unif_SensSpec_pAll, 
                                            sampler = sampler_L15_unif_SensSpec_pAll)
 
-
+#Same as density_L15_unif_SensSpec_pAll but with all no flood years having their own
 density_L15_unif_SensSpec_pAll_theta = function(par){
-  d1 = dnorm(par[1], mean = as.numeric(res_Firth_L15_PC3$coefficients)[1], sd = 10, log =TRUE)
-  d2 = dnorm(par[2], mean = as.numeric(res_Firth_L15_PC3$coefficients)[2], sd = 10, log =TRUE)
-  d3 = dnorm(par[3], mean = as.numeric(res_Firth_L15_PC3$coefficients)[3], sd = 10, log =TRUE)
+  d1 = dnorm(par[1], mean = 0, sd = 10, log =TRUE)
+  d2 = dnorm(par[2], mean = 0, sd = 10, log =TRUE)
+  d3 = dnorm(par[3], mean = 0, sd = 10, log =TRUE)
   #Large
   d4 = dbeta(par[4], shape1 = 1, shape2 = 1, log =TRUE)
   d5 = dbeta(par[5], shape1 = 1, shape2 = 1, log =TRUE)
@@ -997,9 +1043,9 @@ density_L15_unif_SensSpec_pAll_theta = function(par){
            d43 + d44 + d45 + d46)
 }
 sampler_L15_unif_SensSpec_pAll_theta = function(n=1){
-  d1 = rnorm(n, mean = as.numeric(res_Firth_L15_PC3$coefficients)[1], sd = 10)
-  d2 = rnorm(n, mean = as.numeric(res_Firth_L15_PC3$coefficients)[2], sd = 10)
-  d3 = rnorm(n, mean = as.numeric(res_Firth_L15_PC3$coefficients)[3], sd = 10)
+  d1 = rnorm(n, mean = 0, sd = 10)
+  d2 = rnorm(n, mean = 0, sd = 10)
+  d3 = rnorm(n, mean = 0, sd = 10)
   d4 = rbeta(n, shape1 = 1, shape2 = 1)
   d5 = rbeta(n, shape1 = 1, shape2 = 1)
   d6 = rbeta(n, shape1 = 1, shape2 = 1)
@@ -1053,16 +1099,16 @@ prior_L15_unif_SensSpec_pAll_theta = createPrior(density = density_L15_unif_Sens
                                                  sampler = sampler_L15_unif_SensSpec_pAll_theta)
 
 # Likelihood Definition----
-likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s <- function(param, sum = TRUE){
+likelihood_L15_FixY_pSensSpec_PCAcvs_DataAsIs <- function(param, sum = TRUE){
   #Determine indices of historical large Y = 1
   IndL = which((FloodMag_L15sm == 'L') & (years_L15sm < 1962))
-  #Determine indices of historical moderate Y = 1
+  #Determine indices of historical moderate Y = 0
   IndM = which((FloodMag_L15sm == 'M') & (years_L15sm < 1962))
-  #Determine indices of historical small Y = 1
+  #Determine indices of historical small Y = 0
   IndS = which((FloodMag_L15sm == 'S') & (years_L15sm < 1962))
   #Determine indices of historical not a flood Y = 0
   IndN = which((FloodMag_L15sm == 'N') & (years_L15sm < 1962))
-  #Same for floods of unknown magnitude Y = 1
+  #Same for floods of unknown magnitude
   IndU = which((FloodMag_L15sm == 'U'))
   
   #point likelihoods
@@ -1077,41 +1123,41 @@ likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s <- function(param, sum = TRUE)
   I = t(Xi) %*% w %*% Xi
   
   #Terms for sens spec likelihood
-  pred10 = pred
+  pred01 = pred
   pred11 = pred
   pred00 = pred
   #Large - correct by eta
   pred11[IndL] = pred[IndL]*param[4]
-  #Moderate - correct by eta
-  pred11[IndM] = pred[IndM]*param[5]
-  #Small - correct by eta
-  pred11[IndS] = pred[IndS]*param[6]
-  #Unknown - correct by eta
-  pred11[IndU] = pred[IndU]*param[7]
+  #All Y=0 are affected by 1-eta
+  pred01 = pred*(1-param[4])
+  #Moderate - correct by theta
+  pred00[IndM] = (1-pred[IndM])*param[5]
+  #Small - correct by theta
+  pred00[IndS] = (1-pred[IndS])*param[6]
+  #Unknown - correct by theta
+  pred00[IndU] = (1-pred[IndU])*param[7]
   #Not a flood - correct by theta
   pred00[IndN] = (1-pred[IndN])*param[8]
-  #All historical Y = 1 are affected by 1-theta
-  pred10 = (1-pred)*(1-param[8])
   
   pll = vector('numeric', length=length(Y_L15sm))
-  #Weighted 1-eta
-  s01 = ((1-param[5])*length(IndM) + (1-param[6])*length(IndS) + (1-param[7])*length(IndU) + (1-param[4])*length(IndL))/(length(IndM) + length(IndS) + length(IndU) + length(IndL))
   for (j in 1:length(Y_L15sm)){
     if (j %in% IndL){
       #Get adjusted probability of Y = 1
-      pll[j] = log(pred11[j] + pred10[j])
+      #Weighted 1-theta
+      s1t = ((1-param[5])*length(IndM) + (1-param[6])*length(IndS) + (1-param[7])*length(IndU) + (1-param[8])*length(IndN))/(length(IndM) + length(IndS) + length(IndU) + length(IndN))
+      pll[j] = log(pred11[j] + (1-pred[j])*s1t)
     }else if (j %in% IndM){
-      #Get adjusted probability of Y = 1
-      pll[j] = log(pred11[j] + pred10[j])
+      #Get adjusted probability of Y = 0
+      pll[j] = log(pred01[j] + pred00[j])
     }else if (j %in% IndS){
-      #Get adjusted probability of Y = 1
-      pll[j] = log(pred11[j] + pred10[j])
+      #Get adjusted probability of Y = 0
+      pll[j] = log(pred01[j] + pred00[j])
     }else if (j %in% IndU){
-      #Get adjusted probability of Y = 1
-      pll[j] = log(pred11[j] + pred10[j])
+      #Get adjusted probability of Y = 0
+      pll[j] = log(pred01[j] + pred00[j])
     }else if (j %in% IndN){
       #Get adjusted probability of Y = 0
-      pll[j] = log(pred[j]*s01 + pred00[j])
+      pll[j] = log(pred01[j] + pred00[j])
     }else{
       #Could be Y=0 or Y=1 and Y is not uncertain
       pll[j] = Y_L15sm[j]*log(pred[j]) + (1 - Y_L15sm[j])*log(1 - pred[j])
@@ -1127,16 +1173,16 @@ likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s <- function(param, sum = TRUE)
   return(if (sum == TRUE) ll else (pll + 0.5*determinant(I, logarithm = TRUE)$modulus[1]/length(Y_L15sm)))  
 }
 
-likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll <- function(param, sum = TRUE){
+likelihood_L15_FixY_pSensSpec_PCAcvs_DataAsIs_pAll <- function(param, sum = TRUE){
   #Determine indices of historical large Y = 1
   IndL = which((FloodMag_L15sm == 'L') & (years_L15sm < 1962))
-  #Determine indices of historical moderate Y = 1
+  #Determine indices of historical moderate Y = 0
   IndM = which((FloodMag_L15sm == 'M') & (years_L15sm < 1962))
-  #Determine indices of historical small Y = 1
+  #Determine indices of historical small Y = 0
   IndS = which((FloodMag_L15sm == 'S') & (years_L15sm < 1962))
   #Determine indices of historical not a flood Y = 0
   IndN = which((FloodMag_L15sm == 'N') & (years_L15sm < 1962))
-  #Same for floods of unknown magnitude Y = 1
+  #Same for floods of unknown magnitude
   IndU = which((FloodMag_L15sm == 'U'))
   
   #point likelihoods
@@ -1151,7 +1197,7 @@ likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll <- function(param, sum = 
   I = t(Xi) %*% w %*% Xi
   
   #Terms for sens spec likelihood
-  pred10 = pred
+  pred01 = pred
   pred11 = pred
   pred00 = pred
   #Large - correct by eta
@@ -1161,47 +1207,49 @@ likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll <- function(param, sum = 
   pred11[IndL[4]] = pred[IndL[4]]*param[7]
   pred11[IndL[5]] = pred[IndL[5]]*param[8]
   pred11[IndL[6]] = pred[IndL[6]]*param[9]
-  #Moderate - correct by eta
-  pred11[IndM[1]] = pred[IndM[1]]*param[10]
-  pred11[IndM[2]] = pred[IndM[2]]*param[11]
-  pred11[IndM[3]] = pred[IndM[3]]*param[12]
-  pred11[IndM[4]] = pred[IndM[4]]*param[13]
-  pred11[IndM[5]] = pred[IndM[5]]*param[14]
-  #Small - correct by eta
-  pred11[IndS[1]] = pred[IndS[1]]*param[15]
-  pred11[IndS[2]] = pred[IndS[2]]*param[16]
-  pred11[IndS[3]] = pred[IndS[3]]*param[17]
-  pred11[IndS[4]] = pred[IndS[4]]*param[18]
-  pred11[IndS[5]] = pred[IndS[5]]*param[19]
-  #Unknown - correct by eta
-  pred11[IndU[1]] = pred[IndU[1]]*param[20]
-  pred11[IndU[2]] = pred[IndU[2]]*param[21]
-  pred11[IndU[3]] = pred[IndU[3]]*param[22]
-  pred11[IndU[4]] = pred[IndU[4]]*param[23]
+  #All Y=0 are affected by 1-eta
+  #Weighted 1-eta
+  s01 = sum(1-param[4:9])/(length(param[4:9]))
+  pred01 = pred*s01
+  #Moderate - correct by theta
+  pred00[IndM[1]] = (1-pred[IndM[1]])*param[10]
+  pred00[IndM[2]] = (1-pred[IndM[2]])*param[11]
+  pred00[IndM[3]] = (1-pred[IndM[3]])*param[12]
+  pred00[IndM[4]] = (1-pred[IndM[4]])*param[13]
+  pred00[IndM[5]] = (1-pred[IndM[5]])*param[14]
+  #Small - correct by theta
+  pred00[IndS[1]] = (1-pred[IndS[1]])*param[15]
+  pred00[IndS[2]] = (1-pred[IndS[2]])*param[16]
+  pred00[IndS[3]] = (1-pred[IndS[3]])*param[17]
+  pred00[IndS[4]] = (1-pred[IndS[4]])*param[18]
+  pred00[IndS[5]] = (1-pred[IndS[5]])*param[19]
+  #Unknown - correct by theta
+  pred00[IndU[1]] = (1-pred[IndU[1]])*param[20]
+  pred00[IndU[2]] = (1-pred[IndU[2]])*param[21]
+  pred00[IndU[3]] = (1-pred[IndU[3]])*param[22]
+  pred00[IndU[4]] = (1-pred[IndU[4]])*param[23]
   #Not a flood - correct by theta
   pred00[IndN] = (1-pred[IndN])*param[24]
-  #All historical Y = 1 are affected by 1-theta
-  pred10 = (1-pred)*(1-param[24])
   
   pll = vector('numeric', length=length(Y_L15sm))
-  #Weighted 1-eta
-  s01 = sum(1-param[4:23])/(length(param[4:23]))
   for (j in 1:length(Y_L15sm)){
     if (j %in% IndL){
       #Get adjusted probability of Y = 1
-      pll[j] = log(pred11[j] + pred10[j])
+      #Weighted 1-theta
+      s1t = (sum(1-param[10:23]) + (1-param[24])*length(IndN))/(length(IndM) + length(IndS) + length(IndU) + length(IndN))
+      pll[j] = log(pred11[j] + (1-pred[j])*s1t)
     }else if (j %in% IndM){
-      #Get adjusted probability of Y = 1
-      pll[j] = log(pred11[j] + pred10[j])
+      #Get adjusted probability of Y = 0
+      pll[j] = log(pred01[j] + pred00[j])
     }else if (j %in% IndS){
-      #Get adjusted probability of Y = 1
-      pll[j] = log(pred11[j] + pred10[j])
+      #Get adjusted probability of Y = 0
+      pll[j] = log(pred01[j] + pred00[j])
     }else if (j %in% IndU){
-      #Get adjusted probability of Y = 1
-      pll[j] = log(pred11[j] + pred10[j])
+      #Get adjusted probability of Y = 0
+      pll[j] = log(pred01[j] + pred00[j])
     }else if (j %in% IndN){
       #Get adjusted probability of Y = 0
-      pll[j] = log(pred[j]*s01 + pred00[j])
+      pll[j] = log(pred01[j] + pred00[j])
     }else{
       #Could be Y=0 or Y=1 and Y is not uncertain
       pll[j] = Y_L15sm[j]*log(pred[j]) + (1 - Y_L15sm[j])*log(1 - pred[j])
@@ -1217,16 +1265,16 @@ likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll <- function(param, sum = 
   return(if (sum == TRUE) ll else (pll + 0.5*determinant(I, logarithm = TRUE)$modulus[1]/length(Y_L15sm)))  
 }
 
-likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll_theta <- function(param, sum = TRUE){
+likelihood_L15_FixY_pSensSpec_PCAcvs_DataAsIs_pAll_theta <- function(param, sum = TRUE){
   #Determine indices of historical large Y = 1
   IndL = which((FloodMag_L15sm == 'L') & (years_L15sm < 1962))
-  #Determine indices of historical moderate Y = 1
+  #Determine indices of historical moderate Y = 0
   IndM = which((FloodMag_L15sm == 'M') & (years_L15sm < 1962))
-  #Determine indices of historical small Y = 1
+  #Determine indices of historical small Y = 0
   IndS = which((FloodMag_L15sm == 'S') & (years_L15sm < 1962))
   #Determine indices of historical not a flood Y = 0
   IndN = which((FloodMag_L15sm == 'N') & (years_L15sm < 1962))
-  #Same for floods of unknown magnitude Y = 1
+  #Same for floods of unknown magnitude
   IndU = which((FloodMag_L15sm == 'U'))
   
   #point likelihoods
@@ -1241,7 +1289,7 @@ likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll_theta <- function(param, 
   I = t(Xi) %*% w %*% Xi
   
   #Terms for sens spec likelihood
-  pred10 = pred
+  pred01 = pred
   pred11 = pred
   pred00 = pred
   #Large - correct by eta
@@ -1251,23 +1299,27 @@ likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll_theta <- function(param, 
   pred11[IndL[4]] = pred[IndL[4]]*param[7]
   pred11[IndL[5]] = pred[IndL[5]]*param[8]
   pred11[IndL[6]] = pred[IndL[6]]*param[9]
-  #Moderate - correct by eta
-  pred11[IndM[1]] = pred[IndM[1]]*param[10]
-  pred11[IndM[2]] = pred[IndM[2]]*param[11]
-  pred11[IndM[3]] = pred[IndM[3]]*param[12]
-  pred11[IndM[4]] = pred[IndM[4]]*param[13]
-  pred11[IndM[5]] = pred[IndM[5]]*param[14]
-  #Small - correct by eta
-  pred11[IndS[1]] = pred[IndS[1]]*param[15]
-  pred11[IndS[2]] = pred[IndS[2]]*param[16]
-  pred11[IndS[3]] = pred[IndS[3]]*param[17]
-  pred11[IndS[4]] = pred[IndS[4]]*param[18]
-  pred11[IndS[5]] = pred[IndS[5]]*param[19]
-  #Unknown - correct by eta
-  pred11[IndU[1]] = pred[IndU[1]]*param[20]
-  pred11[IndU[2]] = pred[IndU[2]]*param[21]
-  pred11[IndU[3]] = pred[IndU[3]]*param[22]
-  pred11[IndU[4]] = pred[IndU[4]]*param[23]
+  #All Y=0 are affected by 1-eta
+  #Weighted 1-eta
+  s01 = sum(1-param[4:9])/(length(param[4:9]))
+  pred01 = pred*s01
+  #Moderate - correct by theta
+  pred00[IndM[1]] = (1-pred[IndM[1]])*param[10]
+  pred00[IndM[2]] = (1-pred[IndM[2]])*param[11]
+  pred00[IndM[3]] = (1-pred[IndM[3]])*param[12]
+  pred00[IndM[4]] = (1-pred[IndM[4]])*param[13]
+  pred00[IndM[5]] = (1-pred[IndM[5]])*param[14]
+  #Small - correct by theta
+  pred00[IndS[1]] = (1-pred[IndS[1]])*param[15]
+  pred00[IndS[2]] = (1-pred[IndS[2]])*param[16]
+  pred00[IndS[3]] = (1-pred[IndS[3]])*param[17]
+  pred00[IndS[4]] = (1-pred[IndS[4]])*param[18]
+  pred00[IndS[5]] = (1-pred[IndS[5]])*param[19]
+  #Unknown - correct by theta
+  pred00[IndU[1]] = (1-pred[IndU[1]])*param[20]
+  pred00[IndU[2]] = (1-pred[IndU[2]])*param[21]
+  pred00[IndU[3]] = (1-pred[IndU[3]])*param[22]
+  pred00[IndU[4]] = (1-pred[IndU[4]])*param[23]
   #Not a flood - correct by theta
   pred00[IndN[1]] = (1-pred[IndN[1]])*param[24]
   pred00[IndN[2]] = (1-pred[IndN[2]])*param[25]
@@ -1292,30 +1344,26 @@ likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll_theta <- function(param, 
   pred00[IndN[21]] = (1-pred[IndN[21]])*param[44]
   pred00[IndN[22]] = (1-pred[IndN[22]])*param[45]
   pred00[IndN[23]] = (1-pred[IndN[23]])*param[46]
-  #All historical Y = 1 are affected by 1-theta
-  #Weighted 1-theta
-  s10 = sum(1-param[24:46])/(length(param[24:46]))
-  pred10 = (1-pred)*s10
   
   pll = vector('numeric', length=length(Y_L15sm))
-  #Weighted 1-eta
-  s01 = sum(1-param[4:23])/(length(param[4:23]))
   for (j in 1:length(Y_L15sm)){
     if (j %in% IndL){
       #Get adjusted probability of Y = 1
-      pll[j] = log(pred11[j] + pred10[j])
+      #Weighted 1-theta
+      s1t = sum(1-param[10:46])/length(param[10:46])
+      pll[j] = log(pred11[j] + (1-pred[j])*s1t)
     }else if (j %in% IndM){
-      #Get adjusted probability of Y = 1
-      pll[j] = log(pred11[j] + pred10[j])
+      #Get adjusted probability of Y = 0
+      pll[j] = log(pred01[j] + pred00[j])
     }else if (j %in% IndS){
-      #Get adjusted probability of Y = 1
-      pll[j] = log(pred11[j] + pred10[j])
+      #Get adjusted probability of Y = 0
+      pll[j] = log(pred01[j] + pred00[j])
     }else if (j %in% IndU){
-      #Get adjusted probability of Y = 1
-      pll[j] = log(pred11[j] + pred10[j])
+      #Get adjusted probability of Y = 0
+      pll[j] = log(pred01[j] + pred00[j])
     }else if (j %in% IndN){
       #Get adjusted probability of Y = 0
-      pll[j] = log(pred[j]*s01 + pred00[j])
+      pll[j] = log(pred01[j] + pred00[j])
     }else{
       #Could be Y=0 or Y=1 and Y is not uncertain
       pll[j] = Y_L15sm[j]*log(pred[j]) + (1 - Y_L15sm[j])*log(1 - pred[j])
@@ -1337,80 +1385,85 @@ settingsDREAMzs_L15_Hist = list(iterations = 2000000, gamma= NULL, eps = 0, e = 
                                   #burnin must be greater than adaptation.
                                   burnin = 50000, adaptation = 50000, thin = 100, message = FALSE, startValue = 7)
 
-# DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s----
-dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020', showWarnings = FALSE)
-setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s <- createBayesianSetup(likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s, prior = prior_L15_unif_SensSpec_Hist, parallel = 7, 
-                                                                    parallelOptions = list(packages=list('BayesianTools'), 
-                                                                                           variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 'FloodMag_L15sm', 
-                                                                                                          'years_L15sm'), dlls=NULL), 
-                                                                    names = c('Int', 'PC1', 'PC2', 'pLL', 'pLM', 'pLS', 'pLU', 'pNN'), 
-                                                                    plotLower = c(-15, -1, -1,0,0,0,0,0), plotUpper = c(0, 6, 6,1,1,1,1,1), 
-                                                                    plotBest = c(as.numeric(res_Firth_L15_PC3$coefficients),0.8,0.5,0.2,0.5,0.5))
+settingsDREAMzs_L15_Hist_pAll = list(iterations = 4000000, gamma= NULL, eps = 0, e = 0.05, parallel = NULL, Z = NULL, ZupdateFrequency = 100, pSnooker = 0.1, DEpairs = 2,
+                                nCR = 3, pCRupdate = TRUE, updateInterval = 10,
+                                #burnin must be greater than adaptation.
+                                burnin = 100000, adaptation = 100000, thin = 200, message = FALSE, startValue = 7)
+
+# DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s, Y=0 ----
+dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020', showWarnings = FALSE)
+setUpDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs <- createBayesianSetup(likelihood_L15_FixY_pSensSpec_PCAcvs_DataAsIs, prior = prior_L15_unif_SensSpec_DataAsIs, parallel = 7, 
+                                                                      parallelOptions = list(packages=list('BayesianTools'), 
+                                                                                             variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 'FloodMag_L15sm', 
+                                                                                                            'years_L15sm'), dlls=NULL), 
+                                                                      names = c('Int', 'PC1', 'PC2', 'pLL', 'pNNM', 'pNNS', 'pNNU', 'pNNN'), 
+                                                                      plotLower = c(-15, -1, -1,0,0,0,0,0), plotUpper = c(0, 6, 6,1,1,1,1,1), 
+                                                                      plotBest = c(as.numeric(res_Firth_L15_PC3$coefficients),0.8,0.5,0.2,0.5,0.5))
 set.seed(26440)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s <- runMCMC(bayesianSetup = setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s, sampler = "DREAMzs", settings = settingsDREAMzs_L15_Hist)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs <- runMCMC(bayesianSetup = setUpDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs, sampler = "DREAMzs", settings = settingsDREAMzs_L15_Hist)
 #Remove all -Inf in chain. These result from poor initial conditions (prior samples)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s = removeInf(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs = removeInf(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs)
 #Check for remaining infinities
-if(any(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$InfCk > 0)){
+if(any(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$InfCk > 0)){
   print('infinities remain within MCMC chain posteriors')
 }
-summary(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s)
+summary(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs)
 
 #Compute WAIC and DIC
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$WAICBT = WAIC(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s, numSamples = 100000)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$WAIC2BT = WAIC2(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s, numSamples = 100000)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$DIC = DIC(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$WAICBT = WAIC(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs, numSamples = 100000)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$WAIC2BT = WAIC2(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs, numSamples = 100000)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$DIC = DIC(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs)
 #Pointwise log-likelihoods
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$pll = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$likelihood$density(
-  getSample(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s, parametersOnly = F)[,1:outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$numPars], sum = FALSE)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$pll = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$setup$likelihood$density(
+  getSample(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs, parametersOnly = F)[,1:outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$setup$numPars], sum = FALSE)
 #LOO
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$LOO = loo(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$pll, 
-                                                       cores = 7, save_psis = TRUE, r_eff = relative_eff(x = exp(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$pll),
-                                                                                                         chain_id = c(rep(1,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])), 
-                                                                                                                      rep(2,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])), 
-                                                                                                                      rep(3,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])), 
-                                                                                                                      rep(4,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])), 
-                                                                                                                      rep(5,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])), 
-                                                                                                                      rep(6,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])), 
-                                                                                                                      rep(7,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])))))
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$WAIC = waic(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$pll)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$WAIC2 = waic2(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$pll)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$LOO = loo(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$pll, 
+                                                       cores = 7, save_psis = TRUE, r_eff = relative_eff(x = exp(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$pll),
+                                                                                                         chain_id = c(rep(1,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[[1]])), 
+                                                                                                                      rep(2,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[[1]])), 
+                                                                                                                      rep(3,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[[1]])), 
+                                                                                                                      rep(4,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[[1]])), 
+                                                                                                                      rep(5,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[[1]])), 
+                                                                                                                      rep(6,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[[1]])), 
+                                                                                                                      rep(7,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[[1]])))))
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$WAIC = waic(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$pll)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$WAIC2 = waic2(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$pll)
 #Rejection rate
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$rejectRate = rejectionRate(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$rejectRate = rejectionRate(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain)
 #Highest Posterior Density Intervals
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$HPD = HPDinterval(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$HPD = HPDinterval(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain)
 #Credible Intervals
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$CI = getCredibleIntervals(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$CI = getCredibleIntervals(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[[1]])
 #Effective sample size for each parameter should be similar
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$Neff = effectiveSize(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:8])
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$Neff = effectiveSize(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[,1:8])
 
 #Sample only the last 1000 from each chain
-sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])
+sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[[1]])
 
-dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC', showWarnings = FALSE)
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:8], size = 0.05)
+dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC', showWarnings = FALSE)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[,1:8], size = 0.05)
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
-correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], method = 'spearman')
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[sample_chain_inds,1:8], method = 'spearman')
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:6], plot = TRUE, thin = 0)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[,1:6], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,7:8], plot = TRUE, thin = 0)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[,7:8], plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
-marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], 
-             prior = prior_L15_unif_SensSpec_Hist$sampler(n = 50000), singlePanel = FALSE, 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
+marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[sample_chain_inds,1:8], 
+             prior = prior_L15_unif_SensSpec_DataAsIs$sampler(n = 50000), singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], diag_fun = 'dens', off_diag_fun = 'scatter', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[sample_chain_inds,1:8], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
@@ -1430,143 +1483,144 @@ mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,
                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA)))
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
-autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]][-1,1:8], lag.max = 100)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[[1]][-1,1:8], lag.max = 100)
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_acf(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain, 
-         pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$names, lags = 20)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_acf(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain, 
+         pars = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,])
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,], 
-           pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$names, 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[sample_chain_inds,], 
+           pars = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,], 
-               pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$names,
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[sample_chain_inds,], 
+               pars = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$setup$names,
                prob_outer = 0.95)
 dev.off()
 
-geweke.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:8], ask = FALSE, nbins = 8)
+geweke.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[,1:8], ask = FALSE, nbins = 8)
 
-stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s)
+stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs)
 
 # Figure 3----
-pdf('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/Fig3-densOverlay.pdf', width = 7, height = 7)
-mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], color_chains = FALSE) +
+pdf('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/Fig3-densOverlay.pdf', width = 7, height = 7)
+mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[sample_chain_inds,1:8], color_chains = FALSE) +
   theme(strip.text.x = element_text(size=14))
 dev.off()
 
-# DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s, pAll----
-dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll', showWarnings = FALSE)
-setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll <- createBayesianSetup(likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll, prior = prior_L15_unif_SensSpec_pAll, parallel = 7, 
-                                                                        parallelOptions = list(packages=list('BayesianTools'), 
-                                                                                               variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 'FloodMag_L15sm', 
-                                                                                                              'years_L15sm'), dlls=NULL), 
-                                                                        names = c('Int', 'PC1', 'PC2', paste0('pLL',seq(1,6,1)), paste0('pLM',seq(1,5,1)), 
-                                                                                  paste0('pLS',seq(1,5,1)), paste0('pLU',seq(1,4,1)), 'pNN'), 
-                                                                        plotLower = c(-15, -6, 0,rep(0,21)), plotUpper = c(0, 2, 6,rep(1,21)), 
-                                                                        plotBest = c(as.numeric(res_Firth$coefficients),rep(0.5,21)))
-set.seed(26441)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll <- runMCMC(bayesianSetup = setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll, sampler = "DREAMzs", settings = settingsDREAMzs_L15_Hist)
+# DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s, Y=0, pAll ----
+dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll', showWarnings = FALSE)
+setUpDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll <- createBayesianSetup(likelihood_L15_FixY_pSensSpec_PCAcvs_DataAsIs_pAll, prior = prior_L15_unif_SensSpec_pAll, parallel = 7, 
+                                                                  parallelOptions = list(packages=list('BayesianTools'), 
+                                                                                         variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 'FloodMag_L15sm', 
+                                                                                                        'years_L15sm'), dlls=NULL), 
+                                                                  names = c('Int', 'PC1', 'PC2', paste0('pLL',seq(1,6,1)), paste0('pNNM',seq(1,5,1)), 
+                                                                            paste0('pNNS',seq(1,5,1)), paste0('pNNU',seq(1,4,1)), 'pNNN'), 
+                                                                  plotLower = c(-15, -6, 0,rep(0,21)), plotUpper = c(0, 2, 6,rep(1,21)), 
+                                                                  plotBest = c(as.numeric(res_Firth_L15_PC3$coefficients),rep(0.5,21)))
+set.seed(26440)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll <- runMCMC(bayesianSetup = setUpDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll, sampler = "DREAMzs", settings = settingsDREAMzs_L15_Hist_pAll)
 #Remove all -Inf in chain. These result from poor initial conditions (prior samples)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll = removeInf(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll = removeInf(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll)
 #Check for remaining infinities
-if(any(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$InfCk > 0)){
+if(any(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$InfCk > 0)){
   print('infinities remain within MCMC chain posteriors')
 }
-summary(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll)
+summary(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll)
 
 #Compute WAIC and DIC
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$WAICBT = WAIC(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll, numSamples = 100000)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$WAIC2BT = WAIC2(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll, numSamples = 100000)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$DIC = DIC(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$WAICBT = WAIC(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll, numSamples = 100000)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$WAIC2BT = WAIC2(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll, numSamples = 100000)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$DIC = DIC(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll)
 #Pointwise log-likelihoods
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$pll = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$likelihood$density(
-  getSample(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll, parametersOnly = F)[,1:outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$numPars], sum = FALSE)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$pll = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$setup$likelihood$density(
+  getSample(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll, parametersOnly = F)[,1:outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$setup$numPars], sum = FALSE)
 #LOO
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$LOO = loo(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$pll, 
-                                                            cores = 7, save_psis = TRUE, r_eff = relative_eff(x = exp(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$pll), 
-                                                                                                              chain_id = c(rep(1,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])), 
-                                                                                                                           rep(2,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])), 
-                                                                                                                           rep(3,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])), 
-                                                                                                                           rep(4,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])), 
-                                                                                                                           rep(5,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])), 
-                                                                                                                           rep(6,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])), 
-                                                                                                                           rep(7,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])))))
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$WAIC = waic(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$pll)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$WAIC2 = waic2(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$pll)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$LOO = loo(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$pll, 
+                                                   cores = 7, save_psis = TRUE, r_eff = relative_eff(x = exp(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$pll),
+                                                                                                     chain_id = c(rep(1,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]])), 
+                                                                                                                  rep(2,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]])), 
+                                                                                                                  rep(3,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]])), 
+                                                                                                                  rep(4,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]])), 
+                                                                                                                  rep(5,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]])), 
+                                                                                                                  rep(6,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]])), 
+                                                                                                                  rep(7,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]])))))
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$WAIC = waic(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$pll)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$WAIC2 = waic2(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$pll)
 #Rejection rate
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$rejectRate = rejectionRate(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$rejectRate = rejectionRate(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain)
 #Highest Posterior Density Intervals
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$HPD = HPDinterval(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$HPD = HPDinterval(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain)
 #Credible Intervals
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$CI = getCredibleIntervals(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$CI = getCredibleIntervals(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]])
 #Effective sample size for each parameter should be similar
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$Neff = effectiveSize(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,1:24])
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$Neff = 
+  effectiveSize(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[,1:24])
 
 #Sample only the last 1000 from each chain
-sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])
+sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]])
 
-dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC', showWarnings = FALSE)
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/traceplot2_panel1.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,1:9], size = 0.05)
+dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC', showWarnings = FALSE)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/traceplot2_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[,1:9], size = 0.05)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/traceplot2_panel2.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,10:14], size = 0.05)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/traceplot2_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[,10:14], size = 0.05)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/traceplot2_panel3.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,15:19], size = 0.05)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/traceplot2_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[,15:19], size = 0.05)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/traceplot2_panel4.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,20:24], size = 0.05)
-dev.off()
-
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
-correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,1:24], method = 'spearman')
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/traceplot2_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[,20:24], size = 0.05)
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,1:6], plot = TRUE, thin = 0)
-dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,7:12], plot = TRUE, thin = 0)
-dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/gelmanplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,13:18], plot = TRUE, thin = 0)
-dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/gelmanplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,19:24], plot = TRUE, thin = 0)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[sample_chain_inds,1:24], method = 'spearman')
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/marginalplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
-marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,1:9], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,1:9], 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[,1:6], plot = TRUE, thin = 0)
+dev.off()
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[,7:12], plot = TRUE, thin = 0)
+dev.off()
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/gelmanplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[,13:18], plot = TRUE, thin = 0)
+dev.off()
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/gelmanplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[,19:24], plot = TRUE, thin = 0)
+dev.off()
+
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/marginalplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[sample_chain_inds,1:9], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,1:9], 
              singlePanel = FALSE, xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/marginalplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
-marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,10:14], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,10:14], 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/marginalplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[sample_chain_inds,10:14], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,10:14], 
              singlePanel = FALSE, xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/marginalplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
-marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,15:19], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,15:19], 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/marginalplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[sample_chain_inds,15:19], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,15:19], 
              singlePanel = FALSE, xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/marginalplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
-marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,20:24], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,20:24], 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/marginalplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[sample_chain_inds,20:24], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,20:24], 
              singlePanel = FALSE, xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
 
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,1:8], diag_fun = 'dens', off_diag_fun = 'scatter', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[sample_chain_inds,1:8], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-6,1),c(0,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
                         c(-15,0),c(-6,1),c(0,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
@@ -1586,199 +1640,180 @@ mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_
                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA)))
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
-autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,1:9], lag.max = 100)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]][-1,1:9], lag.max = 100)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
-autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,10:14], lag.max = 100)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/autocorrplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]][-1,10:14], lag.max = 100)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
-autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,15:19], lag.max = 100)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/autocorrplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]][-1,15:19], lag.max = 100)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
-autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,20:24], lag.max = 100)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/autocorrplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]][-1,20:24], lag.max = 100)
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs__L15_pSensSpec_PCAcvs_Historical1s_pAll$chain, 
          pars = outDREAMzs__L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,])
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,], 
-           pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names, 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[sample_chain_inds,], 
+           pars = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,], 
-               pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names,
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[sample_chain_inds,], 
+               pars = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$setup$names,
                prob_outer = 0.95)
 dev.off()
 
-geweke.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,1:24], ask = FALSE, nbins = 8)
+geweke.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[,1:24], ask = FALSE, nbins = 8)
 
-stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll)
+stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll)
 
-# DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s, pAll, theta----
-dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta', showWarnings = FALSE)
-setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta <- 
-  createBayesianSetup(likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll_theta, 
-                      prior = prior_L15_unif_SensSpec_pAll_theta, 
-                      parallel = 7, parallelOptions = list(packages=list('BayesianTools'),
-                                                           variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 
-                                                                          'FloodMag_L15sm', 'years_L15sm'), dlls=NULL), 
-                                                                        
-                      names = c('Int', 'PC1', 'PC2', paste0('pLL',seq(1,6,1)), paste0('pLM',seq(1,5,1)), 
-                                paste0('pLS',seq(1,5,1)), paste0('pLU',seq(1,4,1)), paste0('pNN',seq(1,23,1))), 
-                      plotLower = c(-15, -6, 0,rep(0,43)), plotUpper = c(0, 2, 6,rep(1,43)), 
-                      plotBest = c(as.numeric(res_Firth$coefficients),rep(0.5,43)))
-set.seed(31422)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta = 
-  runMCMC(bayesianSetup = setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta,
-          sampler = "DREAMzs", settings = settingsDREAMzs_L15_Hist)
+# DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s, Y=0, pAll, theta ----
+dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta', showWarnings = FALSE)
+setUpDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta <- createBayesianSetup(likelihood_L15_FixY_pSensSpec_PCAcvs_DataAsIs_pAll_theta, prior = prior_L15_unif_SensSpec_pAll_theta, parallel = 7, 
+                                                                       parallelOptions = list(packages=list('BayesianTools'), 
+                                                                                              variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 'FloodMag_L15sm', 
+                                                                                                             'years_L15sm'), dlls=NULL), 
+                                                                       names = c('Int', 'PC1', 'PC2', paste0('pLL',seq(1,6,1)), paste0('pNNM',seq(1,5,1)), 
+                                                                                 paste0('pNNS',seq(1,5,1)), paste0('pNNU',seq(1,4,1)), paste0('pNNN',seq(1,23,1))), 
+                                                                       plotLower = c(-15, -6, 0,rep(0,43)), plotUpper = c(0, 2, 6,rep(1,43)), 
+                                                                       plotBest = c(as.numeric(res_Firth_L21$coefficients),rep(0.5,43)))
+set.seed(26440)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta <- runMCMC(bayesianSetup = setUpDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta, sampler = "DREAMzs", settings = settingsDREAMzs_L15_Hist_pAll)
 #Remove all -Inf in chain. These result from poor initial conditions (prior samples)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta = 
-  removeInf(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta = removeInf(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta)
 #Check for remaining infinities
-if(any(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$InfCk > 0)){
+if(any(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$InfCk > 0)){
   print('infinities remain within MCMC chain posteriors')
 }
-summary(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta)
+summary(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta)
 
 #Compute WAIC and DIC
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$WAICBT = 
-  WAIC(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta, numSamples = 100000)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$WAIC2BT = 
-  WAIC2(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta, numSamples = 100000)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$DIC = 
-  DIC(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$WAICBT = WAIC(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta, numSamples = 100000)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$WAIC2BT = WAIC2(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta, numSamples = 100000)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$DIC = DIC(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta)
 #Pointwise log-likelihoods
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$pll = 
-  outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$likelihood$density(
-    getSample(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta,                       
-              parametersOnly = F)[,1:outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$numPars],
-    sum = FALSE)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$pll = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$setup$likelihood$density(
+  getSample(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta, parametersOnly = F)[,1:outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$setup$numPars], sum = FALSE)
 #LOO
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$LOO = 
-  loo(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$pll,
-      cores = 7, save_psis = TRUE, 
-      r_eff = relative_eff(x = exp(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$pll), 
-                           chain_id = c(rep(1,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])),         
-                                        rep(2,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])),         
-                                        rep(3,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])),         
-                                        rep(4,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])),         
-                                        rep(5,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])),         
-                                        rep(6,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])),         
-                                        rep(7,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])))))
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$WAIC = 
-  waic(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$pll)
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$WAIC2 = 
-  waic2(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$pll)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$LOO = loo(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$pll, 
+                                                        cores = 7, save_psis = TRUE, r_eff = relative_eff(x = exp(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$pll),
+                                                                                                          chain_id = c(rep(1,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[[1]])), 
+                                                                                                                       rep(2,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[[1]])), 
+                                                                                                                       rep(3,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[[1]])), 
+                                                                                                                       rep(4,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[[1]])), 
+                                                                                                                       rep(5,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[[1]])), 
+                                                                                                                       rep(6,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[[1]])), 
+                                                                                                                       rep(7,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[[1]])))))
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$WAIC = waic(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$pll)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$WAIC2 = waic2(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$pll)
 #Rejection rate
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$rejectRate = 
-  rejectionRate(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$rejectRate = rejectionRate(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain)
 #Highest Posterior Density Intervals
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$HPD = 
-  HPDinterval(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain)
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$HPD = HPDinterval(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain)
 #Credible Intervals
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$CI = 
-  getCredibleIntervals(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$CI = getCredibleIntervals(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[[1]])
 #Effective sample size for each parameter should be similar
-outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$Neff = 
-  effectiveSize(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,1:46])
+outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$Neff = 
+  effectiveSize(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[,1:46])
 
 #Sample only the last 1000 from each chain
-sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])
+sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[[1]])
 
-dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC', showWarnings = FALSE)
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/traceplot2.png', res = 300, units = 'in', 
+dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC', showWarnings = FALSE)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/traceplot2.png', res = 300, units = 'in', 
     width = 7, height = 7)
-mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,1:46], size = 0.05)
+mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[,1:46], size = 0.05)
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/correlplot.png', res = 300, units = 'in',
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/correlplot.png', res = 300, units = 'in',
     width = 14, height = 14)
-correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,1:46], method = 'spearman')
+correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[sample_chain_inds,1:46], method = 'spearman')
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', 
     width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,1:6], plot = TRUE, thin = 0)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[,1:6], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', 
     width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,7:12], plot = TRUE, thin = 0)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[,7:12], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel3.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/gelmanplot_panel3.png', res = 300, units = 'in', 
     width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,13:18], plot = TRUE, thin = 0)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[,13:18], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel4.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/gelmanplot_panel4.png', res = 300, units = 'in', 
     width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,19:24], plot = TRUE, thin = 0)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[,19:24], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel5.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/gelmanplot_panel5.png', res = 300, units = 'in', 
     width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,25:30], plot = TRUE, thin = 0)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[,25:30], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel6.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/gelmanplot_panel6.png', res = 300, units = 'in', 
     width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,31:36], plot = TRUE, thin = 0)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[,31:36], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel7.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/gelmanplot_panel7.png', res = 300, units = 'in', 
     width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,37:42], plot = TRUE, thin = 0)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[,37:42], plot = TRUE, thin = 0)
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel8.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/gelmanplot_panel8.png', res = 300, units = 'in', 
     width = 7, height = 7)
-gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,43:46], plot = TRUE, thin = 0)
+gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[,43:46], plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel1.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/marginalplot_panel1.png', res = 300, units = 'in', 
     width = 7, height = 7)
-marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,1:9], 
+marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[sample_chain_inds,1:9], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,1:9], singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel2.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/marginalplot_panel2.png', res = 300, units = 'in', 
     width = 7, height = 7)
-marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,10:18], 
+marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[sample_chain_inds,10:18], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,10:18], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel3.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/marginalplot_panel3.png', res = 300, units = 'in', 
     width = 7, height = 7)
-marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,19:27], 
+marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[sample_chain_inds,19:27], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,19:27], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel4.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/marginalplot_panel4.png', res = 300, units = 'in', 
     width = 7, height = 7)
-marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,28:36], 
+marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[sample_chain_inds,28:36], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,28:36], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel5.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/marginalplot_panel5.png', res = 300, units = 'in', 
     width = 7, height = 7)
-marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,37:45], 
+marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[sample_chain_inds,37:45], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,37:45], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel6.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/marginalplot_panel6.png', res = 300, units = 'in', 
     width = 7, height = 7)
-marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,45:46], 
+marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[sample_chain_inds,45:46], 
              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,45:46], singlePanel = FALSE, 
              xrange = t(rbind(c(0,1), c(0,1))))
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/PairPlot.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/PairPlot.png', res = 300, units = 'in', 
     width = 7, height = 7)
-mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,1:8], diag_fun = 'dens', 
+mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[sample_chain_inds,1:8], diag_fun = 'dens', 
            off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
@@ -1799,148 +1834,32 @@ mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_
                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA)))
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_acf(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain, 
-         pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$names, lags = 100)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_acf(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain, 
+         pars = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$setup$names, lags = 100)
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/densOverlay.png', res = 300, units = 'in', 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/densOverlay.png', res = 300, units = 'in', 
     width = 7, height = 7)
-mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,])
+mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,], 
-           pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$names, 
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[sample_chain_inds,], 
+           pars = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,], 
-               pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$names,
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[sample_chain_inds,], 
+               pars = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$setup$names,
                prob_outer = 0.95)
 dev.off()
 
-geweke.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,1:46], ask = FALSE, nbins = 8)
+geweke.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[,1:46], ask = FALSE, nbins = 8)
 
-stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta)
 
-#Sample from posterior, model with uncertainty----
-ppSample = function(BTout, #output from a BayesianTools MCMC 
-                    n = 1000,     #number of posterior samples to draw from each chain
-                    Xp,      #the X data to use in regression 
-                    FloodMag,#the flood magnitude data
-                    years,    #the year data
-                    Yp,        #the observed flood data
-                    seed     #the random seed to use
-                    ){
-  #Ensure n is less than length of chains
-  if (n > nrow(BTout$chain[[1]])){
-    stop('n must be less than or equal to the number of samples in each chain')
-  }
-  
-  set.seed(seed)
-  
-  #Get the last n samples from each chain
-  param = matrix(NA, nrow = n*length(BTout$chain), ncol = BTout$setup$numPars)
-  for (i in 1:length(BTout$chain)){
-    param[(1+(n*(i-1))):(n*i),] = BTout$chain[[i]][(nrow(BTout$chain[[i]])-(n-1)):nrow(BTout$chain[[i]]), 
-                                                   1:BTout$setup$numPars]
-  }
-  
-  #Get predicted y (log odds) for each of the parameter sets
-  #numerator
-  num = t(apply(X = param, MARGIN = 1, FUN = function(p){exp(p[1] + p[2]*Xp[,1] + p[3]*Xp[,2])} ))
-  #predicted probability of large IJF
-  ppi = t(apply(X = num, MARGIN = 1, FUN = function(num){num/(1+num)}))
-  
-  #Determine indices of historical large Y = 1
-  IndL = which((FloodMag == 'L') & (years < 1962))
-  #Determine indices of historical moderate Y = 1
-  IndM = which((FloodMag == 'M') & (years < 1962))
-  #Determine indices of historical small Y = 1
-  IndS = which((FloodMag == 'S') & (years < 1962))
-  #Determine indices of historical not a flood Y = 0
-  IndN = which((FloodMag == 'N') & (years < 1962))
-  #Same for floods of unknown magnitude Y = 1
-  IndU = which((FloodMag == 'U'))
-  
-  #Edit the historical predictions based on the probability of misclassification
-  qi = ppi
-  for(i in 1:nrow(qi)){
-    qi[i,IndL] = ppi[i,IndL]*param[i,4] + (1-ppi[i,IndL])*(1-param[i,8])
-    qi[i,IndM] = ppi[i,IndM]*param[i,5] + (1-ppi[i,IndM])*(1-param[i,8])
-    qi[i,IndS] = ppi[i,IndS]*param[i,6] + (1-ppi[i,IndS])*(1-param[i,8])
-    qi[i,IndU] = ppi[i,IndU]*param[i,7] + (1-ppi[i,IndU])*(1-param[i,8])
-    #Weighted eta
-    s11 = (param[i,5]*length(IndM) + param[i,6]*length(IndS) + param[i,7]*length(IndU) + param[i,4]*length(IndL))/(
-      length(IndM) + length(IndS) + length(IndU) + length(IndL))
-    qi[i,IndN] = ppi[i,IndN]*s11 + (1-ppi[i,IndN])*(1-param[i,8])
-  }
-  
-  #Sample a matrix of possible y values based on qi probability of IJF in historical years, and append the 1962-present years
-  y = matrix(NA, nrow = nrow(qi), ncol = ncol(qi))
-  for (i in 1:ncol(y[,years<1963])){
-    y[,i] = rbinom(n = nrow(y), size = 1, prob = qi[,i])
-  }
-  for (i in 1:ncol(y[,years>=1963])){
-    y[,which(years>=1963)[i]] = Yp[years>=1963][i]
-  }
-    
-  #Sample a vector of yrep based on the regression coefficients
-  yrep = matrix(NA, nrow = nrow(ppi), ncol = ncol(ppi))
-  for (i in 1:ncol(yrep)){
-    yrep[,i] = rbinom(n = nrow(yrep), size = 1, prob = ppi[,i])
-  }
-    
-  #return list of params, y and yrep
-  retl = list(param=param, pi=ppi, qi=qi, y=y, yrep=yrep)
-  return(retl)
-}
-
-#Posterior Predictive Check for best model
-ppc = ppSample(BTout = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s, n = 143, Xp = predPCAcvs, 
-               FloodMag = FloodMag_L15sm, years = years_L15sm, Yp = Y_L15sm, seed = 34)
-bayesplot::ppc_bars(y = ppc$y[1,44:93], yrep = ppc$yrep[,44:93])
-#Need to edit this function to plot uncertain y as well as uncertainty in yrep
-#Vector of sum for y
-ySum = apply(X = ppc$y, MARGIN = 1, FUN = sum)
-#Quantiles of sum for y
-ySum2p5 = quantile(x = ySum, probs = 0.025)
-ySum97p5 = quantile(x = ySum, probs = 0.975)
-ySum2p5_0 = quantile(x = ncol(ppc$y)-ySum, probs = 0.025)
-ySum97p5_0 = quantile(x = ncol(ppc$y)-ySum, probs = 0.975)
-#Vector of sum for yrep
-yrepSum = apply(X = ppc$yrep, MARGIN = 1, FUN = sum)
-#Quantiles of sum for y
-yrepSum2p5 = quantile(x = yrepSum, probs = 0.025)
-yrepSum97p5 = quantile(x = yrepSum, probs = 0.975)
-yrepSum2p5_0 = quantile(x = ncol(ppc$y)-yrepSum, probs = 0.025)
-yrepSum97p5_0 = quantile(x = ncol(ppc$y)-yrepSum, probs = 0.975)
-
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/ppcbars.png', res=300, height = 5, width = 5, units = 'in')
-#plot bars for the uncertain y
-barplot(height = c(mean(ncol(ppc$y)-ySum), mean(ySum)), space = 0, names.arg = c(0,1), col = 'gray', 
-        border = 'white', ylim = c(0,100))
-par(new=TRUE)
-#plot bars for the certain y in a darker shade
-barplot(height = c(length(which(ppc$y[1,44:93] == 0)), length(which(ppc$y[1,44:93] == 1))), space = 0, 
-        col = 'black', border = 'white', ylim = c(0,100))
-#Add error bars for y and yrep on each
-arrows(x0 = c(0.25,1.25), y0 = c(ySum2p5_0, ySum2p5), x1 = c(0.25,1.25), y1 = c(ySum97p5_0, ySum97p5), 
-       col = c('blue'), lty = 1, lwd = 1, code = 0)
-arrows(x0 = c(0.75,1.75), y0 = c(yrepSum2p5_0, yrepSum2p5), x1 = c(0.75,1.75), y1 = c(yrepSum97p5_0, yrepSum97p5), 
-       col = c('red'), lty = 1, lwd = 1, code = 0)
-legend('topright', legend=c('y', 'yrep', 'certain y', 'uncertain y'), col = c('blue', 'red', 'black', 'gray'), 
-       pch = c(NA,NA,15,15), lty = c(1,1,NA,NA))
-dev.off()
-
-#Save data for plotting with premade python functions
-write.csv(ppc$y, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/y.csv', row.names = FALSE)
-write.csv(ppc$yrep, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/yrep.csv', row.names = FALSE)
-write.csv(ppc$pi, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/p.csv', row.names = FALSE)
-write.csv(ppc$qi, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/q.csv', row.names = FALSE)
-write.csv(years_L15sm, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/years.csv', row.names = FALSE)
+stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta)
 
 #Sample from posterior, Lamontagne et al. model----
 ppSample_BestLamonMod = function(BTout, #output from a BayesianTools MCMC 
@@ -1980,26 +1899,26 @@ ppSample_BestLamonMod = function(BTout, #output from a BayesianTools MCMC
   #predicted probability of large IJF
   ppi = t(apply(X = num, MARGIN = 1, FUN = function(num){num/(1+num)}))
   
-  #Sample a vector of yrep based on the regression coefficients
-  yrep = matrix(NA, nrow = nrow(ppi), ncol = ncol(ppi))
-  for (i in 1:ncol(yrep)){
-    yrep[,i] = rbinom(n = nrow(yrep), size = 1, prob = ppi[,i])
+  #Sample a vector of zrep based on the regression coefficients
+  zrep = matrix(NA, nrow = nrow(ppi), ncol = ncol(ppi))
+  for (i in 1:ncol(zrep)){
+    zrep[,i] = rbinom(n = nrow(zrep), size = 1, prob = ppi[,i])
   }
   
-  #return list of params, y and yrep
-  retl = list(param = param, pi = ppi, yrep = yrep)
+  #return list of params, y and zrep
+  retl = list(param = param, pi = ppi, zrep = zrep)
   return(retl)
 }
 
 #Posterior Predictive Check for best model
 ppc_BestLamonMod = ppSample_BestLamonMod(BTout = outDREAMzs_1p, n = 143, Xp = X_hold[,c(3,5)], seed = 35)
 ppc_BestLamonMod_LgSample = ppSample_BestLamonMod(BTout = outDREAMzs_1p, n = 300, Xp = X_hold[,c(3,5)], seed = 36)
-bayesplot::ppc_bars(y = Y_hold, yrep = ppc_BestLamonMod$yrep)
+bayesplot::ppc_bars(y = Y_hold, yrep = ppc_BestLamonMod$zrep)
 #Need to make predictions only for the years with Ft. Smith data 1915-2020 for hindcast.
 ppc_BestLamonMod_1915 = ppSample_BestLamonMod(BTout = outDREAMzs_1p, n = 143, Xp = X[-which(is.na(X$Fort.Smith)),c(2,4)], 
                                               seed = 35, start1915 = TRUE, years = years_L15sm)
 
-write.csv(ppc_BestLamonMod_1915$yrep, file = 'DREAMzs_L15_VermPrecip_1962-2020/yrep.csv', row.names = FALSE)
+write.csv(ppc_BestLamonMod_1915$zrep, file = 'DREAMzs_L15_VermPrecip_1962-2020/zrep.csv', row.names = FALSE)
 write.csv(ppc_BestLamonMod_1915$pi, file = 'DREAMzs_L15_VermPrecip_1962-2020/p.csv', row.names = FALSE)
 
 #Save betas
@@ -2049,24 +1968,24 @@ ppSample_3p = function(BTout, #output from a BayesianTools MCMC
   #predicted probability of large IJF
   ppi = t(apply(X = num, MARGIN = 1, FUN = function(num){num/(1+num)}))
   
-  #Sample a vector of yrep based on the regression coefficients
-  yrep = matrix(NA, nrow = nrow(ppi), ncol = ncol(ppi))
-  for (i in 1:ncol(yrep)){
-    yrep[,i] = rbinom(n = nrow(yrep), size = 1, prob = ppi[,i])
+  #Sample a vector of zrep based on the regression coefficients
+  zrep = matrix(NA, nrow = nrow(ppi), ncol = ncol(ppi))
+  for (i in 1:ncol(zrep)){
+    zrep[,i] = rbinom(n = nrow(zrep), size = 1, prob = ppi[,i])
   }
   
-  #return list of params, y and yrep
-  retl = list(param = param, pi = ppi, yrep = yrep)
+  #return list of params, y and zrep
+  retl = list(param = param, pi = ppi, zrep = zrep)
   return(retl)
 }
 
 #Posterior Predictive Check for best model
-ppc_3p = ppSample_3p(BTout = outDREAMzs_3p_AGU, n = 143, Xp = predict(PCAcvs, X_holdsm), seed = 35)
+ppc_3p = ppSample_3p(BTout = outDREAMzs_3p_PCAcvs, n = 143, Xp = predict(PCAcvs, X_holdsm), seed = 35)
 #Need to make predictions only for the years with Ft. Smith data 1915-2020 for hindcast.
-ppc_3p_1915 = ppSample_3p(BTout = outDREAMzs_3p_AGU, n = 143, Xp = X[-which(is.na(X$Fort.Smith)),], 
+ppc_3p_1915 = ppSample_3p(BTout = outDREAMzs_3p_PCAcvs, n = 143, Xp = X[-which(is.na(X$Fort.Smith)),], 
                                               seed = 35, start1915 = TRUE, years = years_L15sm, PCA = PCAcvs)
 
-write.csv(ppc_3p_1915$yrep, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/yrep.csv', row.names = FALSE)
+write.csv(ppc_3p_1915$zrep, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/zrep.csv', row.names = FALSE)
 write.csv(ppc_3p_1915$pi, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_1962-2020/p.csv', row.names = FALSE)
 
 
@@ -2095,14 +2014,14 @@ ppSample_NoUncertainty = function(BTout, #output from a BayesianTools MCMC
   #predicted probability of large IJF
   ppi = t(apply(X = num, MARGIN = 1, FUN = function(num){num/(1+num)}))
   
-  #Sample a vector of yrep based on the regression coefficients
-  yrep = matrix(NA, nrow = nrow(ppi), ncol = ncol(ppi))
-  for (i in 1:ncol(yrep)){
-    yrep[,i] = rbinom(n = nrow(yrep), size = 1, prob = ppi[,i])
+  #Sample a vector of zrep based on the regression coefficients
+  zrep = matrix(NA, nrow = nrow(ppi), ncol = ncol(ppi))
+  for (i in 1:ncol(zrep)){
+    zrep[,i] = rbinom(n = nrow(zrep), size = 1, prob = ppi[,i])
   }
   
-  #return list of params, y and yrep
-  retl = list(param = param, pi = ppi, yrep = yrep)
+  #return list of params, y and zrep
+  retl = list(param = param, pi = ppi, zrep = zrep)
   return(retl)
 }
 
@@ -2110,9 +2029,134 @@ ppSample_NoUncertainty = function(BTout, #output from a BayesianTools MCMC
 ppc_NoUncertainty = ppSample_NoUncertainty(BTout = outDREAMzs_NoUncertainty, n = 143, 
                                            Xp = predict(PCAcvs, X_L15sm), seed = 35)
 
-write.csv(ppc_NoUncertainty$yrep, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/yrep.csv', row.names = FALSE)
+write.csv(ppc_NoUncertainty$zrep, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/zrep.csv', row.names = FALSE)
 write.csv(ppc_NoUncertainty$pi, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/p.csv', row.names = FALSE)
 
+
+#Sample from posterior, model with uncertainty, medium, small, unknown as Y=0----
+ppSample_y0 = function(BTout, #output from a BayesianTools MCMC 
+                    n = 1000,     #number of posterior samples to draw from each chain
+                    Xp,      #the X data to use in regression 
+                    FloodMag,#the flood magnitude data
+                    years,    #the year data
+                    Yp,        #the observed flood data
+                    seed     #the random seed to use
+){
+  #Ensure n is less than length of chains
+  if (n > nrow(BTout$chain[[1]])){
+    stop('n must be less than or equal to the number of samples in each chain')
+  }
+  
+  set.seed(seed)
+  
+  #Get the last n samples from each chain
+  param = matrix(NA, nrow = n*length(BTout$chain), ncol = BTout$setup$numPars)
+  for (i in 1:length(BTout$chain)){
+    param[(1+(n*(i-1))):(n*i),] = BTout$chain[[i]][(nrow(BTout$chain[[i]])-(n-1)):nrow(BTout$chain[[i]]), 
+                                                   1:BTout$setup$numPars]
+  }
+  
+  #Get predicted z (log odds) for each of the parameter sets
+  #numerator
+  num = t(apply(X = param, MARGIN = 1, FUN = function(p){exp(p[1] + p[2]*Xp[,1] + p[3]*Xp[,2])} ))
+  #predicted probability of large IJF
+  ppi = t(apply(X = num, MARGIN = 1, FUN = function(num){num/(1+num)}))
+  
+  #Determine indices of historical large Y = 1
+  IndL = which((FloodMag == 'L') & (years < 1962))
+  #Determine indices of historical moderate Y = 0
+  IndM = which((FloodMag == 'M') & (years < 1962))
+  #Determine indices of historical small Y = 0
+  IndS = which((FloodMag == 'S') & (years < 1962))
+  #Determine indices of historical not a flood Y = 0
+  IndN = which((FloodMag == 'N') & (years < 1962))
+  #Same for floods of unknown magnitude Y = 0
+  IndU = which((FloodMag == 'U'))
+  
+  #Edit the historical Y predictions based on the probability of misclassification
+  qi = ppi
+  for(i in 1:nrow(qi)){
+    #Weighted theta
+    s00 = (param[i,5]*length(IndM) + param[i,6]*length(IndS) + param[i,7]*length(IndU) + param[i,8]*length(IndN))/(
+      length(IndM) + length(IndS) + length(IndU) + length(IndN))
+    qi[i,IndL] = ppi[i,IndL]*param[i,4] + (1-ppi[i,IndL])*(1-s00)
+    qi[i,IndM] = 1 - (ppi[i,IndM]*(1-param[i,4]) + (1-ppi[i,IndM])*param[i,5])
+    qi[i,IndS] = 1 - (ppi[i,IndS]*(1-param[i,4]) + (1-ppi[i,IndS])*param[i,6])
+    qi[i,IndU] = 1 - (ppi[i,IndU]*(1-param[i,4]) + (1-ppi[i,IndU])*param[i,7])
+    qi[i,IndN] = 1 - (ppi[i,IndN]*(1-param[i,4]) + (1-ppi[i,IndN])*param[i,8])
+  }
+  
+  #Sample a matrix of possible y values based on qi probability of IJF in historical years, and append the 1962-present years
+  y = matrix(NA, nrow = nrow(qi), ncol = ncol(qi))
+  for (i in 1:ncol(y[,years<1962])){
+    y[,i] = rbinom(n = nrow(y), size = 1, prob = qi[,i])
+  }
+  for (i in 1:ncol(y[,years>=1962])){
+    y[,which(years>=1962)[i]] = Yp[years>=1962][i]
+  }
+  
+  #Sample a vector of zrep based on the regression coefficients
+  zrep = matrix(NA, nrow = nrow(ppi), ncol = ncol(ppi))
+  for (i in 1:ncol(zrep)){
+    zrep[,i] = rbinom(n = nrow(zrep), size = 1, prob = ppi[,i])
+  }
+  
+  #return list of params, y and zrep
+  retl = list(param=param, pi=ppi, qi=qi, y=y, zrep=zrep)
+  return(retl)
+}
+
+#Posterior Predictive Check for best model
+ppc_y0 = ppSample_y0(BTout = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs, n = 143, Xp = predPCAcvs, 
+               FloodMag = FloodMag_L15sm, years = years_L15sm, Yp = Y_L15sm, seed = 34)
+bayesplot::ppc_bars(y = ppc_y0$y[1,43:95], yrep = ppc_y0$zrep[,43:95])
+#Need to edit this function to plot uncertain y as well as uncertainty in zrep
+#Vector of sum for y
+ySum_y0 = apply(X = ppc_y0$y, MARGIN = 1, FUN = sum)
+#Quantiles of sum for y
+ySum2p5_y0 = quantile(x = ySum_y0, probs = 0.025)
+ySum97p5_y0 = quantile(x = ySum_y0, probs = 0.975)
+ySum2p5_0_y0 = quantile(x = ncol(ppc_y0$y)-ySum_y0, probs = 0.025)
+ySum97p5_0_y0 = quantile(x = ncol(ppc_y0$y)-ySum_y0, probs = 0.975)
+#Vector of sum for zrep
+zrepSum_y0 = apply(X = ppc_y0$zrep, MARGIN = 1, FUN = sum)
+#Quantiles of sum for zrep
+zrepSum2p5_y0 = quantile(x = zrepSum_y0, probs = 0.025)
+zrepSum97p5_y0 = quantile(x = zrepSum_y0, probs = 0.975)
+zrepSum2p5_0_y0 = quantile(x = ncol(ppc_y0$y)-zrepSum_y0, probs = 0.025)
+zrepSum97p5_0_y0 = quantile(x = ncol(ppc_y0$y)-zrepSum_y0, probs = 0.975)
+
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/ppcbars.png', res=300, height = 5, width = 5, units = 'in')
+#plot bars for the uncertain y
+barplot(height = c(mean(ncol(ppc_y0$y)-ySum_y0), mean(ySum_y0)), space = 0, names.arg = c(0,1), col = 'gray', 
+        border = 'white', ylim = c(0,100))
+par(new=TRUE)
+#plot bars for the certain y in a darker shade
+barplot(height = c(length(which(ppc_y0$y[1,43:95] == 0)), length(which(ppc_y0$y[1,43:95] == 1))), space = 0, 
+        col = 'black', border = 'white', ylim = c(0,100))
+#Add error bars for y and zrep on each
+arrows(x0 = c(0.25,1.25), y0 = c(ySum2p5_0_y0, ySum2p5_y0), x1 = c(0.25,1.25), y1 = c(ySum97p5_0_y0, ySum97p5_y0), 
+       col = c('blue'), lty = 1, lwd = 1, code = 0)
+arrows(x0 = c(0.75,1.75), y0 = c(zrepSum2p5_0_y0, zrepSum2p5_y0), x1 = c(0.75,1.75), y1 = c(zrepSum97p5_0_y0, zrepSum97p5_y0), 
+       col = c('red'), lty = 1, lwd = 1, code = 0)
+legend('topright', legend=c('y', 'zrep', 'certain y', 'uncertain y'), col = c('blue', 'red', 'black', 'gray'), 
+       pch = c(NA,NA,15,15), lty = c(1,1,NA,NA))
+dev.off()
+
+#Save data for plotting with python functions
+write.csv(ppc_y0$y, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/y.csv', row.names = FALSE)
+write.csv(ppc_y0$zrep, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/zrep.csv', row.names = FALSE)
+write.csv(ppc_y0$pi, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/p.csv', row.names = FALSE)
+write.csv(ppc_y0$qi, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/q.csv', row.names = FALSE)
+write.csv(years_L15sm, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/years.csv', row.names = FALSE)
+#Save flood magnitude category colors for matplotlib plots
+FloodMag_L15sm_colors = FloodMag_L15sm
+FloodMag_L15sm_colors[FloodMag_L15sm_colors == 'N'] = 'k'
+FloodMag_L15sm_colors[FloodMag_L15sm_colors == 'L'] = 'tab:orange'
+FloodMag_L15sm_colors[FloodMag_L15sm_colors == 'M'] = 'tab:green'
+FloodMag_L15sm_colors[FloodMag_L15sm_colors == 'S'] = 'tab:blue'
+FloodMag_L15sm_colors[FloodMag_L15sm_colors == 'U'] = 'tab:pink'
+write.csv(FloodMag_L15sm_colors, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/y_mag_colors.csv', row.names = FALSE)
 
 #Load in GCM predicted temperature and precipitation----
 GCMhead = read.csv(file = 'GCM_Temp_Chip.csv', stringsAsFactors = FALSE, nrows=1, header = FALSE)
@@ -2243,26 +2287,13 @@ GCMprob_hold = function(DDFVerm_hold, PrecipGPBL_hold, X, ppc_BestLamonMod, year
   return(pmat)
 }
 
-pmatGCM = GCMprob(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc, years_L15sm)
 pmatGCM_hold = GCMprob_hold(DDFVerm_hold = DDFVerm_hold, PrecipGPBL_hold = PrecipGPBL_hold, X = X, 
                             ppc_BestLamonMod = ppc_BestLamonMod, years_hold = years_hold)
 pmatGCM_3p = GCMprob(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc_3p_1915, years_L15sm)
 pmatGCM_NoUncertainty = GCMprob(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc_NoUncertainty, years_L15sm)
+pmatGCM_y0 = GCMprob(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc_y0, years_L15sm)
 
 #Save for loading into plotting functions in Python
-write.csv(pmatGCM[,1,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Had85.csv', row.names = FALSE)
-write.csv(pmatGCM[,2,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Acc85.csv', row.names = FALSE)
-write.csv(pmatGCM[,3,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Can85.csv', row.names = FALSE)
-write.csv(pmatGCM[,4,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_CCS85.csv', row.names = FALSE)
-write.csv(pmatGCM[,5,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_CNR85.csv', row.names = FALSE)
-write.csv(pmatGCM[,6,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_MPI85.csv', row.names = FALSE)
-write.csv(pmatGCM[,7,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Had45.csv', row.names = FALSE)
-write.csv(pmatGCM[,8,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Acc45.csv', row.names = FALSE)
-write.csv(pmatGCM[,9,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Can45.csv', row.names = FALSE)
-write.csv(pmatGCM[,10,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_CCS45.csv', row.names = FALSE)
-write.csv(pmatGCM[,11,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_CNR45.csv', row.names = FALSE)
-write.csv(pmatGCM[,12,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_MPI45.csv', row.names = FALSE)
-
 write.csv(pmatGCM_hold[,1,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_Had85_hold.csv', row.names = FALSE)
 write.csv(pmatGCM_hold[,2,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_Acc85_hold.csv', row.names = FALSE)
 write.csv(pmatGCM_hold[,3,], file = 'DREAMzs_L15_VermPrecip_1962-2020/GCMp_Can85_hold.csv', row.names = FALSE)
@@ -2302,14 +2333,31 @@ write.csv(pmatGCM_NoUncertainty[,10,], file = 'DREAMzs_L15_SmithChipVermPrecipPC
 write.csv(pmatGCM_NoUncertainty[,11,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_CNR45_NoUncertainty.csv', row.names = FALSE)
 write.csv(pmatGCM_NoUncertainty[,12,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_NoUncertainty_1915-2020/GCMp_MPI45_NoUncertainty.csv', row.names = FALSE)
 
-#Save all floods for use in plotting
-Y_L62t20 = Data$Flood[Data$Year >= 1962]
-write.csv(Y_L62t20, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/yL62t20.csv', row.names = FALSE)
-write.csv(Y_L15sm[years_L15sm > 1961], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/yL15sm62t20.csv', 
+write.csv(pmatGCM_y0[,1,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/GCMp_Had85.csv', row.names = FALSE)
+write.csv(pmatGCM_y0[,2,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/GCMp_Acc85.csv', row.names = FALSE)
+write.csv(pmatGCM_y0[,3,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/GCMp_Can85.csv', row.names = FALSE)
+write.csv(pmatGCM_y0[,4,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/GCMp_CCS85.csv', row.names = FALSE)
+write.csv(pmatGCM_y0[,5,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/GCMp_CNR85.csv', row.names = FALSE)
+write.csv(pmatGCM_y0[,6,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/GCMp_MPI85.csv', row.names = FALSE)
+write.csv(pmatGCM_y0[,7,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/GCMp_Had45.csv', row.names = FALSE)
+write.csv(pmatGCM_y0[,8,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/GCMp_Acc45.csv', row.names = FALSE)
+write.csv(pmatGCM_y0[,9,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/GCMp_Can45.csv', row.names = FALSE)
+write.csv(pmatGCM_y0[,10,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/GCMp_CCS45.csv', row.names = FALSE)
+write.csv(pmatGCM_y0[,11,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/GCMp_CNR45.csv', row.names = FALSE)
+write.csv(pmatGCM_y0[,12,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/GCMp_MPI45.csv', row.names = FALSE)
+
+#Save all floods for use in plotting----
+#Y_L62t20 = Data$Flood[Data$Year >= 1962]
+#write.csv(Y_L62t20, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/yL62t20.csv', row.names = FALSE)
+#write.csv(Y_L15sm[years_L15sm > 1961], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/yL15sm62t20.csv', 
+#          row.names = FALSE)
+#write.csv(Y_All15sm, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/yAll15sm15t20.csv', 
+#          row.names = FALSE)
+write.csv(Y_L15sm, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/yL15sm15t20.csv', 
           row.names = FALSE)
 write.csv(Y_hold[years_hold>1961], file = 'DREAMzs_L15_VermPrecip_1962-2020/y62t20.csv', row.names = FALSE)
 #Save years
-write.csv(DDFChip$year, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/year62t2099.csv', row.names = FALSE)
+write.csv(DDFChip$year, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/year62t2099.csv', row.names = FALSE)
 write.csv(DDFChip_hold$year, file = 'DREAMzs_L15_VermPrecip_1962-2020/year62t2099.csv', row.names = FALSE)
 
 #Diagnose GCMs----
@@ -2329,3 +2377,948 @@ for (i in 1:(ncol(PrecipGPBL)-1)){
 for (i in 1:(ncol(PrecipGPBL)-1)){
   plot(as.data.frame(list(Smith = DDFSmith[DDFSmith$year>2020,i+1], Chip = DDFChip[DDFChip$year>2020,i+1], Verm = DDFVerm[DDFVerm$year>2020,i+1])))
 }
+
+#Save data----
+save.image(file = 'Nov2022_CompleteRun_DataAsIs.RData')
+#Extra: Considering Historical data as large flood when recorded as any type of flood magnitude----
+# #Large Floods, 1915 - 2020, All historical floods considered to be large----
+# # Prior Definition----
+# #Parameters are from Firth regression with all large floods
+# #Followed by eta for historical large
+# #Followed by eta for historical moderate
+# #Followed by eta for historical small
+# #Followed by eta for years with unknown magnitude
+# #Followed by theta for historical no flood
+# #Uniform priors
+# density_L15_unif_SensSpec_Hist = function(par){
+#   d1 = dnorm(par[1], mean = 0, sd = 10, log =TRUE)
+#   d2 = dnorm(par[2], mean = 0, sd = 10, log =TRUE)
+#   d3 = dnorm(par[3], mean = 0, sd = 10, log =TRUE)
+#   d4 = dbeta(par[4], shape1 = 1, shape2 = 1, log =TRUE)
+#   d5 = dbeta(par[5], shape1 = 1, shape2 = 1, log =TRUE)
+#   d6 = dbeta(par[6], shape1 = 1, shape2 = 1, log =TRUE)
+#   d7 = dbeta(par[7], shape1 = 1, shape2 = 1, log =TRUE)
+#   d8 = dbeta(par[8], shape1 = 1, shape2 = 1, log =TRUE)
+#   return(d1 + d2 + d3 + d4 + d5 + d6 + d7 + d8)
+# }
+# sampler_L15_unif_SensSpec_Hist = function(n=1){
+#   d1 = rnorm(n, mean = 0, sd = 10)
+#   d2 = rnorm(n, mean = 0, sd = 10)
+#   d3 = rnorm(n, mean = 0, sd = 10)
+#   d4 = rbeta(n, shape1 = 1, shape2 = 1)
+#   d5 = rbeta(n, shape1 = 1, shape2 = 1)
+#   d6 = rbeta(n, shape1 = 1, shape2 = 1)
+#   d7 = rbeta(n, shape1 = 1, shape2 = 1)
+#   d8 = rbeta(n, shape1 = 1, shape2 = 1)
+#   return(cbind(d1,d2,d3,d4,d5,d6,d7,d8))
+# }
+# prior_L15_unif_SensSpec_Hist = createPrior(density = density_L15_unif_SensSpec_Hist, 
+#                                            sampler = sampler_L15_unif_SensSpec_Hist)
+# 
+# # Likelihood Definition----
+# likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s <- function(param, sum = TRUE){
+#   #Determine indices of historical large Y = 1
+#   IndL = which((FloodMag_L15sm == 'L') & (years_L15sm < 1962))
+#   #Determine indices of historical moderate Y = 1
+#   IndM = which((FloodMag_L15sm == 'M') & (years_L15sm < 1962))
+#   #Determine indices of historical small Y = 1
+#   IndS = which((FloodMag_L15sm == 'S') & (years_L15sm < 1962))
+#   #Determine indices of historical not a flood Y = 0
+#   IndN = which((FloodMag_L15sm == 'N') & (years_L15sm < 1962))
+#   #Same for floods of unknown magnitude Y = 1
+#   IndU = which((FloodMag_L15sm == 'U'))
+#   
+#   #point likelihoods
+#   Xi = as.matrix(cbind(X_L15sm[,1], predPCAcvs[,c(1,2)]))
+#   #numerator
+#   num = exp(param[1] + param[2]*Xi[,2] + param[3]*Xi[,3])
+#   #y-hat
+#   pred = num/(1+num)
+#   #weights - assuming pred instead of q
+#   w = diag(pred * (1-pred))
+#   #Information matrix
+#   I = t(Xi) %*% w %*% Xi
+#   
+#   #Terms for sens spec likelihood
+#   pred10 = pred
+#   pred11 = pred
+#   pred00 = pred
+#   #Large - correct by eta
+#   pred11[IndL] = pred[IndL]*param[4]
+#   #Moderate - correct by eta
+#   pred11[IndM] = pred[IndM]*param[5]
+#   #Small - correct by eta
+#   pred11[IndS] = pred[IndS]*param[6]
+#   #Unknown - correct by eta
+#   pred11[IndU] = pred[IndU]*param[7]
+#   #Not a flood - correct by theta
+#   pred00[IndN] = (1-pred[IndN])*param[8]
+#   #All historical Y = 1 are affected by 1-theta
+#   pred10 = (1-pred)*(1-param[8])
+#   
+#   pll = vector('numeric', length=length(Y_L15sm))
+#   #Weighted 1-eta
+#   s01 = ((1-param[5])*length(IndM) + (1-param[6])*length(IndS) + (1-param[7])*length(IndU) + (1-param[4])*length(IndL))/(length(IndM) + length(IndS) + length(IndU) + length(IndL))
+#   for (j in 1:length(Y_L15sm)){
+#     if (j %in% IndL){
+#       #Get adjusted probability of Y = 1
+#       pll[j] = log(pred11[j] + pred10[j])
+#     }else if (j %in% IndM){
+#       #Get adjusted probability of Y = 1
+#       pll[j] = log(pred11[j] + pred10[j])
+#     }else if (j %in% IndS){
+#       #Get adjusted probability of Y = 1
+#       pll[j] = log(pred11[j] + pred10[j])
+#     }else if (j %in% IndU){
+#       #Get adjusted probability of Y = 1
+#       pll[j] = log(pred11[j] + pred10[j])
+#     }else if (j %in% IndN){
+#       #Get adjusted probability of Y = 0
+#       pll[j] = log(pred[j]*s01 + pred00[j])
+#     }else{
+#       #Could be Y=0 or Y=1 and Y is not uncertain
+#       pll[j] = Y_L15sm[j]*log(pred[j]) + (1 - Y_L15sm[j])*log(1 - pred[j])
+#     }
+#   }
+#   #sum with Firth correction
+#   ll = sum(pll) + 0.5*determinant(I, logarithm = TRUE)$modulus[1]
+#   if (is.nan(ll)){
+#     ll = -Inf
+#   }
+#   
+#   #Return sum of the log-likelihoods
+#   return(if (sum == TRUE) ll else (pll + 0.5*determinant(I, logarithm = TRUE)$modulus[1]/length(Y_L15sm)))  
+# }
+# 
+# likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll <- function(param, sum = TRUE){
+#   #Determine indices of historical large Y = 1
+#   IndL = which((FloodMag_L15sm == 'L') & (years_L15sm < 1962))
+#   #Determine indices of historical moderate Y = 1
+#   IndM = which((FloodMag_L15sm == 'M') & (years_L15sm < 1962))
+#   #Determine indices of historical small Y = 1
+#   IndS = which((FloodMag_L15sm == 'S') & (years_L15sm < 1962))
+#   #Determine indices of historical not a flood Y = 0
+#   IndN = which((FloodMag_L15sm == 'N') & (years_L15sm < 1962))
+#   #Same for floods of unknown magnitude Y = 1
+#   IndU = which((FloodMag_L15sm == 'U'))
+#   
+#   #point likelihoods
+#   Xi = as.matrix(cbind(X_L15sm[,1], predPCAcvs[,c(1,2)]))
+#   #numerator
+#   num = exp(param[1] + param[2]*Xi[,2] + param[3]*Xi[,3])
+#   #y-hat
+#   pred = num/(1+num)
+#   #weights - assuming pred instead of q
+#   w = diag(pred * (1-pred))
+#   #Information matrix
+#   I = t(Xi) %*% w %*% Xi
+#   
+#   #Terms for sens spec likelihood
+#   pred10 = pred
+#   pred11 = pred
+#   pred00 = pred
+#   #Large - correct by eta
+#   pred11[IndL[1]] = pred[IndL[1]]*param[4]
+#   pred11[IndL[2]] = pred[IndL[2]]*param[5]
+#   pred11[IndL[3]] = pred[IndL[3]]*param[6]
+#   pred11[IndL[4]] = pred[IndL[4]]*param[7]
+#   pred11[IndL[5]] = pred[IndL[5]]*param[8]
+#   pred11[IndL[6]] = pred[IndL[6]]*param[9]
+#   #Moderate - correct by eta
+#   pred11[IndM[1]] = pred[IndM[1]]*param[10]
+#   pred11[IndM[2]] = pred[IndM[2]]*param[11]
+#   pred11[IndM[3]] = pred[IndM[3]]*param[12]
+#   pred11[IndM[4]] = pred[IndM[4]]*param[13]
+#   pred11[IndM[5]] = pred[IndM[5]]*param[14]
+#   #Small - correct by eta
+#   pred11[IndS[1]] = pred[IndS[1]]*param[15]
+#   pred11[IndS[2]] = pred[IndS[2]]*param[16]
+#   pred11[IndS[3]] = pred[IndS[3]]*param[17]
+#   pred11[IndS[4]] = pred[IndS[4]]*param[18]
+#   pred11[IndS[5]] = pred[IndS[5]]*param[19]
+#   #Unknown - correct by eta
+#   pred11[IndU[1]] = pred[IndU[1]]*param[20]
+#   pred11[IndU[2]] = pred[IndU[2]]*param[21]
+#   pred11[IndU[3]] = pred[IndU[3]]*param[22]
+#   pred11[IndU[4]] = pred[IndU[4]]*param[23]
+#   #Not a flood - correct by theta
+#   pred00[IndN] = (1-pred[IndN])*param[24]
+#   #All historical Y = 1 are affected by 1-theta
+#   pred10 = (1-pred)*(1-param[24])
+#   
+#   pll = vector('numeric', length=length(Y_L15sm))
+#   #Weighted 1-eta
+#   s01 = sum(1-param[4:23])/(length(param[4:23]))
+#   for (j in 1:length(Y_L15sm)){
+#     if (j %in% IndL){
+#       #Get adjusted probability of Y = 1
+#       pll[j] = log(pred11[j] + pred10[j])
+#     }else if (j %in% IndM){
+#       #Get adjusted probability of Y = 1
+#       pll[j] = log(pred11[j] + pred10[j])
+#     }else if (j %in% IndS){
+#       #Get adjusted probability of Y = 1
+#       pll[j] = log(pred11[j] + pred10[j])
+#     }else if (j %in% IndU){
+#       #Get adjusted probability of Y = 1
+#       pll[j] = log(pred11[j] + pred10[j])
+#     }else if (j %in% IndN){
+#       #Get adjusted probability of Y = 0
+#       pll[j] = log(pred[j]*s01 + pred00[j])
+#     }else{
+#       #Could be Y=0 or Y=1 and Y is not uncertain
+#       pll[j] = Y_L15sm[j]*log(pred[j]) + (1 - Y_L15sm[j])*log(1 - pred[j])
+#     }
+#   }
+#   #sum with Firth correction
+#   ll = sum(pll) + 0.5*determinant(I, logarithm = TRUE)$modulus[1]
+#   if (is.nan(ll)){
+#     ll = -Inf
+#   }
+#   
+#   #Return sum of the log-likelihoods
+#   return(if (sum == TRUE) ll else (pll + 0.5*determinant(I, logarithm = TRUE)$modulus[1]/length(Y_L15sm)))  
+# }
+# 
+# likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll_theta <- function(param, sum = TRUE){
+#   #Determine indices of historical large Y = 1
+#   IndL = which((FloodMag_L15sm == 'L') & (years_L15sm < 1962))
+#   #Determine indices of historical moderate Y = 1
+#   IndM = which((FloodMag_L15sm == 'M') & (years_L15sm < 1962))
+#   #Determine indices of historical small Y = 1
+#   IndS = which((FloodMag_L15sm == 'S') & (years_L15sm < 1962))
+#   #Determine indices of historical not a flood Y = 0
+#   IndN = which((FloodMag_L15sm == 'N') & (years_L15sm < 1962))
+#   #Same for floods of unknown magnitude Y = 1
+#   IndU = which((FloodMag_L15sm == 'U'))
+#   
+#   #point likelihoods
+#   Xi = as.matrix(cbind(X_L15sm[,1], predPCAcvs[,c(1,2)]))
+#   #numerator
+#   num = exp(param[1] + param[2]*Xi[,2] + param[3]*Xi[,3])
+#   #y-hat
+#   pred = num/(1+num)
+#   #weights - assuming pred instead of q
+#   w = diag(pred * (1-pred))
+#   #Information matrix
+#   I = t(Xi) %*% w %*% Xi
+#   
+#   #Terms for sens spec likelihood
+#   pred10 = pred
+#   pred11 = pred
+#   pred00 = pred
+#   #Large - correct by eta
+#   pred11[IndL[1]] = pred[IndL[1]]*param[4]
+#   pred11[IndL[2]] = pred[IndL[2]]*param[5]
+#   pred11[IndL[3]] = pred[IndL[3]]*param[6]
+#   pred11[IndL[4]] = pred[IndL[4]]*param[7]
+#   pred11[IndL[5]] = pred[IndL[5]]*param[8]
+#   pred11[IndL[6]] = pred[IndL[6]]*param[9]
+#   #Moderate - correct by eta
+#   pred11[IndM[1]] = pred[IndM[1]]*param[10]
+#   pred11[IndM[2]] = pred[IndM[2]]*param[11]
+#   pred11[IndM[3]] = pred[IndM[3]]*param[12]
+#   pred11[IndM[4]] = pred[IndM[4]]*param[13]
+#   pred11[IndM[5]] = pred[IndM[5]]*param[14]
+#   #Small - correct by eta
+#   pred11[IndS[1]] = pred[IndS[1]]*param[15]
+#   pred11[IndS[2]] = pred[IndS[2]]*param[16]
+#   pred11[IndS[3]] = pred[IndS[3]]*param[17]
+#   pred11[IndS[4]] = pred[IndS[4]]*param[18]
+#   pred11[IndS[5]] = pred[IndS[5]]*param[19]
+#   #Unknown - correct by eta
+#   pred11[IndU[1]] = pred[IndU[1]]*param[20]
+#   pred11[IndU[2]] = pred[IndU[2]]*param[21]
+#   pred11[IndU[3]] = pred[IndU[3]]*param[22]
+#   pred11[IndU[4]] = pred[IndU[4]]*param[23]
+#   #Not a flood - correct by theta
+#   pred00[IndN[1]] = (1-pred[IndN[1]])*param[24]
+#   pred00[IndN[2]] = (1-pred[IndN[2]])*param[25]
+#   pred00[IndN[3]] = (1-pred[IndN[3]])*param[26]
+#   pred00[IndN[4]] = (1-pred[IndN[4]])*param[27]
+#   pred00[IndN[5]] = (1-pred[IndN[5]])*param[28]
+#   pred00[IndN[6]] = (1-pred[IndN[6]])*param[29]
+#   pred00[IndN[7]] = (1-pred[IndN[7]])*param[30]
+#   pred00[IndN[8]] = (1-pred[IndN[8]])*param[31]
+#   pred00[IndN[9]] = (1-pred[IndN[9]])*param[32]
+#   pred00[IndN[10]] = (1-pred[IndN[10]])*param[33]
+#   pred00[IndN[11]] = (1-pred[IndN[11]])*param[34]
+#   pred00[IndN[12]] = (1-pred[IndN[12]])*param[35]
+#   pred00[IndN[13]] = (1-pred[IndN[13]])*param[36]
+#   pred00[IndN[14]] = (1-pred[IndN[14]])*param[37]
+#   pred00[IndN[15]] = (1-pred[IndN[15]])*param[38]
+#   pred00[IndN[16]] = (1-pred[IndN[16]])*param[39]
+#   pred00[IndN[17]] = (1-pred[IndN[17]])*param[40]
+#   pred00[IndN[18]] = (1-pred[IndN[18]])*param[41]
+#   pred00[IndN[19]] = (1-pred[IndN[19]])*param[42]
+#   pred00[IndN[20]] = (1-pred[IndN[20]])*param[43]
+#   pred00[IndN[21]] = (1-pred[IndN[21]])*param[44]
+#   pred00[IndN[22]] = (1-pred[IndN[22]])*param[45]
+#   pred00[IndN[23]] = (1-pred[IndN[23]])*param[46]
+#   #All historical Y = 1 are affected by 1-theta
+#   #Weighted 1-theta
+#   s10 = sum(1-param[24:46])/(length(param[24:46]))
+#   pred10 = (1-pred)*s10
+#   
+#   pll = vector('numeric', length=length(Y_L15sm))
+#   #Weighted 1-eta
+#   s01 = sum(1-param[4:23])/(length(param[4:23]))
+#   for (j in 1:length(Y_L15sm)){
+#     if (j %in% IndL){
+#       #Get adjusted probability of Y = 1
+#       pll[j] = log(pred11[j] + pred10[j])
+#     }else if (j %in% IndM){
+#       #Get adjusted probability of Y = 1
+#       pll[j] = log(pred11[j] + pred10[j])
+#     }else if (j %in% IndS){
+#       #Get adjusted probability of Y = 1
+#       pll[j] = log(pred11[j] + pred10[j])
+#     }else if (j %in% IndU){
+#       #Get adjusted probability of Y = 1
+#       pll[j] = log(pred11[j] + pred10[j])
+#     }else if (j %in% IndN){
+#       #Get adjusted probability of Y = 0
+#       pll[j] = log(pred[j]*s01 + pred00[j])
+#     }else{
+#       #Could be Y=0 or Y=1 and Y is not uncertain
+#       pll[j] = Y_L15sm[j]*log(pred[j]) + (1 - Y_L15sm[j])*log(1 - pred[j])
+#     }
+#   }
+#   #sum with Firth correction
+#   ll = sum(pll) + 0.5*determinant(I, logarithm = TRUE)$modulus[1]
+#   if (is.nan(ll)){
+#     ll = -Inf
+#   }
+#   
+#   #Return sum of the log-likelihoods
+#   return(if (sum == TRUE) ll else (pll + 0.5*determinant(I, logarithm = TRUE)$modulus[1]/length(Y_L15sm)))  
+# }
+# 
+# # DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s----
+# dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020', showWarnings = FALSE)
+# setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s <- createBayesianSetup(likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s, prior = prior_L15_unif_SensSpec_Hist, parallel = 7, 
+#                                                                       parallelOptions = list(packages=list('BayesianTools'), 
+#                                                                                              variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 'FloodMag_L15sm', 
+#                                                                                                             'years_L15sm'), dlls=NULL), 
+#                                                                       names = c('Int', 'PC1', 'PC2', 'pLL', 'pLM', 'pLS', 'pLU', 'pNN'), 
+#                                                                       plotLower = c(-15, -1, -1,0,0,0,0,0), plotUpper = c(0, 6, 6,1,1,1,1,1), 
+#                                                                       plotBest = c(as.numeric(res_Firth_L15_PC3$coefficients),0.8,0.5,0.2,0.5,0.5))
+# set.seed(26440)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s <- runMCMC(bayesianSetup = setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s, sampler = "DREAMzs", settings = settingsDREAMzs_L15_Hist)
+# #Remove all -Inf in chain. These result from poor initial conditions (prior samples)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s = removeInf(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s)
+# #Check for remaining infinities
+# if(any(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$InfCk > 0)){
+#   print('infinities remain within MCMC chain posteriors')
+# }
+# summary(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s)
+# 
+# #Compute WAIC and DIC
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$WAICBT = WAIC(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s, numSamples = 100000)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$WAIC2BT = WAIC2(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s, numSamples = 100000)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$DIC = DIC(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s)
+# #Pointwise log-likelihoods
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$pll = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$likelihood$density(
+#   getSample(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s, parametersOnly = F)[,1:outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$numPars], sum = FALSE)
+# #LOO
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$LOO = loo(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$pll, 
+#                                                        cores = 7, save_psis = TRUE, r_eff = relative_eff(x = exp(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$pll),
+#                                                                                                          chain_id = c(rep(1,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])), 
+#                                                                                                                       rep(2,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])), 
+#                                                                                                                       rep(3,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])), 
+#                                                                                                                       rep(4,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])), 
+#                                                                                                                       rep(5,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])), 
+#                                                                                                                       rep(6,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])), 
+#                                                                                                                       rep(7,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])))))
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$WAIC = waic(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$pll)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$WAIC2 = waic2(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$pll)
+# #Rejection rate
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$rejectRate = rejectionRate(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain)
+# #Highest Posterior Density Intervals
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$HPD = HPDinterval(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain)
+# #Credible Intervals
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$CI = getCredibleIntervals(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])
+# #Effective sample size for each parameter should be similar
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$Neff = effectiveSize(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:8])
+# 
+# #Sample only the last 1000 from each chain
+# sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]])
+# 
+# dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC', showWarnings = FALSE)
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:8], size = 0.05)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+# correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], method = 'spearman')
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:6], plot = TRUE, thin = 0)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,7:8], plot = TRUE, thin = 0)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
+# marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], 
+#              prior = prior_L15_unif_SensSpec_Hist$sampler(n = 50000), singlePanel = FALSE, 
+#              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], diag_fun = 'dens', off_diag_fun = 'scatter', 
+#            off_diag_args = list(size=0.5,alpha=0.5), 
+#            xlim = rbind(c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1)),
+#            ylim = rbind(c(0,NA),c(-15,0),c(-15,0),c(-15,0),c(-15,0),c(-15,0),c(-15,0),c(-15,0),
+#                         c(-1,6),c(0,NA),c(-1,6),c(-1,6),c(-1,6),c(-1,6),c(-1,6),c(-1,6),
+#                         c(-1,6),c(-1,6),c(0,NA),c(-1,6),c(-1,6),c(-1,6),c(-1,6),c(-1,6),
+#                         c(0,1),c(0,1),c(0,1),c(0,NA),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA),c(0,1),c(0,1),c(0,1),
+#                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA),c(0,1),c(0,1),
+#                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA),c(0,1),
+#                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA)))
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+# autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[[1]][-1,1:8], lag.max = 100)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_acf(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain, 
+#          pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$names, lags = 20)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,])
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,], 
+#            pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$names, 
+#            point_est = 'mean', prob = 0.95)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,], 
+#                pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$setup$names,
+#                prob_outer = 0.95)
+# dev.off()
+# 
+# geweke.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[,1:8], ask = FALSE, nbins = 8)
+# 
+# stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s)
+# 
+# # Figure 3----
+# pdf('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/Fig3-densOverlay.pdf', width = 7, height = 7)
+# mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], color_chains = FALSE) +
+#   theme(strip.text.x = element_text(size=14))
+# dev.off()
+# 
+# # DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s, pAll----
+# dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll', showWarnings = FALSE)
+# setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll <- createBayesianSetup(likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll, prior = prior_L15_unif_SensSpec_pAll, parallel = 7, 
+#                                                                            parallelOptions = list(packages=list('BayesianTools'), 
+#                                                                                                   variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 'FloodMag_L15sm', 
+#                                                                                                                  'years_L15sm'), dlls=NULL), 
+#                                                                            names = c('Int', 'PC1', 'PC2', paste0('pLL',seq(1,6,1)), paste0('pLM',seq(1,5,1)), 
+#                                                                                      paste0('pLS',seq(1,5,1)), paste0('pLU',seq(1,4,1)), 'pNN'), 
+#                                                                            plotLower = c(-15, -6, 0,rep(0,21)), plotUpper = c(0, 2, 6,rep(1,21)), 
+#                                                                            plotBest = c(as.numeric(res_Firth_L21$coefficients),rep(0.5,21)))
+# set.seed(26441)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll <- runMCMC(bayesianSetup = setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll, sampler = "DREAMzs", settings = settingsDREAMzs_L15_Hist_pAll)
+# #Remove all -Inf in chain. These result from poor initial conditions (prior samples)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll = removeInf(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll)
+# #Check for remaining infinities
+# if(any(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$InfCk > 0)){
+#   print('infinities remain within MCMC chain posteriors')
+# }
+# summary(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll)
+# 
+# #Compute WAIC and DIC
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$WAICBT = WAIC(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll, numSamples = 100000)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$WAIC2BT = WAIC2(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll, numSamples = 100000)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$DIC = DIC(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll)
+# #Pointwise log-likelihoods
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$pll = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$likelihood$density(
+#   getSample(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll, parametersOnly = F)[,1:outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$numPars], sum = FALSE)
+# #LOO
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$LOO = loo(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$pll, 
+#                                                             cores = 7, save_psis = TRUE, r_eff = relative_eff(x = exp(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$pll), 
+#                                                                                                               chain_id = c(rep(1,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])), 
+#                                                                                                                            rep(2,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])), 
+#                                                                                                                            rep(3,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])), 
+#                                                                                                                            rep(4,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])), 
+#                                                                                                                            rep(5,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])), 
+#                                                                                                                            rep(6,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])), 
+#                                                                                                                            rep(7,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])))))
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$WAIC = waic(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$pll)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$WAIC2 = waic2(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$pll)
+# #Rejection rate
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$rejectRate = rejectionRate(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain)
+# #Highest Posterior Density Intervals
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$HPD = HPDinterval(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain)
+# #Credible Intervals
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$CI = getCredibleIntervals(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])
+# #Effective sample size for each parameter should be similar
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$Neff = 
+#   effectiveSize(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,1:24])
+# 
+# #Sample only the last 1000 from each chain
+# sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]])
+# 
+# dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC', showWarnings = FALSE)
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/traceplot2_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,1:9], size = 0.05)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/traceplot2_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,10:14], size = 0.05)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/traceplot2_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,15:19], size = 0.05)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/traceplot2_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,20:24], size = 0.05)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+# correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,1:24], method = 'spearman')
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,1:6], plot = TRUE, thin = 0)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,7:12], plot = TRUE, thin = 0)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/gelmanplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,13:18], plot = TRUE, thin = 0)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/gelmanplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,19:24], plot = TRUE, thin = 0)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/marginalplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+# marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,1:9], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,1:9], 
+#              singlePanel = FALSE, xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/marginalplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+# marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,10:14], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,10:14], 
+#              singlePanel = FALSE, xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/marginalplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+# marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,15:19], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,15:19], 
+#              singlePanel = FALSE, xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/marginalplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+# marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,20:24], prior = prior_L15_unif_SensSpec_pAll$sampler(n = 50000)[,20:24], 
+#              singlePanel = FALSE, xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
+# dev.off()
+# 
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,1:8], diag_fun = 'dens', off_diag_fun = 'scatter', 
+#            off_diag_args = list(size=0.5,alpha=0.5), 
+#            xlim = rbind(c(-15,0),c(-6,1),c(0,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-6,1),c(0,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-6,1),c(0,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-6,1),c(0,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-6,1),c(0,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-6,1),c(0,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-6,1),c(0,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-6,1),c(0,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1)),
+#            ylim = rbind(c(0,NA),c(-15,0),c(-15,0),c(-15,0),c(-15,0),c(-15,0),c(-15,0),c(-15,0),
+#                         c(-6,1),c(0,NA),c(-6,1),c(-6,1),c(-6,1),c(-6,1),c(-6,1),c(-6,1),
+#                         c(0,6),c(0,6),c(0,NA),c(0,6),c(0,6),c(0,6),c(0,6),c(0,6),
+#                         c(0,1),c(0,1),c(0,1),c(0,NA),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA),c(0,1),c(0,1),c(0,1),
+#                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA),c(0,1),c(0,1),
+#                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA),c(0,1),
+#                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA)))
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot_panel1.png', res = 300, units = 'in', width = 7, height = 7)
+# autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,1:9], lag.max = 100)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot_panel2.png', res = 300, units = 'in', width = 7, height = 7)
+# autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,10:14], lag.max = 100)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot_panel3.png', res = 300, units = 'in', width = 7, height = 7)
+# autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,15:19], lag.max = 100)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot_panel4.png', res = 300, units = 'in', width = 7, height = 7)
+# autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[[1]][-1,20:24], lag.max = 100)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_acf(x = outDREAMzs__L15_pSensSpec_PCAcvs_Historical1s_pAll$chain, 
+#          pars = outDREAMzs__L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names, lags = 20)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,])
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,], 
+#            pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names, 
+#            point_est = 'mean', prob = 0.95)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[sample_chain_inds,], 
+#                pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names,
+#                prob_outer = 0.95)
+# dev.off()
+# 
+# geweke.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain[,1:24], ask = FALSE, nbins = 8)
+# 
+# stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll)
+# 
+# # DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s, pAll, theta----
+# dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta', showWarnings = FALSE)
+# setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta <- 
+#   createBayesianSetup(likelihood_L15_FixY_pSensSpec_PCAcvs_Historical1s_pAll_theta, 
+#                       prior = prior_L15_unif_SensSpec_pAll_theta, 
+#                       parallel = 7, parallelOptions = list(packages=list('BayesianTools'),
+#                                                            variables=list('X_L15sm','Y_L15sm', 'predPCAcvs', 
+#                                                                           'FloodMag_L15sm', 'years_L15sm'), dlls=NULL), 
+#                       
+#                       names = c('Int', 'PC1', 'PC2', paste0('pLL',seq(1,6,1)), paste0('pLM',seq(1,5,1)), 
+#                                 paste0('pLS',seq(1,5,1)), paste0('pLU',seq(1,4,1)), paste0('pNN',seq(1,23,1))), 
+#                       plotLower = c(-15, -6, 0,rep(0,43)), plotUpper = c(0, 2, 6,rep(1,43)), 
+#                       plotBest = c(as.numeric(res_Firth_L21$coefficients),rep(0.5,43)))
+# set.seed(31422)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta = 
+#   runMCMC(bayesianSetup = setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta,
+#           sampler = "DREAMzs", settings = settingsDREAMzs_L15_Hist_pAll)
+# #Remove all -Inf in chain. These result from poor initial conditions (prior samples)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta = 
+#   removeInf(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta)
+# #Check for remaining infinities
+# if(any(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$InfCk > 0)){
+#   print('infinities remain within MCMC chain posteriors')
+# }
+# summary(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta)
+# 
+# #Compute WAIC and DIC
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$WAICBT = 
+#   WAIC(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta, numSamples = 100000)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$WAIC2BT = 
+#   WAIC2(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta, numSamples = 100000)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$DIC = 
+#   DIC(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta)
+# #Pointwise log-likelihoods
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$pll = 
+#   outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$likelihood$density(
+#     getSample(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta,                       
+#               parametersOnly = F)[,1:outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$numPars],
+#     sum = FALSE)
+# #LOO
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$LOO = 
+#   loo(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$pll,
+#       cores = 7, save_psis = TRUE, 
+#       r_eff = relative_eff(x = exp(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$pll), 
+#                            chain_id = c(rep(1,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])),         
+#                                         rep(2,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])),         
+#                                         rep(3,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])),         
+#                                         rep(4,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])),         
+#                                         rep(5,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])),         
+#                                         rep(6,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])),         
+#                                         rep(7,nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])))))
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$WAIC = 
+#   waic(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$pll)
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$WAIC2 = 
+#   waic2(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$pll)
+# #Rejection rate
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$rejectRate = 
+#   rejectionRate(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain)
+# #Highest Posterior Density Intervals
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$HPD = 
+#   HPDinterval(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain)
+# #Credible Intervals
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$CI = 
+#   getCredibleIntervals(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])
+# #Effective sample size for each parameter should be similar
+# outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$Neff = 
+#   effectiveSize(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,1:46])
+# 
+# #Sample only the last 1000 from each chain
+# sample_chain_inds = (nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])-1000):nrow(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[[1]])
+# 
+# dir.create('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC', showWarnings = FALSE)
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/traceplot2.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# mcmc_trace(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,1:46], size = 0.05)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/correlplot.png', res = 300, units = 'in',
+#     width = 14, height = 14)
+# correlationPlot(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,1:46], method = 'spearman')
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel1.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,1:6], plot = TRUE, thin = 0)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel2.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,7:12], plot = TRUE, thin = 0)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel3.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,13:18], plot = TRUE, thin = 0)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel4.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,19:24], plot = TRUE, thin = 0)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel5.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,25:30], plot = TRUE, thin = 0)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel6.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,31:36], plot = TRUE, thin = 0)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel7.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,37:42], plot = TRUE, thin = 0)
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/gelmanplot_panel8.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# gelmanDiagnostics(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,43:46], plot = TRUE, thin = 0)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel1.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,1:9], 
+#              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,1:9], singlePanel = FALSE, 
+#              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel2.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,10:18], 
+#              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,10:18], singlePanel = FALSE, 
+#              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel3.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,19:27], 
+#              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,19:27], singlePanel = FALSE, 
+#              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel4.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,28:36], 
+#              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,28:36], singlePanel = FALSE, 
+#              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel5.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,37:45], 
+#              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,37:45], singlePanel = FALSE, 
+#              xrange = t(rbind(c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
+# dev.off()
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/marginalplot_panel6.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,45:46], 
+#              prior = prior_L15_unif_SensSpec_pAll_theta$sampler(n = 50000)[,45:46], singlePanel = FALSE, 
+#              xrange = t(rbind(c(0,1), c(0,1))))
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/PairPlot.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,1:8], diag_fun = 'dens', 
+#            off_diag_fun = 'scatter', 
+#            off_diag_args = list(size=0.5,alpha=0.5), 
+#            xlim = rbind(c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1)),
+#            ylim = rbind(c(0,NA),c(-15,0),c(-15,0),c(-15,0),c(-15,0),c(-15,0),c(-15,0),c(-15,0),
+#                         c(-1,6),c(0,NA),c(-1,6),c(-1,6),c(-1,6),c(-1,6),c(-1,6),c(-1,6),
+#                         c(-1,6),c(-1,6),c(0,NA),c(-1,6),c(-1,6),c(-1,6),c(-1,6),c(-1,6),
+#                         c(0,1),c(0,1),c(0,1),c(0,NA),c(0,1),c(0,1),c(0,1),c(0,1),
+#                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA),c(0,1),c(0,1),c(0,1),
+#                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA),c(0,1),c(0,1),
+#                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA),c(0,1),
+#                         c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),c(0,NA)))
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_acf(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain, 
+#          pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$names, lags = 100)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/densOverlay.png', res = 300, units = 'in', 
+#     width = 7, height = 7)
+# mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,])
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_areas(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,], 
+#            pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$names, 
+#            point_est = 'mean', prob = 0.95)
+# dev.off()
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll_theta/MCMC/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+# mcmc_intervals(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[sample_chain_inds,], 
+#                pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$setup$names,
+#                prob_outer = 0.95)
+# dev.off()
+# 
+# geweke.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta$chain[,1:46], ask = FALSE, nbins = 8)
+# 
+# stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll_theta)
+# 
+# #Sample from posterior, model with uncertainty----
+# ppSample = function(BTout, #output from a BayesianTools MCMC 
+#                     n = 1000,     #number of posterior samples to draw from each chain
+#                     Xp,      #the X data to use in regression 
+#                     FloodMag,#the flood magnitude data
+#                     years,    #the year data
+#                     Yp,        #the observed flood data
+#                     seed     #the random seed to use
+# ){
+#   #Ensure n is less than length of chains
+#   if (n > nrow(BTout$chain[[1]])){
+#     stop('n must be less than or equal to the number of samples in each chain')
+#   }
+#   
+#   set.seed(seed)
+#   
+#   #Get the last n samples from each chain
+#   param = matrix(NA, nrow = n*length(BTout$chain), ncol = BTout$setup$numPars)
+#   for (i in 1:length(BTout$chain)){
+#     param[(1+(n*(i-1))):(n*i),] = BTout$chain[[i]][(nrow(BTout$chain[[i]])-(n-1)):nrow(BTout$chain[[i]]), 
+#                                                    1:BTout$setup$numPars]
+#   }
+#   
+#   #Get predicted y (log odds) for each of the parameter sets
+#   #numerator
+#   num = t(apply(X = param, MARGIN = 1, FUN = function(p){exp(p[1] + p[2]*Xp[,1] + p[3]*Xp[,2])}))
+#   #predicted probability of large IJF
+#   ppi = t(apply(X = num, MARGIN = 1, FUN = function(num){num/(1+num)}))
+#   
+#   #Determine indices of historical large Y = 1
+#   IndL = which((FloodMag == 'L') & (years < 1962))
+#   #Determine indices of historical moderate Y = 1
+#   IndM = which((FloodMag == 'M') & (years < 1962))
+#   #Determine indices of historical small Y = 1
+#   IndS = which((FloodMag == 'S') & (years < 1962))
+#   #Determine indices of historical not a flood Y = 0
+#   IndN = which((FloodMag == 'N') & (years < 1962))
+#   #Same for floods of unknown magnitude Y = 1
+#   IndU = which((FloodMag == 'U'))
+#   
+#   #Edit the historical predictions based on the probability of misclassification
+#   qi = ppi
+#   for(i in 1:nrow(qi)){
+#     qi[i,IndL] = ppi[i,IndL]*param[i,4] + (1-ppi[i,IndL])*(1-param[i,8])
+#     qi[i,IndM] = ppi[i,IndM]*param[i,5] + (1-ppi[i,IndM])*(1-param[i,8])
+#     qi[i,IndS] = ppi[i,IndS]*param[i,6] + (1-ppi[i,IndS])*(1-param[i,8])
+#     qi[i,IndU] = ppi[i,IndU]*param[i,7] + (1-ppi[i,IndU])*(1-param[i,8])
+#     #Weighted 1-eta
+#     s01 = ((1-param[i,5])*length(IndM) + (1-param[i,6])*length(IndS) + (1-param[i,7])*length(IndU) + (1-param[i,4])*length(IndL))/(length(IndM) + length(IndS) + length(IndU) + length(IndL))
+#     qi[i,IndN] = 1 - (ppi[i,IndN]*s01 + (1-ppi[i,IndN])*param[i,8])
+#   }
+#   
+#   #Sample a matrix of possible y values based on qi probability of IJF in historical years, and append the 1962-present years
+#   y = matrix(NA, nrow = nrow(qi), ncol = ncol(qi))
+#   for (i in 1:ncol(y[,years<1962])){
+#     y[,i] = rbinom(n = nrow(y), size = 1, prob = qi[,i])
+#   }
+#   for (i in 1:ncol(y[,years>=1962])){
+#     y[,which(years>=1962)[i]] = Yp[years>=1962][i]
+#   }
+#   
+#   #Sample a vector of zrep based on the regression coefficients
+#   zrep = matrix(NA, nrow = nrow(ppi), ncol = ncol(ppi))
+#   for (i in 1:ncol(zrep)){
+#     zrep[,i] = rbinom(n = nrow(zrep), size = 1, prob = ppi[,i])
+#   }
+#   
+#   #return list of params, y and zrep
+#   retl = list(param=param, pi=ppi, qi=qi, y=y, zrep=zrep)
+#   return(retl)
+# }
+# 
+# #Posterior Predictive Check for best model
+# ppc = ppSample(BTout = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s, n = 143, Xp = predPCAcvs, 
+#                FloodMag = FloodMag_L15sm, years = years_L15sm, Yp = Y_L15sm, seed = 34)
+# bayesplot::ppc_bars(y = ppc$y[1,44:95], yrep = ppc$zrep[,44:95])
+# #Need to edit this function to plot uncertain y as well as uncertainty in zrep
+# #Vector of sum for y
+# ySum = apply(X = ppc$y, MARGIN = 1, FUN = sum)
+# #Quantiles of sum for y
+# ySum2p5 = quantile(x = ySum, probs = 0.025)
+# ySum97p5 = quantile(x = ySum, probs = 0.975)
+# ySum2p5_0 = quantile(x = ncol(ppc$y)-ySum, probs = 0.025)
+# ySum97p5_0 = quantile(x = ncol(ppc$y)-ySum, probs = 0.975)
+# #Vector of sum for zrep
+# zrepSum = apply(X = ppc$zrep, MARGIN = 1, FUN = sum)
+# #Quantiles of sum for y
+# zrepSum2p5 = quantile(x = zrepSum, probs = 0.025)
+# zrepSum97p5 = quantile(x = zrepSum, probs = 0.975)
+# zrepSum2p5_0 = quantile(x = ncol(ppc$y)-zrepSum, probs = 0.025)
+# zrepSum97p5_0 = quantile(x = ncol(ppc$y)-zrepSum, probs = 0.975)
+# 
+# png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/ppcbars.png', res=300, height = 5, width = 5, units = 'in')
+# #plot bars for the uncertain y
+# barplot(height = c(mean(ncol(ppc$y)-ySum), mean(ySum)), space = 0, names.arg = c(0,1), col = 'gray', 
+#         border = 'white', ylim = c(0,100))
+# par(new=TRUE)
+# #plot bars for the certain y in a darker shade
+# barplot(height = c(length(which(ppc$y[1,44:95] == 0)), length(which(ppc$y[1,44:95] == 1))), space = 0, 
+#         col = 'black', border = 'white', ylim = c(0,100))
+# #Add error bars for y and zrep on each
+# arrows(x0 = c(0.25,1.25), y0 = c(ySum2p5_0, ySum2p5), x1 = c(0.25,1.25), y1 = c(ySum97p5_0, ySum97p5), 
+#        col = c('blue'), lty = 1, lwd = 1, code = 0)
+# arrows(x0 = c(0.75,1.75), y0 = c(zrepSum2p5_0, zrepSum2p5), x1 = c(0.75,1.75), y1 = c(zrepSum97p5_0, zrepSum97p5), 
+#        col = c('red'), lty = 1, lwd = 1, code = 0)
+# legend('topright', legend=c('y', 'zrep', 'certain y', 'uncertain y'), col = c('blue', 'red', 'black', 'gray'), 
+#        pch = c(NA,NA,15,15), lty = c(1,1,NA,NA))
+# dev.off()
+# 
+# #Save data for plotting with premade python functions
+# write.csv(ppc$y, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/y.csv', row.names = FALSE)
+# write.csv(ppc$zrep, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/zrep.csv', row.names = FALSE)
+# write.csv(ppc$pi, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/p.csv', row.names = FALSE)
+# write.csv(ppc$qi, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/q.csv', row.names = FALSE)
+# write.csv(years_L15sm, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/years.csv', row.names = FALSE)
+# #Save flood magnitude category colors for matplotlib plots
+# FloodMag_L15sm_colors = FloodMag_L15sm
+# FloodMag_L15sm_colors[FloodMag_L15sm_colors == 'N'] = 'k'
+# FloodMag_L15sm_colors[FloodMag_L15sm_colors == 'L'] = 'tab:orange'
+# FloodMag_L15sm_colors[FloodMag_L15sm_colors == 'M'] = 'tab:green'
+# FloodMag_L15sm_colors[FloodMag_L15sm_colors == 'S'] = 'tab:blue'
+# FloodMag_L15sm_colors[FloodMag_L15sm_colors == 'U'] = 'tab:pink'
+# write.csv(FloodMag_L15sm_colors, file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/y_mag_colors.csv', row.names = FALSE)
+# 
+# 
+# pmatGCM = GCMprob(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc, years_L15sm)
+# #Save for loading into plotting functions in Python
+# write.csv(pmatGCM[,1,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Had85.csv', row.names = FALSE)
+# write.csv(pmatGCM[,2,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Acc85.csv', row.names = FALSE)
+# write.csv(pmatGCM[,3,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Can85.csv', row.names = FALSE)
+# write.csv(pmatGCM[,4,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_CCS85.csv', row.names = FALSE)
+# write.csv(pmatGCM[,5,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_CNR85.csv', row.names = FALSE)
+# write.csv(pmatGCM[,6,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_MPI85.csv', row.names = FALSE)
+# write.csv(pmatGCM[,7,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Had45.csv', row.names = FALSE)
+# write.csv(pmatGCM[,8,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Acc45.csv', row.names = FALSE)
+# write.csv(pmatGCM[,9,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_Can45.csv', row.names = FALSE)
+# write.csv(pmatGCM[,10,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_CCS45.csv', row.names = FALSE)
+# write.csv(pmatGCM[,11,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_CNR45.csv', row.names = FALSE)
+# write.csv(pmatGCM[,12,], file = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/GCMp_MPI45.csv', row.names = FALSE)
