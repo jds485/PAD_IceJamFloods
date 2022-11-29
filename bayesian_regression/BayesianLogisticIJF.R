@@ -1515,7 +1515,8 @@ stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs)
 # Figure 3----
 pdf('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/Fig3-densOverlay.pdf', width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[sample_chain_inds,1:8], color_chains = FALSE) +
-  theme(strip.text.x = element_text(size=14))
+  theme(strip.text.x = element_text(size=14)) +
+  theme_classic()
 dev.off()
 
 # DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s, Y=0, pAll ----
@@ -1654,8 +1655,8 @@ autocorr.plot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain[[1]][-1,20
 dev.off()
 
 png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
-mcmc_acf(x = outDREAMzs__L15_pSensSpec_PCAcvs_Historical1s_pAll$chain, 
-         pars = outDREAMzs__L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names, lags = 20)
+mcmc_acf(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$chain, 
+         pars = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll$setup$names, lags = 20)
 dev.off()
 
 png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
@@ -2195,6 +2196,19 @@ names_GCMs = c(paste(c('HadGEM2-ES','ACCESS1-0','CanESM2','CCSM4','CNRM-CM5','MP
 dir.create('EDA/ProjectedPCsGCMs', showWarnings = FALSE)
 dir.create('EDA/ProjectedPCsGCMs/RawAxes', showWarnings = FALSE)
 dir.create('EDA/ProjectedPCsGCMs/PCAxes', showWarnings = FALSE)
+
+#Coordinates of PCA loadings axes
+load_x <- PCAcvs$rotation[,1]*3
+load_y <- PCAcvs$rotation[,2]*3
+#Text for axes labels
+# Label position
+text_pos <- load_y
+lo <- which(load_y < 0) # Get the variables on the bottom half of the plot
+hi <- which(load_y >= 0) # Get variables on the top half
+# Replace values in the vector
+text_pos <- replace(text_pos, lo, "1")
+text_pos <- replace(text_pos, hi, "3")
+
 GCMprob = function(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc, years_L15sm){
   #Transform with standardization and PCA loadings
   MeanGCM = as.numeric(colMeans(X[!apply(X = is.na(as.matrix(X[,c(1,2,3,4)])), MARGIN = 1, FUN = any),]))
@@ -2226,7 +2240,44 @@ GCMprob = function(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc, years_L15sm){
     plot(PCi[,1], PCi[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, axes = FALSE, xlab = '', ylab = '')
     legend('bottomleft', legend = c('Projected Conditions', '1915-2020 Conditions', 'Recorded Large Floods'),
            col = c('black', 'gray', 'orange'), pch = 16, cex = 0.7)
+    #plot biplot axes for each variable
+    arrows(x0 = 0, x1 = load_x, y0 = 0, y1 = load_y, col = "skyblue", length = 0.1, lwd = 1.5)
+    text(load_x, load_y, labels = c('','','DDF','Precipitation'), col  ="skyblue", pos = text_pos, cex = 0.7)
     dev.off()
+    
+    if(i == 1){
+      #Save data for panel plot
+      PC8p5 <- PCi
+    }
+    if(i == 7){
+      #Figure 6 panel plot
+      pdf(paste0('EDA/ProjectedPCsGCMs/PCAxes/Fig8_GCM_PCs.pdf'), width = 10, height = 5)
+      layout(rbind(c(1,2)))
+      plot(predPCAcvs[,1], predPCAcvs[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, col = 'gray',
+           xlab = 'PC1', ylab = 'PC2', main = names_GCMs[i], cex.axis = 0.5, cex.lab = 0.9)
+      par(new = T)
+      plot(predPCAcvs[Y_L15sm == 1,1], predPCAcvs[Y_L15sm == 1,2], ylim = c(-3,6), 
+           xlim = c(-10,5), pch = 16, col = 'orange', axes = FALSE, xlab = '', ylab = '')
+      par(new = T)
+      plot(PCi[,1], PCi[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, axes = FALSE, xlab = '', ylab = '')
+      legend('bottomleft', legend = c('Projected Conditions', '1915-2020 Conditions', 'Recorded Large Floods'),
+             col = c('black', 'gray', 'orange'), pch = 16, cex = 0.7)
+      #plot biplot axes for each variable
+      arrows(x0 = 0, x1 = load_x, y0 = 0, y1 = load_y, col = "skyblue", length = 0.1, lwd = 1.5)
+      text(load_x, load_y, labels = c('','','DDF','Precipitation'), col  ="skyblue", pos = text_pos, cex = 0.7)
+      
+      plot(predPCAcvs[,1], predPCAcvs[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, col = 'gray',
+           xlab = 'PC1', ylab = 'PC2', main = names_GCMs[1], cex.axis = 0.5, cex.lab = 0.9)
+      par(new = T)
+      plot(predPCAcvs[Y_L15sm == 1,1], predPCAcvs[Y_L15sm == 1,2], ylim = c(-3,6), 
+           xlim = c(-10,5), pch = 16, col = 'orange', axes = FALSE, xlab = '', ylab = '')
+      par(new = T)
+      plot(PC8p5[,1], PC8p5[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, axes = FALSE, xlab = '', ylab = '')
+      #plot biplot axes for each variable
+      arrows(x0 = 0, x1 = load_x, y0 = 0, y1 = load_y, col = "skyblue", length = 0.1, lwd = 1.5)
+      text(load_x, load_y, labels = c('','','DDF','Precipitation'), col  ="skyblue", pos = text_pos, cex = 0.7)
+      dev.off()
+    }
     
     #Use PCs to predict IJFs with sampled params matrix
     #Get predicted p prob for each of the parameter sets
@@ -2958,8 +3009,8 @@ save.image(file = 'Nov2022_CompleteRun_DataAsIs.RData')
 # dev.off()
 # 
 # png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
-# mcmc_acf(x = outDREAMzs__L15_pSensSpec_PCAcvs_Historical1s_pAll$chain, 
-#          pars = outDREAMzs__L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names, lags = 20)
+# mcmc_acf(x = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$chain, 
+#          pars = outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s_pAll$setup$names, lags = 20)
 # dev.off()
 # 
 # png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020_pAll/MCMC/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
