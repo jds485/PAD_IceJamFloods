@@ -520,7 +520,7 @@ del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 #save IQRs
 IQRs_y0 = pd.DataFrame(IQRs_y0)
 IQRs_y0.index = GCMs
-IQRs_y0.to_csv('GCM_IQRs.csv', header = [2020-8.5,2040-8.5,2060-8.5,2080-8.5,2020-4.5,2040-4.5,2060-4.5,2080-4.5])
+IQRs_y0.to_csv('GCM_IQRs.csv', header = ['2020-8.5','2040-8.5','2060-8.5','2080-8.5','2020-4.5','2040-4.5','2060-4.5','2080-4.5'])
 
 #1962-present – best model based on only that data
 os.chdir('../../DREAMzs_L15_VermPrecip_1962-2020')
@@ -827,7 +827,7 @@ del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 #save IQRs
 IQRs_hold = pd.DataFrame(IQRs_hold)
 IQRs_hold.index = GCMs
-IQRs_hold.to_csv('GCM_IQRs.csv', header = [2020-8.5,2040-8.5,2060-8.5,2080-8.5,2020-4.5,2040-4.5,2060-4.5,2080-4.5])
+IQRs_hold.to_csv('GCM_IQRs.csv', header = ['2020-8.5','2040-8.5','2060-8.5','2080-8.5','2020-4.5','2040-4.5','2060-4.5','2080-4.5'])
 
 
 #1962-present – best model with Ft. Smith
@@ -1135,7 +1135,7 @@ del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 #save IQRs
 IQRs_cvsp = pd.DataFrame(IQRs_cvsp)
 IQRs_cvsp.index = GCMs
-IQRs_cvsp.to_csv('GCM_IQRs.csv', header = [2020-8.5,2040-8.5,2060-8.5,2080-8.5,2020-4.5,2040-4.5,2060-4.5,2080-4.5])
+IQRs_cvsp.to_csv('GCM_IQRs.csv', header = ['2020-8.5','2040-8.5','2060-8.5','2080-8.5','2020-4.5','2040-4.5','2060-4.5','2080-4.5'])
 
 
 #1915-present – no uncertainty considered
@@ -1446,7 +1446,7 @@ del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 #save IQRs
 IQRs_NoUncertainty = pd.DataFrame(IQRs_NoUncertainty)
 IQRs_NoUncertainty.index = GCMs
-IQRs_NoUncertainty.to_csv('GCM_IQRs.csv', header = [2020-8.5,2040-8.5,2060-8.5,2080-8.5,2020-4.5,2040-4.5,2060-4.5,2080-4.5])
+IQRs_NoUncertainty.to_csv('GCM_IQRs.csv', header = ['2020-8.5','2040-8.5','2060-8.5','2080-8.5','2020-4.5','2040-4.5','2060-4.5','2080-4.5'])
 
 
 ##Waiting times
