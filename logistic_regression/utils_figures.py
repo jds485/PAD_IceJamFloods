@@ -116,7 +116,7 @@ def percentile_fill_plot_double(Y,Y2,title='Wicked Pissah',ylabel='Cumulative Pi
 
 
 def percentile_fill_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissah',scale='linear',Names='Pissah1',
-                                ylim=None,xlim=None,window=20,CIind=0,colPlt='green',start=1962,end=2100,
+                                ylim=None,xlim=None,window=20,CIind=0,colPlt='black',start=1962,end=2100,
                                 Yobs=None,Ypobs=None,years=None,YBayes=None,Ycolors=None):
     """
     Confidence corridor plot for one GCM+RCP at a time. Useful for overlaying multiple confidence levels on one plot.
@@ -156,18 +156,18 @@ def percentile_fill_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissa
             plt.plot(np.arange(start+(window-1),end,1),moving_average(Ypobs,window),linewidth=2, label='Predicted from Observed Data', ls = '--', marker = 'D')
     if Yobs is not None:
         if years is not None:
-            plt.plot(years,moving_average(Yobs,window),linewidth=2, label='Observed Data', ls = '--', marker = 'o', c = 'r')
+            plt.plot(years,moving_average(Yobs,window),linewidth=2, label='Observed Data', ls = '--', marker = 'o', c = 'tab:blue')
             if YBayes is not None:
-                plt.plot(years[:np.where(years == YBayes)[0][0]],moving_average(Yobs,window)[:np.where(years == YBayes)[0][0]],linewidth=2, label='Inferred Mean', ls = '--', marker = 'o', c = 'm')
+                plt.plot(years[:np.where(years == YBayes)[0][0]],moving_average(Yobs,window)[:np.where(years == YBayes)[0][0]],linewidth=2, label='Inferred Mean', ls = '--', marker = 'o', c = 'tab:cyan')
                 if Ycolors is not None:
                     #loop over all points to plot the colors
                     for i in range(len(years[:np.where(years == YBayes)[0][0]])):
                         plt.plot(years[:np.where(years == YBayes)[0][0]][i],moving_average(Yobs,window)[:np.where(years == YBayes)[0][0]][i], marker = 'o', c = Ycolors[i])
         else:
-            plt.plot(np.arange(start+(window-1),end,1),moving_average(Yobs,window),linewidth=2, label='Observed Data', ls = '--', marker = 'o', c = 'r')
+            plt.plot(np.arange(start+(window-1),end,1),moving_average(Yobs,window),linewidth=2, label='Observed Data', ls = '--', marker = 'o', c = 'tab:blue')
             #plt.scatter(np.arange(start,end,1),Yobs, label = 'Floods', marker = 'o', c = 'r')
             if YBayes is not None:
-                plt.plot(np.arange(start+(window-1),end,1)[:np.where(years == YBayes)[0][0]],moving_average(Yobs,window)[:np.where(years == YBayes)[0][0]],linewidth=2, label='Inferred Data', ls = '--', marker = 'o', c = 'm')
+                plt.plot(np.arange(start+(window-1),end,1)[:np.where(years == YBayes)[0][0]],moving_average(Yobs,window)[:np.where(years == YBayes)[0][0]],linewidth=2, label='Inferred Data', ls = '--', marker = 'o', c = 'tab:cyan')
                 
     ax1.legend()
     fig.tight_layout()
