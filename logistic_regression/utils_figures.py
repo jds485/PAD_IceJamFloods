@@ -159,10 +159,10 @@ def percentile_fill_plot_single(Y,title='Wicked Pissah',ylabel='Cumulative Pissa
             plt.plot(years,moving_average(Yobs,window),linewidth=2, label='Observed Data', ls = '--', marker = 'o', c = 'tab:blue')
             if YBayes is not None:
                 plt.plot(years[:np.where(years == YBayes)[0][0]],moving_average(Yobs,window)[:np.where(years == YBayes)[0][0]],linewidth=2, label='Inferred Mean', ls = '--', marker = 'o', c = 'tab:cyan')
-                if Ycolors is not None:
-                    #loop over all points to plot the colors
-                    for i in range(len(years[:np.where(years == YBayes)[0][0]])):
-                        plt.plot(years[:np.where(years == YBayes)[0][0]][i],moving_average(Yobs,window)[:np.where(years == YBayes)[0][0]][i], marker = 'o', c = Ycolors[i])
+            if Ycolors is not None:
+                #loop over all points to plot the colors
+                for i in range(len(years)):
+                    plt.plot(years[i],moving_average(Yobs,window)[i], marker = 'o', c = Ycolors[i])
         else:
             plt.plot(np.arange(start+(window-1),end,1),moving_average(Yobs,window),linewidth=2, label='Observed Data', ls = '--', marker = 'o', c = 'tab:blue')
             #plt.scatter(np.arange(start,end,1),Yobs, label = 'Floods', marker = 'o', c = 'r')

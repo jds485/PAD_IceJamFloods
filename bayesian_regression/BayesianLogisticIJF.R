@@ -2087,13 +2087,14 @@ ppSample_y0 = function(BTout, #output from a BayesianTools MCMC
     qi[i,IndN] = 1 - (ppi[i,IndN]*(1-param[i,4]) + (1-ppi[i,IndN])*param[i,8])
   }
   
-  #Sample a matrix of possible y values based on qi probability of IJF in historical years, and append the 1962-present years
+  #Sample a matrix of possible y values based on qi probability of IJF in historical years, 
+  # and append the known 1963-present years
   y = matrix(NA, nrow = nrow(qi), ncol = ncol(qi))
-  for (i in 1:ncol(y[,years<1962])){
+  for (i in 1:ncol(y[,years<=1962])){
     y[,i] = rbinom(n = nrow(y), size = 1, prob = qi[,i])
   }
-  for (i in 1:ncol(y[,years>=1962])){
-    y[,which(years>=1962)[i]] = Yp[years>=1962][i]
+  for (i in 1:ncol(y[,years>1962])){
+    y[,which(years>1962)[i]] = Yp[years>1962][i]
   }
   
   #Sample a vector of zrep based on the regression coefficients
@@ -2110,7 +2111,7 @@ ppSample_y0 = function(BTout, #output from a BayesianTools MCMC
 #Posterior Predictive Check for best model
 ppc_y0 = ppSample_y0(BTout = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs, n = 143, Xp = predPCAcvs, 
                FloodMag = FloodMag_L15sm, years = years_L15sm, Yp = Y_L15sm, seed = 34)
-bayesplot::ppc_bars(y = ppc_y0$y[1,43:95], yrep = ppc_y0$zrep[,43:95])
+bayesplot::ppc_bars(y = ppc_y0$y[1,44:95], yrep = ppc_y0$zrep[,44:95])
 #Need to edit this function to plot uncertain y as well as uncertainty in zrep
 #Vector of sum for y
 ySum_y0 = apply(X = ppc_y0$y, MARGIN = 1, FUN = sum)
@@ -2133,7 +2134,7 @@ barplot(height = c(mean(ncol(ppc_y0$y)-ySum_y0), mean(ySum_y0)), space = 0, name
         border = 'white', ylim = c(0,100))
 par(new=TRUE)
 #plot bars for the certain y in a darker shade
-barplot(height = c(length(which(ppc_y0$y[1,43:95] == 0)), length(which(ppc_y0$y[1,43:95] == 1))), space = 0, 
+barplot(height = c(length(which(ppc_y0$y[1,44:95] == 0)), length(which(ppc_y0$y[1,44:95] == 1))), space = 0, 
         col = 'black', border = 'white', ylim = c(0,100))
 #Add error bars for y and zrep on each
 arrows(x0 = c(0.25,1.25), y0 = c(ySum2p5_0_y0, ySum2p5_y0), x1 = c(0.25,1.25), y1 = c(ySum97p5_0_y0, ySum97p5_y0), 

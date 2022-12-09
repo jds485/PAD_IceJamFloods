@@ -41,7 +41,7 @@ os.chdir('./DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020')
 p_L15sm_y0 = np.loadtxt('p.csv',delimiter=',',skiprows=1)
 #prob recording Y=1|X
 q_L15sm_y0 = np.loadtxt('q.csv',delimiter=',',skiprows=1)
-#observed data matrix 1962-2020, replicates 1915-1962 generated from q
+#observed data matrix 1963-2020, replicates 1915-1962 generated from q
 Y_L15sm_y0 = np.loadtxt('y.csv',delimiter=',',skiprows=1)
 #Replicates of Z generated from p
 Zrep_L15sm_y0 = np.loadtxt('zrep.csv',delimiter=',',skiprows=1)
@@ -96,7 +96,7 @@ plt.close()
 
 plt_perc = np.percentile(YMA_L15sm_y0,percentiles,axis=1)
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Observed/Inferred Large IJF Probability\nModel: Historical Uncertainty Considered, Trained 1915-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Observed/Inferred Probability of Recording a Large IJF\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
                                      xlim=[1920,2020])
@@ -120,11 +120,11 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      xlim=[1920,2020])    
 #Add mean of Y
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Historical Uncertainty Considered, Trained 1915-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability, Z, and Observed/Inferred Y\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
                                      Yobs=np.mean(Y_L15sm_y0,axis=0), 
-                                     xlim=[1920,2020], YBayes=1962)
+                                     xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 #Add predicted mean of Z
@@ -132,7 +132,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:42]),np.mean(Y_L15sm_y0,axis=0)[42:]), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 #Add colors for historical flood magnitudes
@@ -140,8 +140,8 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:42]),np.mean(Y_L15sm_y0,axis=0)[42:]), 
-                                     xlim=[1915,1965], YBayes=1962, Ycolors=Yobs_colors)
+                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), 
+                                     xlim=[1915,1965], YBayes=1963, Ycolors=Yobs_colors)
 plt.gca().get_legend().remove()
 plt.savefig('HistPredPlot_MeanZ_MagColors_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
@@ -175,7 +175,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average [Large IJF Prob. (p) - Prob. Recording Large IJF (q)]\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                      ylabel='Large IJF Probability Difference',scale='linear',ylim=[-1,1],Names='p - q',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     CIind=0, xlim=[1920,1970])
+                                     CIind=0, xlim=[1915,1965])
 plt.axhline(y = 0., color = 'blue')
 plt.savefig('HistPredPlot_p-q_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
@@ -219,7 +219,7 @@ plt.close()
 
 plt_perc = np.percentile(YMA_L15sm_y0,percentiles,axis=1)
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Observed/Inferred Large IJF Probability\nModel: Historical Uncertainty Considered, Trained 1915-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Observed/Inferred Probability of Recording a Large IJF\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
                                      xlim=[1920,2020])
@@ -243,11 +243,11 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      xlim=[1920,2020])    
 #Add mean of Y
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Historical Uncertainty Considered, Trained 1915-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability, Z, and Observed/Inferred Y\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
                                      Yobs=np.mean(Y_L15sm_y0,axis=0), 
-                                     xlim=[1920,2020], YBayes=1962)
+                                     xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 #Add predicted mean of Z
@@ -255,7 +255,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:42]),np.mean(Y_L15sm_y0,axis=0)[42:]), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 
@@ -289,7 +289,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average [Large IJF Prob. (p) - Prob. Recording Large IJF (q)]\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                      ylabel='Large IJF Probability Difference',scale='linear',ylim=[-1,1],Names='p - q',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     CIind=0, xlim=[1920,1970])
+                                     CIind=0, xlim=[1915,1965])
 plt.axhline(y = 0., color = 'blue')
 plt.savefig('HistPredPlot_p-q_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
@@ -332,7 +332,7 @@ plt.close()
 
 plt_perc = np.percentile(YMA_L15sm_y0,percentiles,axis=1)
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Observed/Inferred Large IJF Probability\nModel: Historical Uncertainty Considered, Trained 1915-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Observed/Inferred Probability of Recording a Large IJF\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
                                      xlim=[1920,2020])
@@ -357,11 +357,11 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      xlim=[1920,2020])    
 #Add mean of Y
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Historical Uncertainty Considered, Trained 1915-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability, Z, and Observed/Inferred Y\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
                                      Yobs=np.mean(Y_L15sm_y0,axis=0), 
-                                     xlim=[1920,2020], YBayes=1962)
+                                     xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 #Add predicted mean of Z
@@ -369,7 +369,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
-                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:42]),np.mean(Y_L15sm_y0,axis=0)[42:]), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 
@@ -402,7 +402,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average [Large IJF Prob. (p) - Prob. Recording Large IJF (q)]\nModel: Historical Uncertainty Considered, Trained 1915-2020',
                                      ylabel='Large IJF Probability Difference',scale='linear',ylim=[-1,1],Names='p - q',
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
-                                     CIind=0, xlim=[1920,1970])
+                                     CIind=0, xlim=[1915,1965])
 plt.axhline(y = 0., color = 'blue')
 plt.savefig('HistPredPlot_p-q_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
@@ -566,10 +566,10 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      xlim=[1920,2020])    
 #Add mean of Y
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Lamontagne et al. Best Model, Trained 1962-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability, Z, and Observed/Inferred Y\nModel: Lamontagne et al. Best Model, Trained 1962-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 #Add predicted mean of Z
@@ -577,7 +577,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Lamontagne et al. Best Model, Trained 1962-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:42]),np.mean(Y_L15sm_y0,axis=0)[42:]), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 
@@ -626,10 +626,10 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      xlim=[1920,2020])    
 #Add mean of Y
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Lamontagne et al. Best Model, Trained 1962-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability, Z, and Observed/Inferred Y\nModel: Lamontagne et al. Best Model, Trained 1962-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 #Add predicted mean of Z
@@ -637,7 +637,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Lamontagne et al. Best Model, Trained 1962-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:42]),np.mean(Y_L15sm_y0,axis=0)[42:]), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 
@@ -686,10 +686,10 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      xlim=[1920,2020])    
 #Add mean of Y
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Lamontagne et al. Best Model, Trained 1962-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability, Z, and Observed/Inferred Y\nModel: Lamontagne et al. Best Model, Trained 1962-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
-                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 #Add predicted mean of Z
@@ -697,7 +697,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Lamontagne et al. Best Model, Trained 1962-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
-                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:42]),np.mean(Y_L15sm_y0,axis=0)[42:]), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 
@@ -874,10 +874,10 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      xlim=[1920,2020])    
 #Add mean of Y
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Best Model with Ft. Smith, Trained 1962-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability, Z, and Observed/Inferred Y\nModel: Best Model with Ft. Smith, Trained 1962-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 #Add predicted mean of Z
@@ -885,7 +885,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Best Model with Ft. Smith, Trained 1962-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:42]),np.mean(Y_L15sm_y0,axis=0)[42:]), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 
@@ -934,10 +934,10 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      xlim=[1920,2020])    
 #Add mean of Y
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Best Model with Ft. Smith, Trained 1962-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability, Z, and Observed/Inferred Y\nModel: Best Model with Ft. Smith, Trained 1962-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 #Add predicted mean of Z
@@ -945,7 +945,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Best Model with Ft. Smith, Trained 1962-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:42]),np.mean(Y_L15sm_y0,axis=0)[42:]), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 
@@ -994,10 +994,10 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      xlim=[1920,2020])    
 #Add mean of Y
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Best Model with Ft. Smith, Trained 1962-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability, Z, and Observed/Inferred Y\nModel: Best Model with Ft. Smith, Trained 1962-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
-                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 #Add predicted mean of Z
@@ -1005,7 +1005,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: Best Model with Ft. Smith, Trained 1962-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
-                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:42]),np.mean(Y_L15sm_y0,axis=0)[42:]), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 
@@ -1182,10 +1182,10 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      xlim=[1920,2020])    
 #Add mean of Y
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: No Historical Uncertainty, Trained 1915-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability, Z, and Observed/Inferred Y\nModel: No Historical Uncertainty, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 #Add predicted mean of Z
@@ -1193,7 +1193,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: No Historical Uncertainty, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:42]),np.mean(Y_L15sm_y0,axis=0)[42:]), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 
@@ -1242,10 +1242,10 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      xlim=[1920,2020])    
 #Add mean of Y
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: No Historical Uncertainty, Trained 1915-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability, Z, and Observed/Inferred Y\nModel: No Historical Uncertainty, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 #Add predicted mean of Z
@@ -1253,7 +1253,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: No Historical Uncertainty, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
-                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:42]),np.mean(Y_L15sm_y0,axis=0)[42:]), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 
@@ -1302,10 +1302,10 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      xlim=[1920,2020])    
 #Add mean of Y
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
-                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: No Historical Uncertainty, Trained 1915-2020',
+                                     title='Hindcast: '+str(window)+'-year Average Large IJF Probability, Z, and Observed/Inferred Y\nModel: No Historical Uncertainty, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
-                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.mean(Y_L15sm_y0,axis=0), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanY_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 #Add predicted mean of Z
@@ -1313,7 +1313,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      title='Hindcast: '+str(window)+'-year Average Large IJF Probability\nModel: No Historical Uncertainty, Trained 1915-2020',
                                      ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names='50% and 95% CIs',
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
-                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:42]),np.mean(Y_L15sm_y0,axis=0)[42:]), xlim=[1920,2020], YBayes=1962)
+                                     Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
 
@@ -1450,7 +1450,7 @@ IQRs_NoUncertainty.to_csv('GCM_IQRs.csv', header = ['2020-8.5','2040-8.5','2060-
 
 
 ##Waiting times
-#flood,cum_flood,waits = simulate_GCM_futures_probStart(Y_L15sm_y0[2,42:],prob,N_prob=1000)
+#flood,cum_flood,waits = simulate_GCM_futures_probStart(Y_L15sm_y0[2,43:],prob,N_prob=1000)
 #
 #
 ##Survival Analysis#############################################################
