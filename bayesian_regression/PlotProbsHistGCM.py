@@ -1158,11 +1158,16 @@ percentiles=[2.5,25,50,75,97.5]
 pMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_NoUncertainty)[0]])
 YMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_NoUncertainty)[0]])
 ZrepMA_NoUncertainty = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_NoUncertainty)[0]])
+pqMA_NoUncL15sm_y0 = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_NoUncertainty)[0]])
+qMA_L15sm_y0 = np.zeros([np.shape(years_L15sm)[0]-(window-1),np.shape(p_L15sm_y0)[0]])
 
 for i in range(np.shape(p_NoUncertainty)[0]):
     YMA_NoUncertainty[:,i] = moving_average(Y_L15sm_y0[i,:],window)
     ZrepMA_NoUncertainty[:,i] = moving_average(Zrep_NoUncertainty[i,:],window)
     pMA_NoUncertainty[:,i] = moving_average(p_NoUncertainty[i,:],window)
+    #To plot difference between p No Uncertainty and q with uncertainty considered
+    pqMA_NoUncL15sm_y0[:,i] = moving_average(p_NoUncertainty[i,:] - q_L15sm_y0[i,:],window)
+    qMA_L15sm_y0[:,i] = moving_average(q_L15sm_y0[i,:],window)
 
 #Compute percentiles and plot
 plt_perc = np.percentile(pMA_NoUncertainty,percentiles,axis=1)
@@ -1208,6 +1213,30 @@ percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      CIind=0, xlim=[1920,2020])
 plt.savefig('HistPredPlot_PPC_' + str(window) + 'yr.png', dpi = 600)
 plt.close()
+
+
+#p and q from uncertainty considered
+plt_perc2 = np.percentile(qMA_L15sm_y0,percentiles,axis=1)
+plt_perc = np.percentile(pMA_NoUncertainty,percentiles,axis=1)
+percentile_fill_plot_double(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], 
+                                     plt_perc2[:,0:(np.shape(years_L15sm)[0]-(window-1))], 
+                                     title='Hindcast: '+str(window)+'-year Average Large IJF Prob. (p) from Model with No Historical Uncertainty, and\n Prob. Recording Large IJF (q) from Model with Historical Uncertainty Considered, Trained 1915-2020',
+                                     ylabel='Large IJF Probability',scale='linear',ylim=[0,1],Names=['p', 'q'],
+                                     window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
+                                     CIind=0, xlim=[1915,1962])
+plt.savefig('HistPredPlot_pNoUncqUnc_' + str(window) + 'yr.png', dpi = 600)
+plt.close()
+#difference plot
+plt_perc = np.percentile(pqMA_NoUncL15sm_y0,percentiles,axis=1)
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))], 
+                                     title='Hindcast: '+str(window)+'-year Average [Large IJF Prob. (p) - Prob. Recording Large IJF (q)]\nModels: [Historical Uncertainty Not Considered - Considered], Trained 1915-2020',
+                                     ylabel='Large IJF Probability Difference',scale='linear',ylim=[-1,1],Names='p - q',
+                                     window=window,years=years_L15sm[(window-1):(np.shape(years_L15sm)[0])], 
+                                     CIind=0, xlim=[1915,1962])
+plt.axhline(y = 0., color = 'blue')
+plt.savefig('HistPredPlot_pNoUnc-qUnc_' + str(window) + 'yr.png', dpi = 600)
+plt.close()
+
 
 
 #Moving window size and percentiles to compute for plots
