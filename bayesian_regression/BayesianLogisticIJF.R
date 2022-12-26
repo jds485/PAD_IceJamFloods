@@ -356,7 +356,7 @@ settingsDREAMzs_1 = list(iterations = 330000, gamma= NULL, eps = 0, e = 0.05, pa
 
 # Posterior Solvers----
 #  DREAMzs: prior #1 - normal, Firth mean----
-dir.create(path = 'DREAMzs1', showWarnings = FALSE)
+dir.create(path = 'DREAMzs_L15_VermPrecip_1962-2020_MAPPrior', showWarnings = FALSE)
 setUpDREAMzs_1 <- createBayesianSetup(likelihood, prior = prior, parallel = 7, 
                                       parallelOptions = list(packages=list('BayesianTools'), 
                                                              variables=list('X_hold','Y_hold'), dlls=NULL), 
@@ -405,48 +405,48 @@ outDREAMzs_1$Neff = effectiveSize(outDREAMzs_1$chain[,1:3])
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_1$chain[[1]])-1000):nrow(outDREAMzs_1$chain[[1]])
 
-png('DREAMzs1/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_MAPPrior/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_1$chain[,1:3], size = 0.05)
 dev.off()
 
-png('DREAMzs1/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_MAPPrior/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
 correlationPlot(outDREAMzs_1$chain[sample_chain_inds,1:3], method = 'spearman')
 dev.off()
 
-png('DREAMzs1/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_MAPPrior/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_1, plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs1/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_MAPPrior/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_1$chain[sample_chain_inds, 1:3], prior = prior$sampler(n = 50000), singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15))))
 dev.off()
 
-png('DREAMzs1/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_MAPPrior/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_pairs(outDREAMzs_1$chain[sample_chain_inds, 1:3], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-6,1),c(0,6),c(-15,0),c(-6,1),c(0,6),c(-15,0),c(-6,1),c(0,6)),
            ylim = rbind(c(0,NA),c(-15,0),c(-15,0),c(-6,0),c(0,NA),c(-6,0),c(0,6),c(0,6),c(0,NA)))
 dev.off()
 
-png('DREAMzs1/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_MAPPrior/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_1$chain[[1]][-1,1:3], lag.max = 100)
 dev.off()
 
-png('DREAMzs1/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_MAPPrior/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs_1$chain, pars = outDREAMzs_1$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs1/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_MAPPrior/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_1$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs1/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_MAPPrior/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_1$chain[sample_chain_inds,], pars = outDREAMzs_1$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs1/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_MAPPrior/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_1$chain[sample_chain_inds,], pars = outDREAMzs_1$setup$names,
                prob_outer = 0.95)
 dev.off()
@@ -555,7 +555,7 @@ geweke.plot(x = outDREAMzs_1p$chain[,1:3], ask = FALSE, nbins = 8)
 stopParallel(setUpDREAMzs_1p)
 
 #  DREAMzs: prior #3 - uniform----
-dir.create(path = 'DREAMzs3p', showWarnings = FALSE)
+dir.create(path = 'DREAMzs_L15_VermPrecip_1962-2020_UniformPrior', showWarnings = FALSE)
 setUpDREAMzs_3p <- createBayesianSetup(likelihood, prior = prior3, parallel = 7, 
                                        parallelOptions = list(packages=list('BayesianTools'), 
                                                               variables=list('X_hold','Y_hold'), dlls=NULL), 
@@ -602,48 +602,48 @@ outDREAMzs_3p$Neff = effectiveSize(outDREAMzs_3p$chain[,1:3])
 #Sample only the last 1000 from each chain
 sample_chain_inds = (nrow(outDREAMzs_3p$chain[[1]])-1000):nrow(outDREAMzs_3p$chain[[1]])
 
-png('DREAMzs3p/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_UniformPrior/traceplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_trace(x = outDREAMzs_3p$chain[,1:3], size = 0.05)
 dev.off()
 
-png('DREAMzs3p/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_UniformPrior/correlplot.png', res = 300, units = 'in', width = 7, height = 7)
 correlationPlot(outDREAMzs_3p$chain[sample_chain_inds,1:3], method = 'spearman')
 dev.off()
 
-png('DREAMzs3p/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_UniformPrior/gelmanplot.png', res = 300, units = 'in', width = 7, height = 7)
 gelmanDiagnostics(outDREAMzs_3p, plot = TRUE, thin = 0)
 dev.off()
 
-png('DREAMzs3p/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_UniformPrior/marginalplot.png', res = 300, units = 'in', width = 7, height = 7)
 marginalPlot(x = outDREAMzs_3p$chain[sample_chain_inds,1:3], prior = prior3$sampler(n = 50000), singlePanel = FALSE, 
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15))))
 dev.off()
 
-png('DREAMzs3p/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_UniformPrior/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_pairs(outDREAMzs_3p$chain[sample_chain_inds,1:3], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-6,1),c(0,6),c(-15,0),c(-6,1),c(0,6),c(-15,0),c(-6,1),c(0,6)),
            ylim = rbind(c(0,NA),c(-15,0),c(-15,0),c(-6,0),c(0,NA),c(-6,0),c(0,6),c(0,6),c(0,NA)))
 dev.off()
 
-png('DREAMzs3p/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_UniformPrior/autocorrplot.png', res = 300, units = 'in', width = 7, height = 7)
 autocorr.plot(x = outDREAMzs_3p$chain[[1]][-1,1:3], lag.max = 100)
 dev.off()
 
-png('DREAMzs3p/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_UniformPrior/autocorrplot2.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_acf(x = outDREAMzs_3p$chain, pars = outDREAMzs_3p$setup$names, lags = 20)
 dev.off()
 
-png('DREAMzs3p/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_UniformPrior/densOverlay.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_dens_overlay(outDREAMzs_3p$chain[sample_chain_inds,])
 dev.off()
 
-png('DREAMzs3p/HPD.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_UniformPrior/HPD.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_areas(x = outDREAMzs_3p$chain[sample_chain_inds,], pars = outDREAMzs_3p$setup$names, 
            point_est = 'mean', prob = 0.95)
 dev.off()
 
-png('DREAMzs3p/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_VermPrecip_1962-2020_UniformPrior/HPD_boxplot.png', res = 300, units = 'in', width = 7, height = 7)
 mcmc_intervals(x = outDREAMzs_3p$chain[sample_chain_inds,], pars = outDREAMzs_3p$setup$names,
                prob_outer = 0.95)
 dev.off()
