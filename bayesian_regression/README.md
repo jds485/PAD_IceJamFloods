@@ -1,7 +1,7 @@
 # Readme for bayesian_regression folder
 
 ## Code
-1. BayesianLogisticIJF.R - main R script that runs
+1. BayesianLogisticIJF.R - main R script that processes data and runs the Bayesian logistic regressions
 2. PlotProbsHistGCM.py - main python script that makes plots for historical and projected conditions
 3. utils.R - functions used in the main R script
 4. mcmc_pairsEdits.R - edits the bayesplot::mcmc_pairs function to add x and y axis limits
