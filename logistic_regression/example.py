@@ -447,7 +447,7 @@ percentiles = [2.5,25,50,75,97.5]
 plt_perc = np.percentile(Y_HistBootPred,percentiles,axis=1)
 for i in range(5):
     plt_perc[i,0:(np.shape(years_All)[0]-(window-1))]=moving_average(plt_perc[i,:],window)    
-percentile_fill_plot_single(plt_perc[:,31:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1949,end=2021,xlim=[1950,2020],Yobs=Y_All[31:103], Ypobs = Y_HistPred[31:103])
+percentile_fill_plot_single(plt_perc[:,31:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1949,end=2021,xlim=[1950,2020],Yobs=Y_All[31:103], Ypobs = Y_HistPred[31:103], colObs='r')
 del plt_perc, percentiles, i
 # PRESENTATION = Moving Average in Real Space with a plot in real space Correct CIs for 20 year moving average
 #Y moving average
@@ -459,20 +459,20 @@ percentiles = [2.5,25,50,75,97.5]
 plt_perc = np.percentile(YMA,percentiles,axis=1)
 percentile_fill_plot_single(plt_perc[:,35:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1953,end=2021,xlim=[1950,2020],Ypobs = Y_HistPred[35:103])
 #With observed data - backward looking
-percentile_fill_plot_single(plt_perc[:,35:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1953,end=2021,xlim=[1950,2020],Yobs=Y_All[35:103], Ypobs = Y_HistPred[35:103])
+percentile_fill_plot_single(plt_perc[:,35:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1953,end=2021,xlim=[1950,2020],Yobs=Y_All[35:103], Ypobs = Y_HistPred[35:103], colObs='r')
 #Figure 6
 #PAPER - Revision: With observed data - centered
-percentile_fill_plot_single(plt_perc[:,40:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1953,end=2016,xlim=[1950,2020],Yobs=Y_All[40:103], Ypobs = Y_HistPred[40:103])
+percentile_fill_plot_single(plt_perc[:,40:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1953,end=2016,xlim=[1950,2020],Yobs=Y_All[40:103], Ypobs = Y_HistPred[40:103], colObs='r')
 ##All data to 1915
 percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1915,end=2021,xlim=[1910,2020],Ypobs = Y_HistPred,years=years_All[(window-1):(np.shape(years_All)[0])])
 #With observed data: large floods only
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1915,end=2021,xlim=[1910,2020],Yobs=Y_All, Ypobs = Y_HistPred,years=years_All[(window-1):(np.shape(years_All)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1915,end=2021,xlim=[1910,2020],Yobs=Y_All, Ypobs = Y_HistPred,years=years_All[(window-1):(np.shape(years_All)[0])], colObs='r')
 #With observed data: large + moderate floods
 Y_AllLM = np.loadtxt('cleaned_dataLMS.csv',delimiter=',',skiprows=1,usecols=1)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1915,end=2021,xlim=[1910,2020],Yobs=Y_AllLM, Ypobs = Y_HistPred,years=years_All[(window-1):(np.shape(years_All)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1915,end=2021,xlim=[1910,2020],Yobs=Y_AllLM, Ypobs = Y_HistPred,years=years_All[(window-1):(np.shape(years_All)[0])], colObs='r')
 #With observed data: large + moderate + small floods
 Y_AllLMS = np.loadtxt('cleaned_dataLMS.csv',delimiter=',',skiprows=1,usecols=2)
-percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1915,end=2021,xlim=[1910,2020],Yobs=Y_AllLMS, Ypobs = Y_HistPred,years=years_All[(window-1):(np.shape(years_All)[0])])
+percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_All)[0]-(window-1))],title='10-year Average IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[0,1],Names='Bootstrapped 50% and 95% CIs',window=window,start=1915,end=2021,xlim=[1910,2020],Yobs=Y_AllLMS, Ypobs = Y_HistPred,years=years_All[(window-1):(np.shape(years_All)[0])], colObs='r')
 del plt_perc, percentiles, i
 
 #Figure S.2
@@ -486,7 +486,7 @@ percentiles = [2.5,25,50,75,97.5]
 #Probability
 plt_perc = np.percentile(YMA,percentiles,axis=1)
 #With observed data - centered
-percentile_fill_plot_single(plt_perc[:,44:(np.shape(years_All)[0]-(window-1))],title='IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[-0.05,1.05],Names='Bootstrapped 50% and 95% CIs',window=window,start=1962,end=2021,xlim=[1960,2022],Yobs=Y_All[44:103], Ypobs = Y_HistPred[44:103])
+percentile_fill_plot_single(plt_perc[:,44:(np.shape(years_All)[0]-(window-1))],title='IJF Probability for Historical Record',ylabel='IJF Probability',scale='linear',ylim=[-0.05,1.05],Names='Bootstrapped 50% and 95% CIs',window=window,start=1962,end=2021,xlim=[1960,2022],Yobs=Y_All[44:103], Ypobs = Y_HistPred[44:103], colObs='r')
 
 window=20
 # Moving Median in Real Space with a plot in log scale
