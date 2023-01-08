@@ -36,9 +36,10 @@ The utils.py and utils_figures.py scripts load user-defined functions that are u
 The example.py script assumes that all files are written to the .\PAD_IceJamFloods\logistic_regression directory. This script takes up to 5 hours to run. The resulting data file is about 39 GB. We estimate that a machine with 16 GB RAM or more is required to run this script. This script will generate many figures to the plotting window, some of which were not used in the paper. We saved the final paper figures in the PaperFigures directory.
 
 ## **bayesian_regression directory for Smith et al.**
-This directory corresponds to the Smith et al. paper. The code in that directory may be run to generate all of the paper figures, as well as intermediate figures not presented in the paper.\
+This directory corresponds to the Smith et al. paper. The code in that directory may be run to generate all of the paper figures, as well as intermediate figures not presented in the paper. This code takes about 4 hours to run on an 8-core machine with at least 16 GB RAM.\
 \
 Python 3.7.4 was used for this analysis. The requirements.txt file in the logistic_regression folder provides the packages and versions used for this analysis. If needed, you can install these using `pip install -r requirements.txt`\
+R version 3.5.3 was used for this analysis.
 
 # License
 See license file.
