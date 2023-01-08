@@ -38,7 +38,7 @@ The example.py script assumes that all files are written to the .\PAD_IceJamFloo
 ## **bayesian_regression directory for Smith et al.**
 This directory corresponds to the Smith et al. paper. The code in that directory may be run to generate all of the paper figures, as well as intermediate figures not presented in the paper. This code takes about 4 hours to run on an 8-core machine with at least 16 GB RAM.\
 \
-Python 3.7.4 was used for this analysis. The requirements.txt file in the logistic_regression folder provides the packages and versions used for this analysis. If needed, you can install these using `pip install -r requirements.txt`\
+Python 3.10.8 was used for this analysis. The requirements.txt file in the logistic_regression folder provides the packages used for this analysis. If needed, you can install these using `pip install -r requirements.txt`\
 R version 3.5.3 was used for this analysis.
 
 # License
