@@ -144,6 +144,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      xlim=[1915,1965], YBayes=1963, Ycolors=Yobs_colors)
 plt.gca().get_legend().remove()
 plt.savefig('HistPredPlot_MeanZ_MagColors_' + str(window) + 'yr.png', dpi = 600)
+plt.savefig('../../PaperFigures/Fig4-Historical_1yr_colors.png', dpi = 600)
 plt.close()
 
 #Y and Zrep
@@ -178,6 +179,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      CIind=0, xlim=[1915,1965])
 plt.axhline(y = 0., color = 'blue')
 plt.savefig('HistPredPlot_p-q_' + str(window) + 'yr.png', dpi = 600)
+plt.savefig('../../PaperFigures/Fig5-Historical_1yr_pq.png', dpi = 600)
 plt.close()
 
 
@@ -371,6 +373,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
                                      Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
+plt.savefig('../../PaperFigures/Fig6-Historical_1yr_A.png', dpi = 600)
 plt.close()
 
 #Y and Zrep
@@ -456,6 +459,8 @@ for scenario in range(len(GCMs)):
                                 window=window,years=GCMyears[int(window/2-1):int(len(GCMyears)-window/2)], 
                                 CIind=1, xlim=[1980,2100])
     plt.savefig('ProjPredPlot_' + GCMs[scenario] + '_' + str(window) + 'yr.png', dpi = 600)
+    if scenario == 0:
+        plt.savefig('../../PaperFigures/Fig7-Projection-A.png', dpi = 600)
     plt.close()
 del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 
@@ -699,6 +704,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
                                      Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
+plt.savefig('../../PaperFigures/Fig6-Historical_1yr_C.png', dpi = 600)
 plt.close()
 
 #Y and Zrep
@@ -761,6 +767,8 @@ for scenario in range(len(GCMs)):
                                 years=GCMyears[int(window/2-1):int(len(GCMyears)-window/2)], 
                                 CIind=1, xlim=[1980,2100])
     plt.savefig('ProjPredPlot_' + GCMs[scenario] + '_' + str(window) + 'yr.png', dpi = 600)
+    if scenario == 0:
+        plt.savefig('../../PaperFigures/Fig7-Projection-C.png', dpi = 600)
     plt.close()
 del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 
@@ -1007,6 +1015,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
                                      Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
+plt.savefig('../../PaperFigures/Fig6-Historical_1yr_D.png', dpi = 600)
 plt.close()
 
 #Y and Zrep
@@ -1068,6 +1077,8 @@ for scenario in range(len(GCMs)):
                                 years=GCMyears[int(window/2-1):int(len(GCMyears)-window/2)], 
                                 CIind=1, xlim=[1980,2100])
     plt.savefig('ProjPredPlot_' + GCMs[scenario] + '_' + str(window) + 'yr.png', dpi = 600)
+    if scenario == 0:
+        plt.savefig('../../PaperFigures/Fig7-Projection-D.png', dpi = 600)
     plt.close()
 del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 
@@ -1344,6 +1355,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      window=window,years=years_L15sm[int(window/2-1):int(len(years_L15sm)-window/2)], 
                                      Yobs=np.append(np.array(np.mean(Zrep_L15sm_y0,axis=0)[0:43]),np.mean(Y_L15sm_y0,axis=0)[43:]), xlim=[1920,2020], YBayes=1963)
 plt.savefig('HistPredPlot_MeanZ_' + str(window) + 'yr.png', dpi = 600)
+plt.savefig('../../PaperFigures/Fig6-Historical_1yr_B.png', dpi = 600)
 plt.close()
 
 #Y and Zrep
@@ -1408,6 +1420,8 @@ for scenario in range(len(GCMs)):
                                 years=GCMyears[int(window/2-1):int(len(GCMyears)-window/2)], 
                                 CIind=1, xlim=[1980,2100])
     plt.savefig('ProjPredPlot_' + GCMs[scenario] + '_' + str(window) + 'yr.png', dpi = 600)
+    if scenario == 0:
+        plt.savefig('../../PaperFigures/Fig7-Projection-B.png', dpi = 600)
     plt.close()
 del scenario, plt_perc, plt_perc2, percentiles, i, probMA, probMA2
 

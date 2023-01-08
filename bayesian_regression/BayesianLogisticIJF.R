@@ -84,6 +84,8 @@ X_holdsm = X_L15sm[years_L15sm >= 1962,]
 
 #Exploratory Data Analysis----
 dir.create(path = 'EDA', showWarnings = FALSE)
+dir.create(path = 'PaperFigures', showWarnings = FALSE)
+
 # Ft Chip----
 plot_EDA_AllFloods(fname = 'EDA/EDA_GPBLPrecip+FtChipDDF_AllFloods.png', X_All15, 
                    X_colname = 'Fort.Chip.DDF', X_label = 'Fort Chip. DDF', 
@@ -128,6 +130,11 @@ plot_EDA_PCA_MSFloodsPre1962_fill(fname = 'EDA/PCAcvsp_MSFloodsPre1962_Fill.png'
 
 #  Figure 2----
 plot_EDA_PCA_MSFloodsPre1962_fill(fname = 'EDA/Fig2-PCA_fill.pdf', X = PCAcvs_All15,
+                                  X_label = 'PC1 (81% variance)',
+                                  Y_label = 'PC2 (15% variance)', 
+                                  Y = Y_All15sm, FloodMag = FloodMag_All15sm, years = years_All15sm, pdf = TRUE)
+#for PaperFigures directory
+plot_EDA_PCA_MSFloodsPre1962_fill(fname = 'PaperFigures/Fig2-PCA_fill.pdf', X = PCAcvs_All15,
                                   X_label = 'PC1 (81% variance)',
                                   Y_label = 'PC2 (15% variance)', 
                                   Y = Y_All15sm, FloodMag = FloodMag_All15sm, years = years_All15sm, pdf = TRUE)
@@ -1518,6 +1525,13 @@ mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[sample_chain_in
   theme(strip.text.x = element_text(size=14)) +
   theme_classic()
 dev.off()
+#for PaperFigures directory
+pdf('PaperFigures/Fig3-densOverlay.pdf', width = 7, height = 7)
+mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[sample_chain_inds,1:8], color_chains = FALSE) +
+  theme(strip.text.x = element_text(size=14)) +
+  theme_classic()
+dev.off()
+
 
 # DREAMzs: prior #2, FixY, PCAcvs, pSensSpec, Historical1s, Y=0, pAll ----
 dir.create(path = 'DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll', showWarnings = FALSE)
@@ -2251,8 +2265,36 @@ GCMprob = function(DDFChip, DDFVerm, DDFSmith, PrecipGPBL, X, ppc, years_L15sm){
       PC8p5 <- PCi
     }
     if(i == 7){
-      #Figure 6 panel plot
+      #Figure 8 panel plot
       pdf(paste0('EDA/ProjectedPCsGCMs/PCAxes/Fig8_GCM_PCs.pdf'), width = 10, height = 5)
+      layout(rbind(c(1,2)))
+      plot(predPCAcvs[,1], predPCAcvs[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, col = 'gray',
+           xlab = 'PC1', ylab = 'PC2', main = names_GCMs[i], cex.axis = 0.5, cex.lab = 0.9)
+      par(new = T)
+      plot(predPCAcvs[Y_L15sm == 1,1], predPCAcvs[Y_L15sm == 1,2], ylim = c(-3,6), 
+           xlim = c(-10,5), pch = 16, col = 'orange', axes = FALSE, xlab = '', ylab = '')
+      par(new = T)
+      plot(PCi[,1], PCi[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, axes = FALSE, xlab = '', ylab = '')
+      legend('bottomleft', legend = c('Projected Conditions', '1915-2020 Conditions', 'Recorded Large Floods'),
+             col = c('black', 'gray', 'orange'), pch = 16, cex = 0.7)
+      #plot biplot axes for each variable
+      arrows(x0 = 0, x1 = load_x, y0 = 0, y1 = load_y, col = "skyblue", length = 0.1, lwd = 1.5)
+      text(load_x, load_y, labels = c('','','DDF','Precipitation'), col  ="skyblue", pos = text_pos, cex = 0.7)
+      
+      plot(predPCAcvs[,1], predPCAcvs[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, col = 'gray',
+           xlab = 'PC1', ylab = 'PC2', main = names_GCMs[1], cex.axis = 0.5, cex.lab = 0.9)
+      par(new = T)
+      plot(predPCAcvs[Y_L15sm == 1,1], predPCAcvs[Y_L15sm == 1,2], ylim = c(-3,6), 
+           xlim = c(-10,5), pch = 16, col = 'orange', axes = FALSE, xlab = '', ylab = '')
+      par(new = T)
+      plot(PC8p5[,1], PC8p5[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, axes = FALSE, xlab = '', ylab = '')
+      #plot biplot axes for each variable
+      arrows(x0 = 0, x1 = load_x, y0 = 0, y1 = load_y, col = "skyblue", length = 0.1, lwd = 1.5)
+      text(load_x, load_y, labels = c('','','DDF','Precipitation'), col  ="skyblue", pos = text_pos, cex = 0.7)
+      dev.off()
+      
+      #for PaperFigures directory
+      pdf(paste0('PaperFigures/Fig8_GCM_PCs.pdf'), width = 10, height = 5)
       layout(rbind(c(1,2)))
       plot(predPCAcvs[,1], predPCAcvs[,2], ylim = c(-3,6), xlim = c(-10,5), pch = 16, col = 'gray',
            xlab = 'PC1', ylab = 'PC2', main = names_GCMs[i], cex.axis = 0.5, cex.lab = 0.9)
@@ -2868,8 +2910,8 @@ save.image(file = 'Nov2022_CompleteRun_DataAsIs.RData')
 # 
 # stopParallel(setUpDREAMzs_L15_pSensSpec_PCAcvs_Historical1s)
 # 
-# # Figure 3----
-# pdf('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/Fig3-densOverlay.pdf', width = 7, height = 7)
+# # pdf----
+# pdf('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_1915-2020/MCMC/densOverlay.pdf', width = 7, height = 7)
 # mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_Historical1s$chain[sample_chain_inds,1:8], color_chains = FALSE) +
 #   theme(strip.text.x = element_text(size=14))
 # dev.off()
