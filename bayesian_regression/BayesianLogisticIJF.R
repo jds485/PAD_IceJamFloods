@@ -1469,7 +1469,7 @@ marginalPlot(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[sample_chain_ind
              xrange = t(rbind(c(-20,5),c(-10,5),c(-5,15), c(0,1), c(0,1), c(0,1), c(0,1), c(0,1))))
 dev.off()
 
-png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/PairPlot.png', res = 300, units = 'in', width = 7, height = 7)
+png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020/MCMC/PairPlot.png', res = 600, units = 'in', width = 12, height = 12)
 mcmc_pairs(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs$chain[sample_chain_inds,1:8], diag_fun = 'dens', off_diag_fun = 'scatter', 
            off_diag_args = list(size=0.5,alpha=0.5), 
            xlim = rbind(c(-15,0),c(-1,6),c(-1,6),c(0,1),c(0,1),c(0,1),c(0,1),c(0,1),
@@ -1855,7 +1855,7 @@ mcmc_acf(x = outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain,
 dev.off()
 
 png('DREAMzs_L15_SmithChipVermPrecipPCA_Uncertainty_y0_1915-2020_pAll_theta/MCMC/densOverlay.png', res = 300, units = 'in', 
-    width = 7, height = 7)
+    width = 12, height = 12)
 mcmc_dens_overlay(outDREAMzs_L15_pSensSpec_PCAcvs_DataAsIs_pAll_theta$chain[sample_chain_inds,])
 dev.off()
 
