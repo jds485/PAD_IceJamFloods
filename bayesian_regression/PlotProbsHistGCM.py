@@ -179,7 +179,7 @@ percentile_fill_plot_single(plt_perc[:,0:(np.shape(years_L15sm)[0]-(window-1))],
                                      CIind=0, xlim=[1915,1965])
 plt.axhline(y = 0., color = 'blue')
 plt.savefig('HistPredPlot_p-q_' + str(window) + 'yr.png', dpi = 600)
-plt.savefig('../../PaperFigures/Fig5-Historical_1yr_pq.png', dpi = 600)
+plt.savefig('../../PaperFigures/Fig5-Historical_1yr_pq.pdf', dpi = 600)
 plt.close()
 
 
