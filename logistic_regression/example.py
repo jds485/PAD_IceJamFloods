@@ -244,6 +244,24 @@ plt.ylabel('Prob. of Flood')
 plt.xlabel('Year')
 plt.legend(loc = 'center')
 
+#2021 and 2022 predictions
+X_2122 = pd.read_csv('./Predictors_2021-2022.csv')
+X_2122.iloc[:,1] = (X_2122.iloc[:,1]-np.mean(bootstrap_X[:,1,0],0))/np.std(bootstrap_X[:,1,0],0)
+X_2122.iloc[:,2] = (X_2122.iloc[:,2]-np.mean(bootstrap_X[:,3,0],0))/np.std(bootstrap_X[:,3,0],0)
+Y_HistPred2122 = np.exp(res_Firth.params[0] + X_2122.iloc[:,1] * res_Firth.params[1] + X_2122.iloc[:,2] * res_Firth.params[2])/(1+np.exp(res_Firth.params[0] + X_2122.iloc[:,1] * res_Firth.params[1] + X_2122.iloc[:,2] * res_Firth.params[2]))
+Y_HistBootPred2122 = np.zeros([len(X_2122.iloc[:,0]),len(betas_boot_df.iloc[:,0])])
+for i in range(len(betas_boot_df.iloc[:,0])):
+    Y_HistBootPred2122[:,i] = np.exp(np.array(betas_boot_df.iloc[i,0]) + X_2122.iloc[:,1] * np.array(betas_boot_df.iloc[i,1]) + X_2122.iloc[:,2] * np.array(betas_boot_df.iloc[i,2]))/(1+np.exp(np.array(betas_boot_df.iloc[i,0]) + X_2122.iloc[:,1] * np.array(betas_boot_df.iloc[i,1]) + X_2122.iloc[:,2] * np.array(betas_boot_df.iloc[i,2])))
+
+#MLE
+#Y_HistPred2122
+#mean and quantile values
+#np.mean(Y_HistBootPred2122[0,:])
+#np.quantile(Y_HistBootPred2122[0,:], q = [0.025,0.5,0.975])
+#np.mean(Y_HistBootPred2122[1,:])
+#np.quantile(Y_HistBootPred2122[1,:], q = [0.025,0.5,0.975])
+
+
 #Now GCM#######################################################################
 #Load the dam filling years for plotting purposes
 [years_GCM,Y_GCM,X_GCM] = load_data()
